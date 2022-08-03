@@ -1,0 +1,11 @@
+[user]
+	email = igorxteixeira+github@gmail.com
+	name = igortxra
+[alias]
+	st = status
+	ct = commit
+	br = branch
+	co = checkout
+	l = log --oneline
+[url "git@github.com:cromai/"]
+	insteadOf = https://github.com/cromai/

@@ -1,0 +1,34 @@
+# default options
+display_on=0
+span_image=false
+lock_timeout=200
+fx_list=(dim blur dimblur pixel dimpixel color)
+dim_level=40
+blur_level=0.8
+pixel_scale=10,1000
+solid_color=333333
+wallpaper_cmd="~/.fehbg"   
+# i3lockcolor_bin="i3lock-color" # Manually set command for i3lock-color
+
+# default theme
+loginbox=00000066
+loginshadow=00000000
+locktext="Type password..."
+font="sans-serif"
+ringcolor=ffffffff
+insidecolor=00000000
+separatorcolor=00000000
+ringvercolor=ffffffff
+insidevercolor=00000000
+ringwrongcolor=ffffffff
+insidewrongcolor=d23c3dff
+timecolor=ffffffff
+time_format="%H:%M:%S"
+greetercolor=1185dcff
+layoutcolor=ffffff00
+keyhlcolor=1185dcff
+bshlcolor=d23c3dff
+verifcolor=ffffffff
+wrongcolor=d23c3dff
+modifcolor=1185dcff
+bgcolor=000000ff

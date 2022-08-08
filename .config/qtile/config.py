@@ -103,6 +103,32 @@ def get_monitors():
     monitors = len(xr) - 1 if len(xr) > 2 else len(xr)
     return monitors
 
+def move_window_to_screen(qtile, window, screen):
+    """Moves a window to a screen and focuses it, allowing you to move it
+    further if you wish."""
+    window.togroup(screen.group.name)
+    qtile.focus_screen(screen.index)
+    screen.group.focus(window, True)
+
+@lazy.function
+def change_to_group_without_change_group_screen(qtile, group):
+    if group.name != qtile.current_screen.group.name:
+        index = qtile.current_screen.index
+        index = index - 1 if index > 0 else len(qtile.screens) - 1
+        if qtile.screens[index].group.name == group.name:
+            qtile.focus_screen(index)
+        else:
+            qtile.current_screen.cmd_toggle_group(group.name)
+
+
+@lazy.function
+def move_window_to_another_screen(qtile):
+    """Moves a window to the previous screen. Loops around the beginning and
+    end."""
+    index = qtile.current_screen.index
+    index = index - 1 if index > 0 else len(qtile.screens) - 1
+    move_window_to_screen(qtile, qtile.current_window, qtile.screens[index])
+
 monitors = get_monitors()
 ##################
 # KEYS/SHORTCUTS #
@@ -238,20 +264,21 @@ groups = []
 for workspace in workspaces:
     matches = workspace["matches"] if "matches" in workspace else None
     layouts = workspace["layout"] if "layout" in workspace else None
-    groups.append(Group(workspace["name"], matches=matches, layout=layouts))
+    group = Group(workspace["name"], matches=matches, layout=layouts)
+    groups.append(group)
 
     # Move focus to group
     keys.append(Key([mod], workspace["key"],
-                lazy.group[workspace["name"]].toscreen()))
+                change_to_group_without_change_group_screen(group)))
 
     # Move window to group
     keys.append(Key([mod, "shift"], workspace["key"],
                 lazy.window.togroup(workspace["name"]),
                 lazy.group[workspace["name"]].toscreen()))
 
-    # Move window to screen with Mod, Alt and number
+    # Move window to another screen
     for i in range(monitors):
-        keys.extend([Key([mod, "mod1"], str(i), lazy.window.toscreen(i))])
+        keys.extend([Key([mod, "shift"], "m", move_window_to_another_screen())])
 
 ###########
 # LAYOUTS #
@@ -359,6 +386,7 @@ main_bottom_widgets = [
         other_current_screen_border=GREY,
         highlight_method='block',
         disable_drag=True,
+        hide_unused=True,
         borderwidth=1,
         **widget_defaults),
     widget.Sep(foreground=BAR_BACKGROUND),
@@ -444,6 +472,7 @@ secondary_bottom_widgets = [
         other_current_screen_border=GREY,
         highlight_method='block',
         disable_drag=True,
+        hide_unused=True,
         borderwidth=1,
         **widget_defaults),
     widget.Sep(foreground=BAR_BACKGROUND),

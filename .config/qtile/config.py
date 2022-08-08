@@ -209,8 +209,8 @@ keys = [
     Key([mod], 'm', lazy.next_screen(), desc='Next monitor'),
 
     # Next/previous group
-    Key([mod], 'Tab', lazy.screen.next_group(), desc='Next group'),
-    Key([mod, 'shift'], 'Tab', lazy.screen.prev_group(), desc='Next group'),
+    Key([mod], 'Tab', lazy.screen.next_group(skip_empty=True), desc='Next group'),
+    Key([mod, 'shift'], 'Tab', lazy.screen.prev_group(skip_empty=True), desc='Next group'),
 
     # Resize window
     Key([mod], "Left", lazy.layout.grow_left()),

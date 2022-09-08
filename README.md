@@ -28,6 +28,7 @@ First packages installed (via pacstrap from live environment):
 - **Display server**: xorg
 - **Compositor**: [picom](https://wiki.archlinux.org/title/Picom)
 - **Brightness**: brightnessctl
+- **Screen profiles**: autorandr
 
 ##### Window Manager and other choices
 - **Window manager**: [Qtile](https://wiki.archlinux.org/title/Qtile) \
@@ -59,6 +60,7 @@ First packages installed (via pacstrap from live environment):
     - Fira Code
     - Noto fonts
     - Nerd fonts
+    - Font Awesome (Got icons here: https://fontawesome.com/v5/cheatsheet)
 
 - **User Directories**: xdg-user-dirs \
     **for**: Manage "well known" user directories

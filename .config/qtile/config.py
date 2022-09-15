@@ -37,7 +37,7 @@ from libqtile.utils import guess_terminal
 # COLOR NAMES
 BLACK = '#111122'
 WHITE = '#ffffff'
-GRAY = '#666666'
+GREY = '#333333'
 LIGHT_GREY = '#555555'
 RED = '#cb2424'
 GREEN = '#00aa00'
@@ -103,6 +103,7 @@ def get_monitors():
     monitors = len(xr) - 1 if len(xr) > 2 else len(xr)
     return monitors
 
+monitors = get_monitors()
 ##################
 # KEYS/SHORTCUTS #
 ##################
@@ -247,6 +248,10 @@ for workspace in workspaces:
     keys.append(Key([mod, "shift"], workspace["key"],
                 lazy.window.togroup(workspace["name"]),
                 lazy.group[workspace["name"]].toscreen()))
+
+    # Move window to screen with Mod, Alt and number
+    for i in range(monitors):
+        keys.extend([Key([mod, "mod1"], str(i), lazy.window.toscreen(i))])
 
 ###########
 # LAYOUTS #
@@ -458,7 +463,6 @@ bar_style = dict(
         border_width=[0, 0, 0, 0],
     margin=[0, 0, 0, 0])
 
-monitors = get_monitors()
 screens = []
 for monitor in range(monitors):
     if monitor == 0:

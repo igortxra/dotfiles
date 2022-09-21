@@ -7,4 +7,6 @@ require "user.plugins"
 require "user.nvim-tree"
 require "user.which-key"
 require "user.lualine"
+require "user.bufferline"
+require "user.mason"
 

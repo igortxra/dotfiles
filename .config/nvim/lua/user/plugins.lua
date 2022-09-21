@@ -60,6 +60,8 @@ return packer.startup(function(use)
     requires = { 'kyazdani42/nvim-web-devicons', opt = true }
    }
 
+  -- Top bufferline
+  use {'akinsho/bufferline.nvim', tag = "v2.*", requires = 'kyazdani42/nvim-web-devicons'}
 
   -- Key Helper --
   use "folke/which-key.nvim"
@@ -73,6 +75,11 @@ return packer.startup(function(use)
  
   -- Markdown Previewer
   use({ "iamcco/markdown-preview.nvim", run = "cd app && npm install",setup = function() vim.g.mkdp_filetypes = { "markdown" } end, ft = { "markdown" }, })
+
+  -- LSP
+  use 'neovim/nvim-lspconfig' -- Configurations for Nvim LSP
+  use "williamboman/mason.nvim" -- Package manager for neovim
+  use "williamboman/mason-lspconfig.nvim"
 
   --
 	-- Automatically set up your configuration after cloning packer.nvim

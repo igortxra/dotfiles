@@ -29,7 +29,8 @@ local options = {
     swapfile = false,
     wrap = false,
     completeopt = { "menuone", "noselect" }, -- mostly just for cmp
-    mouse = "a"
+    mouse = "a",
+    termguicolors = true
 }
 
 -- Set all options

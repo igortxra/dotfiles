@@ -397,6 +397,19 @@ main_top_widgets = [
 
     widget.Spacer(), 
     
+    # Music
+    widget.Mpris2(
+        name="spotify",
+        display_metadata=['xesam:title', 'xesam:artist'],
+        scroll_chars=None,
+        objname="org.mpris.MediaPlayer2.spotify",
+        scroll_interval=0,
+        background=GREEN_PASTEL,
+        foreground=BLACK,
+        fmt='  {}',
+        paused_text='Paused: {track}'),
+    widget.Spacer(2),
+
     # DISK
     widget.DF(partition='/', background=WIDGET_BG, fmt=bold('DISK') + '   {}', visible_on_warn=False, format="{s}{m} Total | {f}{m} Free", **widget_defaults),
     widget.Spacer(2),
@@ -606,7 +619,8 @@ floating_layout = layout.Floating(
         Match(title="branchdialog"),  # gitk
         Match(title="pinentry"),  # GPG key password entry
         Match(title="iwgtk"),  # Wireless configuration
-    ]
+    ],
+    **layout_theme
 )
 auto_fullscreen = True
 focus_on_window_activation = "smart"

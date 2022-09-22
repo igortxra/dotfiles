@@ -174,9 +174,8 @@ def autostart():
 @hook.subscribe.screens_reconfigured
 async def _():
     """ Update groupbox config depending on screens length """
-    if len(qtile.screens) > 1:
+    if MONITORS > 1:
         groupbox1.visible_groups = [GROUP_1_NAME, GROUP_2_NAME, GROUP_3_NAME, GROUP_4_NAME, GROUP_5_NAME]
-        groupbox1.hide_unused = False
     else:
         groupbox1.visible_groups = [GROUP_1_NAME, GROUP_2_NAME, GROUP_3_NAME, GROUP_4_NAME, GROUP_5_NAME, GROUP_6_NAME, GROUP_7_NAME, GROUP_8_NAME, GROUP_9_NAME]
     if hasattr(groupbox1, 'bar'):
@@ -529,7 +528,7 @@ secondary_bottom_widgets = [
         other_current_screen_border=GROUPBOX_OTHER_CURRENT_SCREEN_BORDER,
         highlight_method='block',
         disable_drag=True,
-        hide_unused=False,
+        hide_unused=True,
         visible_groups=[GROUP_6_NAME, GROUP_7_NAME, GROUP_8_NAME, GROUP_9_NAME],
         borderwidth=1,
         **widget_defaults),

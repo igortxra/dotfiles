@@ -510,23 +510,6 @@ main_bottom_widgets = [
 ] # main_bottom_widgets END
 
 
-secondary_top_widgets = [
-    
-    widget.Sep(foreground=BAR_BACKGROUND),
-    widget.Spacer(), 
-
-    # Current Screen
-    widget.CurrentScreen(
-        active_text=bold(UNICODE_CURRENT_SCREEN),
-        inactive_text=UNICODE_NOT_CURRENT_SCREEN,
-        active_color=WHITE,
-        inactive_color=GREY_PASTEL),
-
-    widget.Spacer(), 
-    widget.Sep(foreground=BAR_BACKGROUND),
-] # secondary_top_widgets END
-
-
 secondary_bottom_widgets = [
 
     widget.CurrentLayoutIcon(
@@ -586,7 +569,6 @@ for monitor in range(MONITORS):
     else:
         # Secondary monitors
         screens.append(Screen(
-            top=bar.Bar(widgets=secondary_top_widgets, size=20, **bar_style),
             bottom=bar.Bar(widgets=secondary_bottom_widgets, size=18, **bar_style)))
 
 ########

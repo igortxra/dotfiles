@@ -6,26 +6,66 @@ filled in as strings with either
 a global executable or a path to
 an executable
 ]]
--- THESE ARE EXAMPLE CONFIGS FEEL FREE TO CHANGE TO WHATEVER YOU WANT
 
--- Personal key
-lvim.keys.insert_mode["ii"] = "<Esc>"
+local options = {
+  number = true,
+  relativenumber = true,
+  scrolloff = 10,
+  colorcolumn = "80",
+  signcolumn = "yes",
+  cmdheight = 2,
+  updatetime = 100,
+  encoding = "utf-8",
+  timeoutlen = 500,
+  autoread = true,
+  backup = false,
+  writebackup = false,
+  splitbelow = true,
+  splitright = true,
+  tabstop = 2,
+  softtabstop = 2,
+  shiftwidth = 2,
+  smarttab = true,
+  expandtab = true,
+  hidden = true,
+  hlsearch = true,
+  incsearch = true,
+  ignorecase = true,
+  smartcase = true,
+  clipboard = "unnamedplus",
+  cursorline = true,
+  undofile = true,
+  swapfile = false,
+  wrap = false,
+  completeopt = { "menuone", "noselect" }, -- mostly just for cmp
+  mouse = "a",
+  termguicolors = true
+}
 
--- Personal Options
-vim.opt.relativenumber = true
-vim.opt.scrolloff = 10
+-- Set all options
+for k, v in pairs(options) do
+  vim.opt[k] = v
+end
+
+vim.cmd [[
+    filetype on
+    filetype plugin on
+    filetype indent on
+]]
+
 
 -- general
 lvim.log.level = "warn"
 lvim.format_on_save = true
-lvim.colorscheme = "onedarker"
--- to disable icons and use a minimalist setup, uncomment the following
--- lvim.use_icons = false
+lvim.colorscheme = "catppuccin"
 
 -- keymappings [view all the defaults by pressing <leader>Lk]
 lvim.leader = "space"
+lvim.keys.insert_mode["ii"] = "<Esc>"
 lvim.keys.normal_mode["<C-s>"] = ":w<cr>"
--- add your own keymapping
+lvim.keys.normal_mode["<S-l>"] = ":BufferLineCycleNext<CR>"
+lvim.keys.normal_mode["<S-h>"] = ":BufferLineCyclePrev<CR>"
+
 -- unmap a default keymapping
 -- vim.keymap.del("n", "<C-Up>")
 -- override a default keymapping
@@ -37,8 +77,7 @@ lvim.keys.normal_mode["<C-s>"] = ":w<cr>"
 -- lvim.builtin.telescope.defaults.mappings = {
 --   -- for input mode
 --   i = {
---     ["<C-j>"] = actions.move_selection_next,
---     ["<C-k>"] = actions.move_selection_previous,
+--     ["<C-j>"] = actions.move_selection_next, ["<C-k>"] = actions.move_selection_previous,
 --     ["<C-n>"] = actions.cycle_history_next,
 --     ["<C-p>"] = actions.cycle_history_prev,
 --   },
@@ -58,7 +97,7 @@ lvim.keys.normal_mode["<C-s>"] = ":w<cr>"
 --   d = { "<cmd>Trouble document_diagnostics<cr>", "Diagnostics" },
 --   q = { "<cmd>Trouble quickfix<cr>", "QuickFix" },
 --   l = { "<cmd>Trouble loclist<cr>", "LocationList" },
---   w = { "<cmd>Trouble workspace_diagnostics<cr>", "Wordspace Diagnostics" },
+--   w = { "<cmd>Trouble workspace_diagnostics<cr>", "Workspace Diagnostics" },
 -- }
 
 -- TODO: User Config for predefined plugins
@@ -106,7 +145,7 @@ lvim.builtin.treesitter.highlight.enabled = true
 -- }
 
 -- ---@usage disable automatic installation of servers
--- lvim.lsp.automatic_servers_installation = false
+-- lvim.lsp.installer.setup.automatic_installation = false
 
 -- ---configure a server manually. !!Requires `:LvimCacheReset` to take effect!!
 -- ---see the full default list `:lua print(vim.inspect(lvim.lsp.automatic_configuration.skipped_servers))`
@@ -116,7 +155,7 @@ lvim.builtin.treesitter.highlight.enabled = true
 
 -- ---remove a server from the skipped list, e.g. eslint, or emmet_ls. !!Requires `:LvimCacheReset` to take effect!!
 -- ---`:LvimInfo` lists which server(s) are skipped for the current filetype
--- vim.tbl_map(function(server)
+-- lvim.lsp.automatic_configuration.skipped_servers = vim.tbl_filter(function(server)
 --   return server ~= "emmet_ls"
 -- end, lvim.lsp.automatic_configuration.skipped_servers)
 
@@ -165,13 +204,9 @@ lvim.builtin.treesitter.highlight.enabled = true
 -- }
 
 -- Additional Plugins
--- lvim.plugins = {
---     {"folke/tokyonight.nvim"},
---     {
---       "folke/trouble.nvim",
---       cmd = "TroubleToggle",
---     },
--- }
+lvim.plugins = {
+  { "catppuccin/nvim", as = "catppuccin" }
+}
 
 -- Autocommands (https://neovim.io/doc/user/autocmd.html)
 -- vim.api.nvim_create_autocmd("BufEnter", {
@@ -184,5 +219,5 @@ lvim.builtin.treesitter.highlight.enabled = true
 --   callback = function()
 --     -- let treesitter use bash highlight for zsh files as well
 --     require("nvim-treesitter.highlight").attach(0, "bash")
---   end
+--   end,
 -- })

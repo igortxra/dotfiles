@@ -33,11 +33,14 @@ alias ps='procs'
 # Git alias
 alias g='git'
 
-# Aliad for lazyness
+# Alias for lazyness
 alias cc='clear'
+alias cromai='cd $HOME/github/cromai'
+alias nvim='lvim'
 
 # Load autosuggestions
 source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 # Load asdf
 source /opt/asdf-vm/asdf.sh
+

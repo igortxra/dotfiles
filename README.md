@@ -1,7 +1,10 @@
-# How I Installed Arch Linux
+# Dotfiles
 Dotfiles and instructions to make my SO portable and easy to replicate
 
-## Steps
+## Last Screenshot
+![image](https://user-images.githubusercontent.com/91085060/200951007-c51a142a-c3b7-438c-bdb2-2f0c5468c4f2.png)
+
+# How I Installed Arch Linux
 
 - Boot live environment
 - Use archinstall command

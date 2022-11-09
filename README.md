@@ -1,89 +1,144 @@
+# How I Installed Arch Linux
+Dotfiles and instructions to make my SO portable and easy to replicate
 
-# Arch Linux Dotfiles
+## Steps
 
-Dotfiles and information about what i use in my linux setup
-## Screenshot
-![image](https://github.com/igortxra/dotfiles/blob/main/screenshot.png)
-
-## Details
-#### Install Arch Linux following the official documentation
-First packages installed (via pacstrap from live environment):
-- base base-devel linux linux-firmware git vi vim sudo
-
-#### Install and configure more packages
-
-- **Network manager**: systemd-networkd (needs to be enabled) 
-- **Wireless manager**: [iwd](https://wiki.archlinux.org/title/Iwd#Optional_configuration) (needs to be enabled) \
-    **Obs.**: set *systemd-resolved* as *NameResolvingService* in `/etc/iwd/main.conf` \
-    **with**: iwgtk
-
-- **Bootloader**: [GRUB](https://wiki.archlinux.org/title/GRUB) and efibootmgr (see [microcode](https://wiki.archlinux.org/title/Microcode))
-- **Mirrors sync**: [Reflector](https://wiki.archlinux.org/title/Reflector)
-
-##### Audio
-- **Video driver**: x86-video-... (it depends on your machine)
-- **Sound System**: alsa-utils; alsa-firmeware; pulseaudio; pulseaudio-alsa; sof-firmeware;
-
-##### Video
-- **Display server**: xorg
-- **Compositor**: [picom](https://wiki.archlinux.org/title/Picom)
-- **Brightness**: brightnessctl
-- **Screen profiles**: autorandr
-
-##### Window Manager and other choices
-- **Window manager**: [Qtile](https://wiki.archlinux.org/title/Qtile) \
-    **Obs.:**: Remember to see [documentation](http://docs.qtile.org/en/stable) to install required dependencies for widgets
-- **Display manager**: lightdm \
-    **with**: lightdm-gtk-greeter \
-    **with**: lightdm-gtk-greeter-settings
+- Boot live environment
+- Use archinstall command
     
-- **Terminal emulator**: Alacritty
-- **Shell**: zsh \
-    **run**: `chsh -s /usr/bin/zsh` (to make it default shell) \
-    **with**: [powerlevel10k](https://github.com/romkatv/powerlevel10k) \
-    **with**: zsh-autosuggestions \
-    **with**: [Rewritten in Rust Commands](https://zaiste.net/posts/shell-commands-rust)
+    This command will make your life easier, some of my choices are:
+    
 
-- **Web Browser**: Qutebrowser
-- **File Explorer**: Ranger    
-- **AUR helper**: yay
-- **Notifications**: Dunst
-- **Screen locker**: betterlockscreen \
-    **run**: `betterlockscreen -u ~/Pictures/wallpaper.jpg`
-- **Wallpapel and image viewer**: feh 
+   ```yaml
+   Bootloader: grub
+   Profile: xorg
+   Audio: pulseaudio
+   NetworkConfiguration: Copy ISO
+   AdditionalPackages: [
+   qtile, qutebrowser, ranger, zip, unzip, vi, vim, neovim, lightdm, lightdm-gtk-greeter, picom, brightnessctl, zsh, alacritty, arandr, autorandr, dunst, feh, git]
 
-- **Launcher**: rofi \
-    **for**: Power Menu, Apps Menu \
-    **with**: [adi1090x/rofi](https://github.com/adi1090x/rofi) (as theme)
+   ```
 
-+ **Fonts**: 
-    - Fira Code
-    - Noto fonts
-    - Nerd fonts
-    - Font Awesome (Got icons here: https://fontawesome.com/v5/cheatsheet)
+- Set public and private key for SSH (note just to remember)
+- Clone and checkout dotfiles repository
+    
+    ```bash
+    echo ".dotfiles" >> .gitignore
+    git clone --bare <https://github.com/igortxra/dotfiles.git> $HOME/.dotfiles
+    3alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
+    dotfiles config --local status.showUntrackedFiles no
+    dotfiles checkout
+    ```
+    
+    **Obs.:** When checking out you may receive a message requesting to remove files when you already have them.
 
-- **User Directories**: xdg-user-dirs \
-    **for**: Manage "well known" user directories
-    **run**: xdg-user-dirs-update
+### Shell
 
-##### Development utilities
-- **Code editor**: neovim \
-   **with**: lunarvim as IDE layer
-- **Language version manager**: asdf
-- **Containers**: Docker
+- Make Zsh works as expected
+    - Run `chsh -s /usr/bin/zsh` (to make it default shell)
+    - Install `exa` and `procs` (that replace `ls` and `ps`. See more on [Rewritten in Rust Commands](https://zaiste.net/posts/shell-commands-rust))
+    - Install `zsh-autosuggestions` from GitHub
+    - Install and configure [powerlevel10k](https://github.com/romkatv/powerlevel10k) (zsh theme)
+    - Custom as you want
 
-##### Screenshot utilities
-- **maim xclip viewnior**
+### AUR helper
+- Install yay
 
-##### More
-- **Compression**: zip unzip
+### Screen Locker
 
-## Using this dotfiles
-```bash
-echo ".dotfiles" >> .gitignore
-git clone --bare https://github.com/igortxra/dotfiles.git $HOME/.dotfiles
-alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
-dotfiles config --local status.showUntrackedFiles no
-dotfiles checkout
-```
-**Obs.:** When checking out you may receive a message requesting to remove files when you already have them.
+- Make betterlockscreen work as expected
+    - Install and configure betterlockscreen
+    - Install feh and set the wallpaper
+
+### Window Manager
+
+- Make Qtile works as expected
+See [documentation](http://docs.qtile.org/en/stable) to install required dependencies for widgets
+    - Install wireless_tools (for wlan widget)
+    - Install alsa-utils (for volume)
+    - Install python modules: iwlib psutil dbus-next
+    - Install Font Awesome (Icons here: [https://fontawesome.com/v5/cheatsheet](https://fontawesome.com/v5/cheatsheet))
+
+### Display Manager
+
+- Make Lightdm works as expected
+    - Install and run `sudo lightdm-gtk-greeter-settings`
+    - Make sure lightdm service is enabled
+
+### Launcher
+
+- Make Rofi works as expected
+    - Install Rofi and [adi1090x/rofi](https://github.com/adi1090x/rofi)
+    - Install maim, xclip and viewnior (for screenshots)
+    - Custom as you want
+
+### Developer utilities
+
+- Install asdf
+- Install LunarVim (needs neovim)
+- Install docker
+
+### Optionals
+
+- Optional utilities
+    - Install xdg-user-dirs (for /home organization)
+    - Run `xdg-user-dirs-update`
+
+### Configurations
+
+- Screen Profiles
+    - Use **arandr** to configure screen layout
+    - Use **autorandr** to save the profile
+        
+        ```bash
+        autorandr --save <profile-name>
+        ```
+        
+        I use 3 different profiles:
+        
+        | Key (used for shortcuts) | Profile Name | Description |
+        | --- | --- | --- |
+        | 0 | onlynotebook | To use only notebook screen |
+        | 1 | onlyexternal |  To use only external monitor |
+        | 2 | dualmonitor | To use both, notebook and external screen. External as primary and notebook as secondary |
+        
+        In **qtile** configuration i have shortcuts to set these profiles
+        
+
+## About Qtile configuration
+
+### Keybindings
+
+MOD → Super or CAPS LOCK (Caps lock is remapped to act as Super)
+
+| Modifier combination | Key | Action |
+| --- | --- | --- |
+| MOD | [1 ... 9] | Go to workspace |
+| MOD | [H J K L] | Move between windows |
+| MOD | E | File Explorer |
+| MOD | W | Close focused window |
+| MOD | P | Power Menu |
+| MOD | M | Change screen focus |
+| MOD | G | Grow Panel (for monadTall layout) |
+| MOD | TAB | Next window layout |
+| MOD | SPACE | App Launcher |
+| MOD | PRTSC | Print Screen Menu |
+| MOD | ENTER | Open Terminal Emulator |
+| MOD + SHIFT | M | Move window to another screen |
+| MOD + SHIFT | TAB | Previous window layout |
+| MOD + SHIFT | [H J K L] | Move current window position |
+| MOD  + CTRL | Q | Shutdown Qtile |
+| MOD + CTRL | 0 | Set screen profile onlynotebook |
+| MOD  + CTRL | R | Reload Qtile config |
+| MOD + CTRL | 1 | Set screen profile onlyexternal |
+| MOD + CTRL | 2 | Set screen profile dualmonitor |
+| MOD + ALT | [H L] | Previous/Next Workspace |
+
+### Keychords
+
+For a better understand of table below, see KeyChords in qtile configuration.
+
+| Modifier combination | Key | Mode | Description |
+| --- | --- | --- | --- |
+| MOD | O | OPEN | Another key will open something |
+| MOD | S | SETTINGS | Another key to access modes: Audio, Brightness,  Wi-Fi,  Taskbar |

@@ -78,7 +78,7 @@ UNICODE_UPDATES = ''
 UNICODE_NO_UPDATES = ''
 UNICODE_CLOCK = ""
 UNICODE_CURRENT_SCREEN = "   "
-UNICODE_NOT_CURRENT_SCREEN = ""
+UNICODE_NOT_CURRENT_SCREEN = "   "
 UNICODE_AGENDA = ""
 
 # NAMES
@@ -117,11 +117,16 @@ CMD_AUDIO_UP = 'pactl set-sink-volume @DEFAULT_SINK@ +2%'
 CMD_AUDIO_DOWN = 'pactl set-sink-volume @DEFAULT_SINK@ -2%'
 # Needs qutebrowser 'ag' quickmark mapped
 CMD_OPEN_AGENDA = 'qutebrowser ":quickmark-load ag"'
+CMD_OPEN_NOTION = 'qutebrowser ":quickmark-load notes"'
 
 
 ###################
 # Utils functions #
 ###################
+
+def cmd_notification(title: str = "Message", msg: str = "", expire=2000):
+    """ Send a notfication """
+    return f"notify-send '{title}' '{msg}' --expire-time={expire}"
 
 def bold(text: str):
     """ Return text between bold tags """
@@ -134,7 +139,7 @@ def go_to_group(name: str, key: str):
         if len(qtile.screens) == 1:
             qtile.groups_map[name].cmd_toscreen()
             return
-        if key in '9':
+        if key in '56789':
             qtile.focus_screen(1)
             qtile.groups_map[name].cmd_toscreen()
         else:
@@ -200,10 +205,6 @@ keys = [
     Key([mod], "Return",
         lazy.spawn(terminal),
         desc="Launch terminal"),
-
-    Key([mod], "r",
-        lazy.spawncmd(),
-        desc="Spawn a command using a prompt widget"),
 
     Key([mod, ALT], 'l',
         lazy.screen.next_group(),
@@ -274,26 +275,54 @@ keys = [
         lazy.next_screen(),
         desc='Change focused screen'),
 
-    Key([mod, 'control'], '0', lazy.spawn(
-        CMD_MONITOR_ONLYNOTEBOOK), desc='Use only notebook screen'),
-    Key([mod, 'control'], '1', lazy.spawn(
-        CMD_MONITOR_ONLYEXTERNAL), desc='Use only external screen'),
-    Key([mod, 'control'], '2', lazy.spawn(CMD_MONITOR_DUAL),
+    Key([mod, 'control'], '0', 
+        lazy.spawn(CMD_MONITOR_ONLYNOTEBOOK), 
+        lazy.spawn(cmd_notification("Screens", "Using only notebook screen", 4000)),
+        desc='Use only notebook screen'),
+    Key([mod, 'control'], '1', 
+        lazy.spawn(CMD_MONITOR_ONLYEXTERNAL), 
+        lazy.spawn(cmd_notification("Screens", "Using only external screen", 4000)),
+        desc='Use only external screen'),
+    Key([mod, 'control'], '2', 
+        lazy.spawn(CMD_MONITOR_DUAL),
+        lazy.spawn(cmd_notification("Screens", "Using both screens", 4000)),
         desc='Use both screens, notebook and external'),
-    Key([mod, 'control'], 'w', lazy.spawn(SCRIPT_WALLPAPER),
+    Key([mod, 'control'], 'w', 
+        lazy.spawn(SCRIPT_WALLPAPER),
+        lazy.spawn(cmd_notification("Screens", "Wallpaper fixed", 4000)),
         desc='Update wallpaper position'),
-
-    KeyChord([mod], "b", [
-        Key([], "k", lazy.hide_show_bar(position='top'), desc="Show/Hide top bar"),
-        Key([], "j", lazy.hide_show_bar(position='bottom'), desc='Show/Hide bottom bar')],
-        mode="BAR MODE"),
-
+    
     # KEYS: MENUS / PROGRAMS/ LAUNCHERS
     KeyChord([mod], "o", [
-        KeyChord([], "a", [
-            Key([], "g", lazy.spawn(CMD_OPEN_AGENDA))],
-            mode='OPEN A')],
+            Key([], "a", lazy.spawn(CMD_OPEN_AGENDA)),
+            Key([], "n", lazy.spawn(CMD_OPEN_NOTION))],
         mode='OPEN'
+    ),
+
+    KeyChord([mod], "s", [ # Settings Menu
+        
+        KeyChord([], "a", [ # Audio submenu
+                Key([], "j", lazy.spawn(CMD_AUDIO_DOWN)),
+                Key([], "k", lazy.spawn(CMD_AUDIO_UP)),
+                Key([], "m", lazy.spawn(CMD_AUDIO_MUTE))
+            ],
+            mode='Audio'),
+        
+        KeyChord([], "b", [ # Brightness submenu
+                Key([], "j", lazy.spawn(CMD_BRIGHTNESS_DOWN)),
+                Key([], "k", lazy.spawn(CMD_BRIGHTNESS_UP))
+            ],
+            mode='Brightness'),
+        
+        Key([], "w", lazy.spawn(CMD_WIFI_MENU)),
+        
+        KeyChord([], "t", [ # Taskbar submenu
+                Key([], "k", lazy.hide_show_bar(position='top'), desc="Show/Hide top bar"),
+                Key([], "j", lazy.hide_show_bar(position='bottom'), desc='Show/Hide bottom bar')
+            ],
+            mode="TASKBAR"),
+    ],
+    mode='Settings'
     ),
 
     Key([mod], "space",
@@ -404,10 +433,70 @@ groupbox1 = widget.GroupBox(
 main_top_widgets = [
 
     widget.Clipboard(background=WIDGET_BG, max_width=100,
-                     fmt='Copied: {}', **widget_defaults),
+                     fmt='<b>Copied</b>   {}', **widget_defaults),
 
     widget.Spacer(),
 
+    # Internet
+    widget.TextBox(bold(UNICODE_NET), background=GREEN,
+                   foreground=WIDGET_FG, **widget_defaults),
+    widget.Wlan(
+        format='{percent:2.0%}',
+        background=GREEN,
+        foreground=WIDGET_FG,
+        mouse_callbacks={
+            "Button1": lazy.spawn(CMD_WIFI_MENU)
+        },
+        **widget_defaults),
+    widget.Spacer(2),
+
+    # Memory
+    widget.TextBox(bold('RAM'), background=WIDGET_BG,
+                   foreground=WIDGET_FG, **widget_defaults),
+    widget.Memory(format='{MemUsed: .3f}{mm} / {MemTotal: .3f}{mm}', measure_mem='G',
+                  background=WIDGET_BG, foreground=WIDGET_FG, **widget_defaults),
+    widget.Spacer(2),
+
+  
+    # DISK
+    widget.DF(partition='/', background=WIDGET_BG, fmt=bold('DISK') + '   {}',
+              visible_on_warn=False, format="{f}{m} Free", **widget_defaults),
+    widget.Spacer(2),
+
+    # CPU
+    widget.TextBox(bold('CPU'), background=WIDGET_BG,
+                   foreground=WIDGET_FG, **widget_defaults),
+    widget.CPU(format='{freq_current}GHz {load_percent}%',
+               background=WIDGET_BG, foreground=WIDGET_FG, **widget_defaults),
+    widget.Spacer(2),
+
+   ]  # main_top_widgets END
+
+
+main_bottom_widgets = [
+
+    widget.Spacer(5),
+
+    widget.CurrentScreen(
+        active_text=bold(UNICODE_CURRENT_SCREEN),
+        inactive_text=UNICODE_NOT_CURRENT_SCREEN,
+        active_color=WHITE,
+        inactive_color=RED),
+
+
+    widget.CurrentLayoutIcon(
+        background=WIDGET_BG,
+        foreground=WIDGET_FG,
+        scale=0.8,
+        **widget_defaults),
+    widget.WindowCount(background=GREY, show_zero=True),
+
+    groupbox1,
+    widget.Spacer(5),
+
+    widget.Systray(icon_size=15, padding=15),
+
+    widget.Spacer(20),
     # Music
     widget.Mpris2(
         name="spotify",
@@ -421,98 +510,42 @@ main_top_widgets = [
         paused_text='Paused: {track}'),
     widget.Spacer(2),
 
-    # DISK
-    widget.DF(partition='/', background=WIDGET_BG, fmt=bold('DISK') + '   {}',
-              visible_on_warn=False, format="{s}{m} Total | {f}{m} Free", **widget_defaults),
-    widget.Spacer(2),
-
-    # CPU
-    widget.TextBox(bold('CPU'), background=WIDGET_BG,
-                   foreground=WIDGET_FG, **widget_defaults),
-    widget.CPU(format='{freq_current}GHz {load_percent}%',
-               background=WIDGET_BG, foreground=WIDGET_FG, **widget_defaults),
-    widget.Spacer(2),
-
-    # Memory
-    widget.TextBox(bold('RAM'), background=WIDGET_BG,
-                   foreground=WIDGET_FG, **widget_defaults),
-    widget.Memory(format='{MemUsed: .3f}{mm} |{MemTotal: .3f}{mm}', measure_mem='G',
-                  background=WIDGET_BG, foreground=WIDGET_FG, **widget_defaults),
-    widget.Spacer(2),
-
-    # Internet
-    widget.TextBox(bold(UNICODE_NET), background=WIDGET_BG,
-                   foreground=WIDGET_FG, **widget_defaults),
-    widget.Wlan(
-        format='{essid} {percent:2.0%}',
-        background=WIDGET_BG,
-        foreground=WIDGET_FG,
-        mouse_callbacks={
-            "Button1": lazy.spawn(CMD_WIFI_MENU)
-        },
-        **widget_defaults),
-    widget.Spacer(2),
-
-    # Volume control
-    widget.TextBox(bold(UNICODE_AUDIO), background=WIDGET_BG,
-                   foreground=WIDGET_FG, **widget_defaults),
-    widget.Volume(background=WIDGET_BG,
-                  foreground=WIDGET_FG, **widget_defaults),
-    widget.Spacer(2),
-
-    # Brightness/Backlight control
-    widget.TextBox(UNICODE_BRIGHTNESS, background=WIDGET_BG,
-                   foreground=WIDGET_FG, **widget_defaults),
-    widget.Backlight(
-        backlight_name=BACKLIGHT_NAME,
-        change_command=CMD_SET_BRIGHTNESS,
-        background=WIDGET_BG,
-        foreground=WIDGET_FG,
-        **widget_defaults),
-
-]  # main_top_widgets END
-
-
-main_bottom_widgets = [
-
-    widget.Chord(background=GREEN),
-    widget.Spacer(5),
-
-    widget.CurrentLayoutIcon(
-        background=WIDGET_BG,
-        foreground=WIDGET_FG,
-        scale=0.8,
-        **widget_defaults),
-    widget.WindowCount(background=GREY, show_zero=True),
-
-    groupbox1,
-    widget.Spacer(5),
-
-    widget.Prompt(prompt="RUN: ", background=WIDGET_BG, foreground=WIDGET_FG),
-
-    widget.Systray(icon_size=15, padding=15),
-
     widget.Spacer(),
 
-    widget.CurrentScreen(
-        active_text=bold(UNICODE_CURRENT_SCREEN),
-        inactive_text=UNICODE_NOT_CURRENT_SCREEN,
-        active_color=WHITE,
-        inactive_color=GREY_PASTEL),
+    widget.Chord(background=PURPLE, fmt="<b>MODE:</b> {}"),
 
     widget.Spacer(),
 
     widget.CheckUpdates(
         display_format=UNICODE_UPDATES + " {updates}",
         colour_have_updates=YELLOW,
-        colour_no_updates=GREEN,
-        no_update_string=f"{UNICODE_NO_UPDATES}  0"),
+        no_update_string=""),
     widget.Spacer(5),
-
+    
     widget.Clock(
         format=f"{UNICODE_AGENDA}  %d/%m/%Y  %H:%M",
         background=WIDGET_BG,
         foreground=WIDGET_FG),
+    widget.Spacer(2),
+
+    
+    # Brightness/Backlight control
+    # widget.TextBox(UNICODE_BRIGHTNESS, background=WIDGET_BG,
+    #                foreground=WIDGET_FG, **widget_defaults),
+    # widget.Backlight(
+    #     backlight_name=BACKLIGHT_NAME,
+    #     change_command=CMD_SET_BRIGHTNESS,
+    #     background=WIDGET_BG,
+    #     foreground=WIDGET_FG,
+    #     **widget_defaults),
+    # widget.Spacer(2),
+
+
+    # Volume control
+    widget.TextBox(bold(UNICODE_AUDIO), background=WIDGET_BG,
+                   foreground=WIDGET_FG, **widget_defaults),
+    widget.Volume(background=WIDGET_BG,
+                  foreground=WIDGET_FG, **widget_defaults),
     widget.Spacer(2),
 
     widget.Battery(
@@ -530,6 +563,12 @@ main_bottom_widgets = [
 
 
 secondary_bottom_widgets = [
+
+    widget.CurrentScreen(
+        active_text=bold(UNICODE_CURRENT_SCREEN),
+        inactive_text=UNICODE_NOT_CURRENT_SCREEN,
+        active_color=WHITE,
+        inactive_color=RED),
 
     widget.CurrentLayoutIcon(
         background=WIDGET_BG,
@@ -556,13 +595,6 @@ secondary_bottom_widgets = [
 
     widget.Spacer(),
 
-    widget.CurrentScreen(
-        active_text=bold(UNICODE_CURRENT_SCREEN),
-        inactive_text=UNICODE_NOT_CURRENT_SCREEN,
-        active_color=WHITE,
-        inactive_color=GREY_PASTEL),
-
-    widget.Spacer(),
 
     widget.Sep(foreground=BAR_BACKGROUND),
 ]  # secondary_bottom_widgets END

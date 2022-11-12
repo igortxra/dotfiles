@@ -96,7 +96,7 @@ GROUP_9_NAME = "9"
 # SCRIPTS
 HOME = os.path.expanduser('~')
 SCRIPT_AUTOSTART = f'{HOME}/.config/qtile/autostart.sh'
-SCRIPT_POWER_MENU = f"{HOME}/.config/rofi/powermenu/type-2/powermenu.sh &"
+SCRIPT_POWER_MENU = f"{HOME}/.config/rofi/powermenu/type-3/powermenu.sh &"
 SCRIPT_APP_MENU = f"{HOME}/.config/rofi/launchers/type-3/launcher.sh &"
 SCRIPT_WALLPAPER = f"{HOME}/.fehbg"
 

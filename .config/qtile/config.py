@@ -26,7 +26,7 @@ import os
 import subprocess
 
 from libqtile import bar, layout, widget, hook, qtile
-from libqtile.config import Click, Drag, Group, Key, KeyChord, Match, Screen
+from libqtile.config import Click, Drag, Group, Key, KeyChord, Match, Screen, ScratchPad, DropDown
 from libqtile.utils import guess_terminal
 from libqtile.lazy import lazy
 
@@ -186,7 +186,7 @@ keys = [
         lazy.reload_config(),
         desc="Reload the config"),
 
-    Key([mod], "Return",
+    Key([mod, "shift"], "Return",
         lazy.spawn(terminal),
         desc="Launch terminal"),
 
@@ -354,6 +354,14 @@ for workspace in workspaces:
         keys.append(Key([mod, "shift"], "m",
                     move_window_to_another_screen(),
                     desc="Move window to current group of another screen"))
+
+groups.append(ScratchPad('scratchpad', [
+    DropDown('term', terminal, width=0.6, height=0.5, x=0.2, y=0.2)
+]))
+keys.extend([
+    Key([mod], "Return", lazy.group["scratchpad"].dropdown_toggle('term'))
+    ])
+
 
 ###########
 # LAYOUTS #

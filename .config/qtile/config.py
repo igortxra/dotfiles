@@ -98,10 +98,10 @@ HOME = os.path.expanduser('~')
 SCRIPT_AUTOSTART = f'{HOME}/.config/qtile/autostart.sh'
 SCRIPT_POWER_MENU = f"{HOME}/.config/rofi/powermenu/type-2/powermenu.sh &"
 SCRIPT_APP_MENU = f"{HOME}/.config/rofi/launchers/type-3/launcher.sh &"
-SCRIPT_SCREENSHOT = f"{HOME}/.config/rofi/applets/bin/screenshot.sh &"
 SCRIPT_WALLPAPER = f"{HOME}/.fehbg"
 
 # COMMANDS
+CMD_SCREENSHOT = "flameshot gui"
 CMD_LOCK_SCREEN = "betterlockscreen -l blur"
 CMD_SET_BRIGHTNESS = "brightnessctl s {}%"
 CMD_WIFI_MENU = "iwgtk"
@@ -334,7 +334,7 @@ keys = [
         desc="Launch power menu"),
 
     Key([], "Print",
-        lazy.spawn(SCRIPT_SCREENSHOT),
+        lazy.spawn(CMD_SCREENSHOT),
         desc='Launch screenshot menu'),
 
     # File manager

@@ -72,7 +72,7 @@ See [documentation](http://docs.qtile.org/en/stable) to install required depende
 ### Launcher
 
 - Make Rofi works as expected
-    - Install Rofi and [adi1090x/rofi](https://github.com/adi1090x/rofi
+    - Install Rofi and [adi1090x/rofi](https://github.com/adi1090x/rofi)
     - Custom as you want
 
 ### Developer utilities

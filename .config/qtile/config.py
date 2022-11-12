@@ -37,27 +37,17 @@ from libqtile.lazy import lazy
 # COLOR NAMES
 BLACK = '#111111'
 WHITE = '#ffffff'
-BLUE = '#87a1ed'
-BLUE_REGULAR = "#274472"
-BLUE_PASTEL = '#89b4fa'
-BLUE_PASTEL1 = '#45475a'
-BLUE_PASTEL2 = '#585b70'
-BLUE_DARK = '#1e1e2e'
+BLUE = '#1e1e2e'
 GREY = '#333333'
-GREY_LIGHT = '#555555'
-GREY_PASTEL = '#a6adc8'
 RED = '#cb2424'
 YELLOW = '#ffc002'
-YELLOW_PASTEL = '#c9b57c'
-YELLOW_DARK = '#57551E'
 GREEN = '#40a02b'
-GREEN_PASTEL = 'a6e3a1'
-GREEN_DARK = '#1e5553'
+GREEN_SOFT = 'a6e3a1'
 PURPLE = '#4343f4'
 PURPLE_SOFT = '#66669c'
 
 # COLORS CLASSES
-BAR_BACKGROUND = BLUE_DARK
+BAR_BACKGROUND = BLUE
 WIDGET_BG = PURPLE_SOFT
 WIDGET_FG = WHITE
 GROUPBOX_ACTIVE = WHITE
@@ -115,23 +105,18 @@ CMD_AUDIO_MIC_MUTE = 'pactl set-source-mute @DEFAULT_SOURCE@ toggle'
 CMD_AUDIO_MUTE = 'pactl set-sink-mute @DEFAULT_SINK@ toggle'
 CMD_AUDIO_UP = 'pactl set-sink-volume @DEFAULT_SINK@ +2%'
 CMD_AUDIO_DOWN = 'pactl set-sink-volume @DEFAULT_SINK@ -2%'
-# Needs qutebrowser 'ag' quickmark mapped
-CMD_OPEN_AGENDA = 'qutebrowser ":quickmark-load ag"'
-CMD_OPEN_NOTION = 'qutebrowser ":quickmark-load notes"'
-
 
 ###################
 # Utils functions #
 ###################
 
 def cmd_notification(title: str = "Message", msg: str = "", expire=2000):
-    """ Send a notfication """
+    """ return a notfication command """
     return f"notify-send '{title}' '{msg}' --expire-time={expire}"
 
 def bold(text: str):
     """ Return text between bold tags """
     return f'<b>{text}</b>'
-
 
 def go_to_group(name: str, key: str):
     """ Go to group but keeping it predefined screen """
@@ -177,7 +162,6 @@ def move_window_to_another_screen(qtile):
 # HOOKS #
 #########
 
-
 @hook.subscribe.startup_once
 def autostart():
     """ Executes a script on qtile startup """
@@ -188,7 +172,7 @@ def autostart():
 ##################
 
 mod = "mod4"  # Super (or Windows) key
-ALT = "mod1"
+ALT = "mod1"  # ALT key
 terminal = guess_terminal()
 
 keys = [
@@ -222,13 +206,11 @@ keys = [
         lazy.prev_layout(),
         desc="Previous layout"),
 
-
     # KEYS: DEVICE CONTROL
     Key([], "XF86MonBrightnessUp",   lazy.spawn(
         CMD_BRIGHTNESS_UP), desc='Increase brightness'),
     Key([], "XF86MonBrightnessDown", lazy.spawn(
         CMD_BRIGHTNESS_DOWN), desc='Decrease brightness'),
-
     Key([], "XF86AudioMicMute",     lazy.spawn(
         CMD_AUDIO_MIC_MUTE), desc='Mute microphone'),
     Key([], "XF86AudioMute",        lazy.spawn(
@@ -244,15 +226,12 @@ keys = [
     Key([mod], "k", lazy.layout.up(), desc="Move focus up"),
     Key([mod], "l", lazy.layout.right(), desc="Move focus to right"),
 
-    Key([mod, "shift"], "h", lazy.layout.shuffle_left(),
-        desc="Move window to the left"),
+    Key([mod, "shift"], "h", lazy.layout.shuffle_left(),desc="Move window to the left"),
     Key([mod, "shift"], "j", lazy.layout.shuffle_down(), desc="Move window down"),
     Key([mod, "shift"], "k", lazy.layout.shuffle_up(), desc="Move window up"),
-    Key([mod, "shift"], "l", lazy.layout.shuffle_right(),
-        desc="Move window to the right"),
+    Key([mod, "shift"], "l", lazy.layout.shuffle_right(),desc="Move window to the right"),
 
-    Key([mod, "control"], "h", lazy.layout.grow_left(),
-        desc="Grow window to left"),
+    Key([mod, "control"], "h", lazy.layout.grow_left(),desc="Grow window to left"),
     Key([mod, "control"], "j", lazy.layout.grow_down(), desc="Grow window down"),
     Key([mod, "control"], "k", lazy.layout.grow_up(), desc="Grow window up"),
     Key([mod, "control"], "l", lazy.layout.grow_right(), desc="Grow window right"),
@@ -279,26 +258,23 @@ keys = [
         lazy.spawn(CMD_MONITOR_ONLYNOTEBOOK), 
         lazy.spawn(cmd_notification("Screens", "Using only notebook screen", 4000)),
         desc='Use only notebook screen'),
+
     Key([mod, 'control'], '1', 
         lazy.spawn(CMD_MONITOR_ONLYEXTERNAL), 
         lazy.spawn(cmd_notification("Screens", "Using only external screen", 4000)),
         desc='Use only external screen'),
+
     Key([mod, 'control'], '2', 
         lazy.spawn(CMD_MONITOR_DUAL),
         lazy.spawn(cmd_notification("Screens", "Using both screens", 4000)),
         desc='Use both screens, notebook and external'),
+
     Key([mod, 'control'], 'w', 
         lazy.spawn(SCRIPT_WALLPAPER),
         lazy.spawn(cmd_notification("Screens", "Wallpaper fixed", 4000)),
         desc='Update wallpaper position'),
     
     # KEYS: MENUS / PROGRAMS/ LAUNCHERS
-    KeyChord([mod], "o", [
-            Key([], "a", lazy.spawn(CMD_OPEN_AGENDA)),
-            Key([], "n", lazy.spawn(CMD_OPEN_NOTION))],
-        mode='OPEN'
-    ),
-
     KeyChord([mod], "s", [ # Settings Menu
         
         KeyChord([], "a", [ # Audio submenu
@@ -504,7 +480,7 @@ main_bottom_widgets = [
         scroll_chars=None,
         objname="org.mpris.MediaPlayer2.spotify",
         scroll_interval=0,
-        background=GREEN_PASTEL,
+        background=GREEN_SOFT,
         foreground=BLACK,
         fmt='  {}',
         paused_text='Paused: {track}'),

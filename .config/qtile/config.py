@@ -24,6 +24,8 @@
 
 import os
 import subprocess
+import asyncio
+import re
 
 from libqtile import bar, layout, widget, hook, qtile
 from libqtile.utils import guess_terminal
@@ -73,6 +75,7 @@ UNICODE_CLOCK = ""
 UNICODE_CURRENT_SCREEN = "   "
 UNICODE_NOT_CURRENT_SCREEN = "   "
 UNICODE_AGENDA = ""
+UNICODE_CLIPBOARD = "   "
 
 # Scripts
 HOME = os.path.expanduser('~')
@@ -149,10 +152,44 @@ def move_window_to_another_screen(qtile):
 ###############################################################################
 # Hooks
 
+@hook.subscribe.screens_reconfigured
+def reconfigure_groupbox():
+    """ Adapt visible groups depending on number of screens """
+    groups_names = [g.name for g in qtile.groups]
+    if len(qtile.screens) > 1:
+        groupbox1.visible_groups = groups_names[0:4]
+    else:
+        groupbox1.visible_groups = groups_names
+
+@hook.subscribe.startup
+def startup():
+    """ Execute some steps in qtile refresh """
+    reconfigure_groupbox()
+
 @hook.subscribe.startup_once
 def autostart():
     """ Executes a script on qtile startup """
     subprocess.Popen([SCRIPT_AUTOSTART])
+    
+@hook.subscribe.client_new
+async def move_spotify(client):
+    """ Move spotify window to its group """
+    await asyncio.sleep(0.1)
+    if 'Spotify' in client.name:
+        group_name = groups_definitions[7].get("name")
+        client.togroup(group_name)
+        targetgroup = client.qtile.groups_map.get(group_name)
+        targetgroup.cmd_toscreen(toggle=False)
+
+@hook.subscribe.client_new
+def modify_window(client):
+    """ Follow window on auto-move done when it matches with a group """
+    for group in groups:  # follow on auto-move
+        match = next((m for m in group.matches if m.compare(client)), None)
+        if match:
+            targetgroup = client.qtile.groups_map[group.name]  # there can be multiple instances of a group
+            targetgroup.cmd_toscreen(toggle=False)
+            break
 
 ###############################################################################
 # Keys - NOT ALL KEYS ARE SPECIFIED IN THIS SECTIONS
@@ -171,15 +208,15 @@ keys = [
         lazy.reload_config(),
         desc="Reload the config"),
 
-    Key([mod, "shift"], "Return",
+    Key([mod], "Return",
         lazy.spawn(terminal),
         desc="Launch terminal"),
 
-    Key([mod, ALT], 'l',
+    Key([mod], 'n',
         lazy.screen.next_group(),
         desc='Next group'),
 
-    Key([mod, ALT], 'h',
+    Key([mod], 'b',
         lazy.screen.prev_group(),
         desc='Next group'),
 
@@ -264,11 +301,7 @@ keys = [
         lazy.spawn(CMD_SCREENSHOT),
         desc='Launch screenshot menu'),
 
-    Key([mod], "e",
-        lazy.spawn(CMD_FILE_MANAGER),
-        desc='Launch file manager'),
-
-     # Settings Menu
+    # Settings Menu
     KeyChord([mod], "Equal", [
 
         # Audio submenu
@@ -294,17 +327,22 @@ keys = [
 
 ###############################################################################
 # Groups - Workspaces
+notion_regex = re.compile(".*Notion.*")
+qutebrowser_regex = re.compile(".*qutebrowser.*")
+firefox_regex = re.compile(".*Firefox.*")
+postman_regex = re.compile(".*Postman.*")
+alacritty_regex = re.compile(".*Alacritty.*")
 
 groups_definitions = [
-    {"name": "1", "key": "1", "layout": "monadtall", "matches": []},
-    {"name": "2", "key": "2", "layout": "monadtall", "matches": []},
-    {"name": "3", "key": "3", "layout": "monadtall", "matches": []},
-    {"name": "4", "key": "4", "layout": "monadtall", "matches": []},
-    {"name": "5", "key": "5", "layout": "max", "matches": []},
-    {"name": "6", "key": "6", "layout": "max", "matches": []},
-    {"name": "7", "key": "7", "layout": "max", "matches": []},
-    {"name": "8", "key": "8", "layout": "max", "matches": []},
-    {"name": "9", "key": "9", "layout": "max", "matches": [
+    {"name": " ₁", "key": "1", "layout": "max", "matches": [Match(title=qutebrowser_regex), Match(title=firefox_regex)]},
+    {"name": " ₂", "key": "2", "layout": "monadtall", "matches": []},
+    {"name": " ₃", "key": "3", "layout": "matrix", "matches": [Match(title=alacritty_regex)]},
+    {"name": " ₄", "key": "4", "layout": "monadtall", "matches": []},
+    {"name": "5 ₅", "key": "5", "layout": "max", "matches": []},
+    {"name": "6 ₆", "key": "6", "layout": "max", "matches": [Match(title=postman_regex)]},
+    {"name": " ₇", "key": "7", "layout": "max", "matches": [Match(title=notion_regex)]},
+    {"name": " ₈", "key": "8", "layout": "max", "matches": []},
+    {"name": " ₉", "key": "9", "layout": "max", "matches": [
         Match(wm_class='discord')]}]
 
 groups = []
@@ -315,13 +353,14 @@ for group_dict in groups_definitions:
     group = Group(
         name=group_name,
         matches=group_dict.get("matches"), 
-        layout=group_dict.get("layouts"))
+        layout=group_dict.get("layout"))
     groups.append(group)
 
     go_to_group_key = Key(
             [mod], group_key, 
             lazy.function(go_to_group(group_name, group_key)),
             desc="go to specified group")
+    
     move_to_group_key = Key(
         [mod, "shift"], group_key,
         lazy.window.togroup(group_name),
@@ -331,12 +370,11 @@ for group_dict in groups_definitions:
     keys.append(go_to_group_key)
     keys.append(move_to_group_key)
                 
-
     for i in range(MONITORS):
-        keys.append(Key(
-            [mod, "shift"], "m", 
-            move_window_to_another_screen(),
-            desc="move window to current group of another screen"))
+        keys.append(
+            Key([mod, "shift"], "m", 
+                move_window_to_another_screen(),
+                desc="move window to current group of another screen"))
 
 ###############################################################################
 # ScratchPads
@@ -344,10 +382,12 @@ for group_dict in groups_definitions:
 groups.append(
     ScratchPad('scratchpad', [
         DropDown('terminal', terminal, width=0.6, height=0.7, x=0.2, y=0.15),
+        DropDown('files', CMD_FILE_MANAGER, width=0.6, height=0.7, x=0.2, y=0.15),
     ]))
 
 keys.extend([
-    Key([mod], "Return", lazy.group["scratchpad"].dropdown_toggle('terminal')),
+    Key(["control"], "Return", lazy.group["scratchpad"].dropdown_toggle('terminal')),
+    Key([mod], "e", lazy.group["scratchpad"].dropdown_toggle('files'))
 ])
 
 
@@ -395,30 +435,53 @@ groupbox1 = widget.GroupBox(
     other_current_screen_border=GROUPBOX_OTHER_CURRENT_SCREEN_BORDER,
     highlight_method='block',
     disable_drag=True,
-    hide_unused=True,
-    borderwidth=1,
+    hide_unused=False,
+    borderwidth=1, 
     **widget_defaults)
 
+groupbox2 = widget.GroupBox(
+        active=GROUPBOX_ACTIVE,
+        inactive=GROUPBOX_INACTIVE,
+        this_screen_border=GROUPBOX_THIS_SCREEN_BORDER,
+        other_screen_border=GROUPBOX_OTHER_SCREEN_BORDER,
+        this_current_screen_border=GROUPBOX_THIS_CURRENT_SCREEN_BORDER,
+        other_current_screen_border=GROUPBOX_OTHER_CURRENT_SCREEN_BORDER,
+        highlight_method='block',
+        disable_drag=True,
+        hide_unused=False,
+        borderwidth=1,
+        visible_groups=[
+            groups_definitions[4].get("name"),
+            groups_definitions[5].get("name"),
+            groups_definitions[6].get("name"),
+            groups_definitions[7].get("name"),
+            groups_definitions[8].get("name"),
+        ],
+        **widget_defaults)
 
 main_top_widgets = [
 
     widget.Clipboard(
-        fmt=bold("Copied ") + "{}", 
+        fmt=bold(UNICODE_CLIPBOARD) + "{}", 
         max_width=100,
         background=WIDGET_BG, 
         **widget_defaults),
 
     widget.Spacer(),
 
+    widget.Systray(icon_size=15, padding=15),
+
+    widget.Spacer(20),
+    
     # Internet
     widget.TextBox(
         bold(UNICODE_NET), 
-        background=GREEN, 
+        background=WIDGET_BG,
         foreground=WIDGET_FG, 
         **widget_defaults),
     widget.Wlan(
         format='{percent:2.0%}',
-        background=GREEN,
+        background=WIDGET_BG,
         foreground=WIDGET_FG,
         mouse_callbacks={
             "Button1": lazy.spawn(CMD_WIFI_MENU)
@@ -466,7 +529,8 @@ main_top_widgets = [
         **widget_defaults),
 
     widget.Spacer(2),
-] 
+] # main_top_widgets END
+
 
 main_bottom_widgets = [
 
@@ -476,7 +540,7 @@ main_bottom_widgets = [
         active_text=bold(UNICODE_CURRENT_SCREEN),
         inactive_text=UNICODE_NOT_CURRENT_SCREEN,
         active_color=WHITE,
-        inactive_color=RED),
+        inactive_color=PURPLE_SOFT),
 
     widget.CurrentLayoutIcon(
         background=WIDGET_BG,
@@ -490,20 +554,7 @@ main_bottom_widgets = [
 
     widget.Spacer(5),
 
-    widget.Systray(icon_size=15, padding=15),
-
-    widget.Spacer(20),
-    
-    widget.Mpris2(
-        name="spotify",
-        display_metadata=['xesam:title', 'xesam:artist'],
-        scroll_chars=None,
-        objname="org.mpris.MediaPlayer2.spotify",
-        scroll_interval=0,
-        background=GREEN_SOFT,
-        foreground=BLACK,
-        fmt='  {}',
-        paused_text='Paused: {track}'),
+    widget.WindowName(),
 
     widget.Spacer(),
 
@@ -517,6 +568,18 @@ main_bottom_widgets = [
         no_update_string=""),
 
     widget.Spacer(5),
+    widget.Mpris2(
+        name="spotify",
+        display_metadata=['xesam:title', 'xesam:artist'],
+        scroll_chars=None,
+        objname="org.mpris.MediaPlayer2.spotify",
+        scroll_interval=0,
+        background=GREEN_SOFT,
+        foreground=BLACK,
+        fmt='  {}',
+        paused_text='Paused: {track}'),
+    
+    widget.Spacer(2),
     
     widget.Clock(
         format=f"{UNICODE_AGENDA}  %d/%m/%Y  %H:%M",
@@ -551,7 +614,7 @@ secondary_bottom_widgets = [
         active_text=bold(UNICODE_CURRENT_SCREEN),
         inactive_text=UNICODE_NOT_CURRENT_SCREEN,
         active_color=WHITE,
-        inactive_color=RED),
+        inactive_color=PURPLE_SOFT),
 
     widget.CurrentLayoutIcon(
         background=WIDGET_BG,
@@ -561,20 +624,11 @@ secondary_bottom_widgets = [
     widget.WindowCount(background=GREY, show_zero=True),
     widget.Spacer(length=2),
 
-    widget.GroupBox(
-        active=GROUPBOX_ACTIVE,
-        inactive=GROUPBOX_INACTIVE,
-        this_screen_border=GROUPBOX_THIS_SCREEN_BORDER,
-        other_screen_border=GROUPBOX_OTHER_SCREEN_BORDER,
-        this_current_screen_border=GROUPBOX_THIS_CURRENT_SCREEN_BORDER,
-        other_current_screen_border=GROUPBOX_OTHER_CURRENT_SCREEN_BORDER,
-        highlight_method='block',
-        disable_drag=True,
-        hide_unused=True,
-        borderwidth=1,
-        **widget_defaults),
+    groupbox2,
 
     widget.Sep(foreground=BAR_BACKGROUND),
+
+    widget.WindowName(),
 
     widget.Spacer(),
 

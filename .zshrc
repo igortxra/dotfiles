@@ -44,3 +44,6 @@ source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 # Load asdf
 source /opt/asdf-vm/asdf.sh
 
+# Load fuzzy finder
+source /usr/share/fzf/key-bindings.zsh
+source /usr/share/fzf/completion.zsh

@@ -81,11 +81,10 @@ UNICODE_CLIPBOARD = "   "
 HOME = os.path.expanduser('~')
 SCRIPT_AUTOSTART = f'{HOME}/.config/qtile/autostart.sh'
 SCRIPT_POWER_MENU = f"{HOME}/.config/rofi/powermenu/type-3/powermenu.sh &"
-SCRIPT_APP_MENU = f"{HOME}/.config/rofi/launchers/type-3/launcher.sh &"
+SCRIPT_APP_MENU = f"{HOME}/.config/rofi/launchers/type-4/launcher.sh &"
 SCRIPT_WALLPAPER = f"{HOME}/.fehbg"
 
 # Commands
-MUSIC_APP = "spotify"
 CMD_SCREENSHOT = "flameshot gui"
 CMD_REMAP_CAPS = "setxkbmap -option caps:super"
 CMD_LOCK_SCREEN = "betterlockscreen -l blur" # UNUSED
@@ -100,7 +99,6 @@ CMD_AUDIO_MIC_MUTE = 'pactl set-source-mute @DEFAULT_SOURCE@ toggle'
 CMD_AUDIO_MUTE = 'pactl set-sink-mute @DEFAULT_SINK@ toggle'
 CMD_AUDIO_UP = 'pactl set-sink-volume @DEFAULT_SINK@ +2%'
 CMD_AUDIO_DOWN = 'pactl set-sink-volume @DEFAULT_SINK@ -2%'
-CMD_OPEN_AGENDA = 'qutebrowser ":quickmark-load ag"'
 
 ###############################################################################
 # Utils functions
@@ -327,23 +325,23 @@ keys = [
 
 ###############################################################################
 # Groups - Workspaces
-notion_regex = re.compile(".*Notion.*")
-qutebrowser_regex = re.compile(".*qutebrowser.*")
-firefox_regex = re.compile(".*Firefox.*")
-postman_regex = re.compile(".*Postman.*")
-alacritty_regex = re.compile(".*Alacritty.*")
+regex_notion = re.compile(".*Notion.*")
+regex_qutebrowser = re.compile(".*qutebrowser.*")
+regex_firefox = re.compile(".*Firefox.*")
+regex_postman = re.compile(".*Postman.*")
+regex_alacritty= re.compile(".*Alacritty.*")
+regex_beekeper = re.compile(".*beekeeper.*")
 
 groups_definitions = [
-    {"name": " ₁", "key": "1", "layout": "max", "matches": [Match(title=qutebrowser_regex), Match(title=firefox_regex)]},
-    {"name": " ₂", "key": "2", "layout": "monadtall", "matches": []},
-    {"name": " ₃", "key": "3", "layout": "matrix", "matches": [Match(title=alacritty_regex)]},
-    {"name": " ₄", "key": "4", "layout": "monadtall", "matches": []},
-    {"name": "5 ₅", "key": "5", "layout": "max", "matches": []},
-    {"name": "6 ₆", "key": "6", "layout": "max", "matches": [Match(title=postman_regex)]},
-    {"name": " ₇", "key": "7", "layout": "max", "matches": [Match(title=notion_regex)]},
+    {"name": " ₁", "key": "1", "layout": "max", "matches": [Match(title=regex_qutebrowser), Match(title=regex_firefox)]},
+    {"name": " ₂", "key": "2", "layout": "monadtall", "matches": [Match(wm_class="lvim")]},
+    {"name": " ₃", "key": "3", "layout": "matrix", "matches": []},
+    {"name": " ₄", "key": "4", "layout": "monadtall", "matches": [Match(title=regex_beekeper)]},
+    {"name": " ₅", "key": "5", "layout": "max", "matches": []},
+    {"name": " ₆", "key": "6", "layout": "max", "matches": [Match(title=regex_postman)]},
+    {"name": " ₇", "key": "7", "layout": "max", "matches": [Match(title=regex_notion)]},
     {"name": " ₈", "key": "8", "layout": "max", "matches": []},
-    {"name": " ₉", "key": "9", "layout": "max", "matches": [
-        Match(wm_class='discord')]}]
+    {"name": " ₉", "key": "9", "layout": "max", "matches": [Match(wm_class='discord')]}]
 
 groups = []
 for group_dict in groups_definitions:

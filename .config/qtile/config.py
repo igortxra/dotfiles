@@ -70,7 +70,7 @@ UNICODE_BRIGHTNESS = ''
 UNICODE_BATTERY = ''
 UNICODE_CHARGING = ' '
 UNICODE_UPDATES = ''
-UNICODE_NO_UPDATES = ''
+UNICODE_NO_UPDATES = '  System up to date'
 UNICODE_CLOCK = ""
 UNICODE_CURRENT_SCREEN = "   "
 UNICODE_NOT_CURRENT_SCREEN = "   "
@@ -563,7 +563,8 @@ main_bottom_widgets = [
     widget.CheckUpdates(
         display_format=UNICODE_UPDATES + " {updates}",
         colour_have_updates=YELLOW,
-        no_update_string=""),
+        colour_no_updates=GREEN,
+        no_update_string=UNICODE_NO_UPDATES),
 
     widget.Spacer(5),
     widget.Mpris2(

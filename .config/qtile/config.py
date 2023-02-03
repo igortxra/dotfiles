@@ -49,16 +49,19 @@ GREEN = '#40a02b'
 GREEN_SOFT = 'a6e3a1'
 PURPLE = '#4343f4'
 PURPLE_SOFT = '#66669c'
+COFFEE = '#61481C'
+
+
 
 # Colors classes
-BAR_BACKGROUND = BLUE
-WIDGET_BG = PURPLE_SOFT
+BAR_BACKGROUND = BLACK
+WIDGET_BG = GREY
 WIDGET_FG = WHITE
 GROUPBOX_ACTIVE = WHITE
 GROUPBOX_INACTIVE = GREY
-GROUPBOX_THIS_SCREEN_BORDER = PURPLE
+GROUPBOX_THIS_SCREEN_BORDER = COFFEE
 GROUPBOX_OTHER_SCREEN_BORDER = PURPLE_SOFT
-GROUPBOX_THIS_CURRENT_SCREEN_BORDER = PURPLE
+GROUPBOX_THIS_CURRENT_SCREEN_BORDER = COFFEE
 GROUPBOX_OTHER_CURRENT_SCREEN_BORDER = PURPLE_SOFT
 WINDOW_FOCUSED_BORDER = WHITE
 WINDOW_BORDER = BLACK
@@ -510,6 +513,7 @@ main_top_widgets = [
         visible_on_warn=False, 
         format="{f}{m} Free", 
         background=WIDGET_BG, 
+        foreground=WIDGET_FG,
         **widget_defaults),
 
     widget.Spacer(2),
@@ -613,7 +617,7 @@ secondary_bottom_widgets = [
         active_text=bold(UNICODE_CURRENT_SCREEN),
         inactive_text=UNICODE_NOT_CURRENT_SCREEN,
         active_color=WHITE,
-        inactive_color=PURPLE_SOFT),
+        inactive_color=COFFEE),
 
     widget.CurrentLayoutIcon(
         background=WIDGET_BG,

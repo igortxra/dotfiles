@@ -88,9 +88,9 @@ See [documentation](http://docs.qtile.org/en/stable) to install required depende
 
 ### Fonts
 Make sure that you have:
-- Nerd Fonts
-- Font Awesome
-- Fira Code
+- ttf-font-awesmoe
+- ttf-noto-nerd
+- ttf-firacode-nerd
 
 ### Configurations
 

@@ -12,5 +12,7 @@ picom &
 # Update screens
 autorandr --change
 
+sleep 1
+
 # Set wallpaper
 ~/.fehbg &

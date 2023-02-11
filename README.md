@@ -7,32 +7,33 @@ Dotfiles and instructions to make my SO portable and easy to replicate
 # How I Installed Arch Linux
 
 - Boot live environment
+- Connect to the internet
 - Use archinstall command
     
     This command will make your life easier, some of my choices are:
     
-
    ```yaml
    Bootloader: grub
    Profile: xorg
-   Audio: pulseaudio
+   Audio: pipeware
    NetworkConfiguration: Copy ISO
    AdditionalPackages: [
-   qtile, qutebrowser, ranger, zip, unzip, vi, vim, neovim, lightdm, lightdm-gtk-greeter, picom, brightnessctl, zsh, alacritty, arandr, autorandr, dunst, feh, git]
-
+   qtile, qutebrowser, zip, unzip, vi, vim, neovim, ly, picom, brightnessctl, zsh, kitty, arandr, autorandr, dunst, feh, git, tree]
    ```
+   Set a password for root and add an non root user
 
-- Set public and private key for SSH (note just to remember)
+
+- Set public/private keys for SSH (note just to remember)
+
 - Clone and checkout dotfiles repository
     
     ```bash
     echo ".dotfiles" >> .gitignore
     git clone --bare <https://github.com/igortxra/dotfiles.git> $HOME/.dotfiles
-    3alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
+    alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
     dotfiles config --local status.showUntrackedFiles no
     dotfiles checkout
     ```
-    
     **Obs.:** When checking out you may receive a message requesting to remove files when you already have them.
 
 ### Shell
@@ -46,6 +47,16 @@ Dotfiles and instructions to make my SO portable and easy to replicate
 
 ### AUR helper
 - Install yay
+    ```bash
+    git clone https://aur.archlinux.org/yay.git
+    cd yay
+    makepkg -si
+    ```
+
+### Display Manager
+
+- Make Ly works as expected
+    - Make sure Ly service is enabled
 
 ### Screen Locker
 
@@ -63,12 +74,6 @@ See [documentation](http://docs.qtile.org/en/stable) to install required depende
     - Install Font Awesome (Icons here: [https://fontawesome.com/v5/cheatsheet](https://fontawesome.com/v5/cheatsheet))
     - Install Flameshot (for screenshot)
 
-### Display Manager
-
-- Make Lightdm works as expected
-    - Install and run `sudo lightdm-gtk-greeter-settings`
-    - Make sure lightdm service is enabled
-
 ### Launcher
 
 - Make Rofi works as expected
@@ -78,32 +83,32 @@ See [documentation](http://docs.qtile.org/en/stable) to install required depende
 ### Developer utilities
 
 - Install asdf
-- Install LunarVim (needs neovim)
+- Install neovim and use [my configuration](https://github.com/igortxra/nvim)
 - Install docker
 
-### Optionals
-
-- Optional utilities
-    - Install xdg-user-dirs (for /home organization)
-    - Run `xdg-user-dirs-update`
+### Fonts
+Make sure that you have:
+- Nerd Fonts
+- Font Awesome
+- Fira Code
 
 ### Configurations
 
 - Screen Profiles
-    - Use **arandr** to configure screen layout
-    - Use **autorandr** to save the profile
+    - First use **arandr** to configure screen layout
+    - After that use **autorandr** to save the profile
+         ```bash
+            autorandr --save <profile-name>
+         ```
+    - In qtile configuration i mapped some shortcuts to switch between screen profiles
         
-        ```bash
-        autorandr --save <profile-name>
-        ```
-        
-        I use 3 different profiles:
+        I have 2 monitors (notebook and HDM1) and I use 3 different profiles:
         
         | Key (used for shortcuts) | Profile Name | Description |
         | --- | --- | --- |
-        | 0 | onlynotebook | To use only notebook screen |
-        | 1 | onlyexternal |  To use only external monitor |
-        | 2 | dualmonitor | To use both, notebook and external screen. External as primary and notebook as secondary |
+        | SUPER + CTRL + 0 | onlynotebook | To use only notebook screen |
+        | SUPER + CTRL + 1 | onlyexternal |  To use only external monitor |
+        | SUPER + CTRL + 2 | dualmonitor | To use both, notebook and external screen. External as primary and notebook as secondary |
         
         In **qtile** configuration i have shortcuts to set these profiles
         

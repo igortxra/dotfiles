@@ -18,7 +18,7 @@ Dotfiles and instructions to make my SO portable and easy to replicate
    Audio: pipeware
    NetworkConfiguration: Copy ISO
    AdditionalPackages: [
-   qtile, qutebrowser, zip, unzip, vi, vim, neovim, ly, picom, brightnessctl, zsh, kitty, arandr, autorandr, dunst, feh, git, tree]
+   qtile, qutebrowser, zip, unzip, vi, vim, neovim, ly, picom, brightnessctl, zsh, kitty, arandr, autorandr, dunst, feh, git, tree, fzf]
    ```
    Set a password for root and add an non root user
 
@@ -69,6 +69,7 @@ Dotfiles and instructions to make my SO portable and easy to replicate
 - Make Qtile works as expected
 See [documentation](http://docs.qtile.org/en/stable) to install required dependencies for widgets
     - Install wireless_tools (for wlan widget)
+    - Install iwgtk (for GUI on click of wlan widget)
     - Install alsa-utils (for volume)
     - Install python modules: iwlib psutil dbus-next
     - Install Font Awesome (Icons here: [https://fontawesome.com/v5/cheatsheet](https://fontawesome.com/v5/cheatsheet))
@@ -77,8 +78,7 @@ See [documentation](http://docs.qtile.org/en/stable) to install required depende
 ### Launcher
 
 - Make Rofi works as expected
-    - Install Rofi and [adi1090x/rofi](https://github.com/adi1090x/rofi)
-    - Custom as you want
+    - I used a part of [adi1090x/rofi](https://github.com/adi1090x/rofi) for my rofi theme
 
 ### Developer utilities
 

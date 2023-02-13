@@ -337,6 +337,8 @@ keys = [
     ],mode='Settings'),
 
     Key([mod], "0", lazy.spawn(CMD_REMAP_CAPS)),
+
+    Key([mod], "f", lazy.window.disable_floating()),
 ]
 
 ###############################################################################

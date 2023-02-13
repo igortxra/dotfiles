@@ -92,8 +92,8 @@ UNICODE_NO_UPDATES = ''
 UNICODE_CLOCK = ""
 UNICODE_CURRENT_SCREEN = "   "
 UNICODE_NOT_CURRENT_SCREEN = "   "
-UNICODE_AGENDA = ""
-UNICODE_CLIPBOARD = "   "
+UNICODE_AGENDA = ""
+UNICODE_CLIPBOARD = " Copied"
 
 # Scripts
 HOME = os.path.expanduser('~')
@@ -478,9 +478,10 @@ groupbox2 = widget.GroupBox(
 main_top_widgets = [
 
     widget.Clipboard(
-        fmt=bold(UNICODE_CLIPBOARD) + "{}", 
-        max_width=100,
-        background=WIDGET_BG,
+        fmt=bold(UNICODE_CLIPBOARD), 
+        max_width=2,
+        background=bright_cyan,
+        foreground=BLACK,
         **widget_defaults),
     
     widget.Spacer(5),
@@ -506,20 +507,12 @@ main_top_widgets = [
         foreground=WIDGET_FG, 
         **widget_defaults),
 
-    widget.Spacer(5),
-
     widget.Memory(
         format='{MemUsed: .3f}{mm} / {MemTotal: .3f}{mm}', 
         measure_mem='G',
         background=WIDGET_BG, 
         foreground=WIDGET_FG, 
         **widget_defaults),
-
-    widget.Spacer(),
-
-    groupbox1,
-
-    widget.Spacer(),
 
     widget.Spacer(5),
     widget.Mpris2(
@@ -530,12 +523,19 @@ main_top_widgets = [
         scroll_interval=0,
         background=bright_green,
         foreground=BLACK,
-        fmt='  {}',
-        paused_text='Paused: {track}'),
+        fmt='{}  ',
+        paused_text=' {track}'),
+   
     
-    widget.Spacer(2),
-    
+    widget.Spacer(),
+
+    groupbox1,
+
+    widget.Spacer(),
+
     widget.Chord(background=bright_red, fmt=bold("MODE: ") + "{}"),
+    
+    widget.Spacer(10),
 
     widget.Systray(icon_size=15, padding=15),
 

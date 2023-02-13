@@ -38,33 +38,48 @@ from libqtile.config import Click, Drag, Group, Key, KeyChord, Match, Screen, \
 WIDGET_FONT = "Font Awesome"
 BACKLIGHT_NAME = 'intel_backlight'
 
-# Colors
+# Basic Colors
 BLACK = '#111111'
 WHITE = '#ffffff'
-BLUE = '#1e1e2e'
 GREY = '#333333'
-RED = '#cb2424'
-YELLOW = '#ffc002'
-GREEN = '#40a02b'
-GREEN_SOFT = 'a6e3a1'
-PURPLE = '#4343f4'
-PURPLE_SOFT = '#66669c'
-COFFEE = '#61481C'
 
-
+# Dracula colors
+bg = "#282A36"
+fg = "#F8F8F2"
+selection = "#44475A"
+selection_transparent = "#44475A20"
+comment = "#6272A4"
+red = "#FF5555"
+orange = "#FFB86C"
+yellow = "#F1FA8C"
+green = "#50fa7b"
+purple = "#BD93F9"
+cyan = "#8BE9FD"
+pink = "#FF79C6"
+bright_red = "#FF6E6E"
+bright_green = "#69FF94"
+bright_yellow = "#FFFFA5"
+bright_blue = "#D6ACFF"
+bright_magenta = "#FF92DF"
+bright_cyan = "#A4FFFF"
+bright_white = "#FFFFFF"
+menu = "#21222C"
+visual = "#3E4452"
+gutter_fg = "#4B5263"
+nontext = "#3B4048"
 
 # Colors classes
-BAR_BACKGROUND = BLACK
-WIDGET_BG = GREY
-WIDGET_FG = WHITE
+BAR_BACKGROUND = selection_transparent
+WIDGET_BG = selection_transparent
+WIDGET_FG = bright_white
 GROUPBOX_ACTIVE = WHITE
-GROUPBOX_INACTIVE = GREY
-GROUPBOX_THIS_SCREEN_BORDER = COFFEE
-GROUPBOX_OTHER_SCREEN_BORDER = PURPLE_SOFT
-GROUPBOX_THIS_CURRENT_SCREEN_BORDER = COFFEE
-GROUPBOX_OTHER_CURRENT_SCREEN_BORDER = PURPLE_SOFT
-WINDOW_FOCUSED_BORDER = WHITE
-WINDOW_BORDER = BLACK
+GROUPBOX_INACTIVE = gutter_fg
+GROUPBOX_THIS_SCREEN_BORDER = purple
+GROUPBOX_OTHER_SCREEN_BORDER = GREY
+GROUPBOX_THIS_CURRENT_SCREEN_BORDER = purple
+GROUPBOX_OTHER_CURRENT_SCREEN_BORDER = GREY
+WINDOW_FOCUSED_BORDER = bright_white
+WINDOW_BORDER = visual
 
 # Unicodes
 UNICODE_NET = ''
@@ -73,7 +88,7 @@ UNICODE_BRIGHTNESS = ''
 UNICODE_BATTERY = ''
 UNICODE_CHARGING = ' '
 UNICODE_UPDATES = ''
-UNICODE_NO_UPDATES = '  System up to date'
+UNICODE_NO_UPDATES = ''
 UNICODE_CLOCK = ""
 UNICODE_CURRENT_SCREEN = "   "
 UNICODE_NOT_CURRENT_SCREEN = "   "
@@ -237,8 +252,8 @@ keys = [
     Key([], "XF86AudioLowerVolume", lazy.spawn(CMD_AUDIO_DOWN), desc='Decrease audio volume'),
 
     Key([mod], "h", lazy.layout.left(), desc="Move focus to left"),
-    Key([mod], "j", lazy.layout.down(), desc="Move focus down"),
     Key([mod], "k", lazy.layout.up(), desc="Move focus up"),
+    Key([mod], "j", lazy.layout.down(), desc="Move focus down"),
     Key([mod], "l", lazy.layout.right(), desc="Move focus to right"),
 
     Key([mod, "shift"], "h", lazy.layout.shuffle_left(),desc="Move window to the left"),
@@ -251,13 +266,11 @@ keys = [
     Key([mod, "control"], "k", lazy.layout.grow_up(), desc="Grow window up"),
     Key([mod, "control"], "l", lazy.layout.grow_right(), desc="Grow window right"),
 
-    Key([mod], "g", lazy.layout.grow(),
-        lazy.layout.increase_nmaster(),
+    Key([mod], "g", lazy.layout.grow_main(),
         desc="Grow main panel (Useful for specific layouts)"),
 
     Key([mod, "shift"], "g",
-        lazy.layout.shrink(),
-        lazy.layout.decrease_nmaster(),
+        lazy.layout.shrink_main(),
         desc="Shrink main panel (Useful for specific layouts)"),
 
     Key([mod], "w",
@@ -323,7 +336,7 @@ keys = [
     
     ],mode='Settings'),
 
-    Key([mod], "k", lazy.spawn(CMD_REMAP_CAPS)),
+    Key([mod], "0", lazy.spawn(CMD_REMAP_CAPS)),
 ]
 
 ###############################################################################
@@ -336,13 +349,13 @@ regex_alacritty= re.compile(".*Alacritty.*")
 regex_beekeper = re.compile(".*beekeeper.*")
 
 groups_definitions = [
-    {"name": " ₁", "key": "1", "layout": "max", "matches": [Match(title=regex_qutebrowser), Match(title=regex_firefox)]},
-    {"name": " ₂", "key": "2", "layout": "monadtall", "matches": [Match(wm_class="lvim")]},
-    {"name": " ₃", "key": "3", "layout": "matrix", "matches": []},
-    {"name": " ₄", "key": "4", "layout": "monadtall", "matches": [Match(title=regex_beekeper)]},
-    {"name": " ₅", "key": "5", "layout": "max", "matches": []},
-    {"name": " ₆", "key": "6", "layout": "max", "matches": [Match(title=regex_postman)]},
-    {"name": " ₇", "key": "7", "layout": "max", "matches": [Match(title=regex_notion)]},
+    {"name": " ₁", "key": "1", "layout": "monadtall", "matches": [Match(title=regex_qutebrowser), Match(title=regex_firefox)]},
+    {"name": " ₂", "key": "2", "layout": "monadtall", "matches": []},
+    {"name": " ₃", "key": "3", "layout": "monadtall", "matches": []},
+    {"name": " ₄", "key": "4", "layout": "monadtall", "matches": []},
+    {"name": " ₅", "key": "5", "layout": "monadtall", "matches": []},
+    {"name": " ₆", "key": "6", "layout": "monadtall", "matches": [Match(title=regex_postman)]},
+    {"name": " ₇", "key": "7", "layout": "max", "matches": [Match(title=regex_notion)]},
     {"name": " ₈", "key": "8", "layout": "max", "matches": []},
     {"name": " ₉", "key": "9", "layout": "max", "matches": [Match(wm_class='discord')]}]
 
@@ -400,14 +413,14 @@ layout_theme = dict(
     border_width=2,
     border_focus=WINDOW_FOCUSED_BORDER,
     border_normal=WINDOW_BORDER,
-    margin=5,
-    padding=10)
+    margin=8,
+    padding=2)
 
 layouts = [
     layout.Max(**layout_theme),
-    layout.Matrix(**layout_theme),
-    layout.Columns(**layout_theme),
     layout.MonadTall(**layout_theme),
+    # layout.Columns(**layout_theme),
+    # layout.Matrix(**layout_theme),
     # layout.Stack(num_stacks=2, **layout_theme),
     # layout.Bsp(**layout_theme),
     # layout.MonadWide(**layout_theme),
@@ -437,7 +450,7 @@ groupbox1 = widget.GroupBox(
     highlight_method='block',
     disable_drag=True,
     hide_unused=False,
-    borderwidth=1, 
+    borderwidth=3, 
     **widget_defaults)
 
 groupbox2 = widget.GroupBox(
@@ -450,7 +463,7 @@ groupbox2 = widget.GroupBox(
         highlight_method='block',
         disable_drag=True,
         hide_unused=False,
-        borderwidth=1,
+        borderwidth=3,
         visible_groups=[
             groups_definitions[4].get("name"),
             groups_definitions[5].get("name"),
@@ -465,15 +478,74 @@ main_top_widgets = [
     widget.Clipboard(
         fmt=bold(UNICODE_CLIPBOARD) + "{}", 
         max_width=100,
+        background=WIDGET_BG,
+        **widget_defaults),
+    
+    widget.Spacer(5),
+
+
+    widget.CurrentLayoutIcon(
+        background=WIDGET_BG,
+        foreground=WIDGET_FG,
+        scale=0.8,
+        **widget_defaults),
+    
+    widget.WindowCount(background=WIDGET_BG, show_zero=True),
+
+
+    widget.Spacer(5),
+    widget.Sep(),
+    widget.Spacer(5),
+
+    # Memory
+    widget.TextBox(
+        bold('RAM'), 
         background=WIDGET_BG, 
+        foreground=WIDGET_FG, 
+        **widget_defaults),
+
+    widget.Spacer(5),
+
+    widget.Memory(
+        format='{MemUsed: .3f}{mm} / {MemTotal: .3f}{mm}', 
+        measure_mem='G',
+        background=WIDGET_BG, 
+        foreground=WIDGET_FG, 
         **widget_defaults),
 
     widget.Spacer(),
+
+    groupbox1,
+
+    widget.Spacer(),
+
+    widget.Spacer(5),
+    widget.Mpris2(
+        name="spotify",
+        display_metadata=['xesam:title', 'xesam:artist'],
+        scroll_chars=None,
+        objname="org.mpris.MediaPlayer2.spotify",
+        scroll_interval=0,
+        background=bright_green,
+        foreground=BLACK,
+        fmt='  {}',
+        paused_text='Paused: {track}'),
+    
+    widget.Spacer(2),
+    
+    widget.Chord(background=bright_red, fmt=bold("MODE: ") + "{}"),
 
     widget.Systray(icon_size=15, padding=15),
 
     widget.Spacer(20),
     
+    widget.CheckUpdates(
+        display_format=bold(UNICODE_UPDATES + " {updates}"),
+        colour_have_updates=bright_yellow,
+        no_update_string=UNICODE_NO_UPDATES),
+
+    widget.Sep(),
+
     # Internet
     widget.TextBox(
         bold(UNICODE_NET), 
@@ -489,118 +561,19 @@ main_top_widgets = [
         },
         **widget_defaults),
     
-    widget.Spacer(2),
-
-    # Memory
-    widget.TextBox(
-        bold('RAM'), 
-        background=WIDGET_BG, 
-        foreground=WIDGET_FG, 
-        **widget_defaults),
-    widget.Memory(
-        format='{MemUsed: .3f}{mm} / {MemTotal: .3f}{mm}', 
-        measure_mem='G',
-        background=WIDGET_BG, 
-        foreground=WIDGET_FG, 
-        **widget_defaults),
+    widget.Sep(),
     
-    widget.Spacer(2),
-
-    # DISK
-    widget.DF(
-        partition='/', 
-        fmt=bold('DISK') + '   {}', 
-        visible_on_warn=False, 
-        format="{f}{m} Free", 
-        background=WIDGET_BG, 
-        foreground=WIDGET_FG,
-        **widget_defaults),
-
-    widget.Spacer(2),
-
-    # CPU
-    widget.TextBox(
-        bold('CPU'),
-        background=WIDGET_BG,
-        foreground=WIDGET_FG, 
-        **widget_defaults),
-    widget.CPU(
-        format='{freq_current}GHz {load_percent}%',
-        background=WIDGET_BG, 
-        foreground=WIDGET_FG, 
-        **widget_defaults),
-
-    widget.Spacer(2),
-] # main_top_widgets END
-
-
-main_bottom_widgets = [
-
-    widget.Spacer(5),
-
-    widget.CurrentScreen(
-        active_text=bold(UNICODE_CURRENT_SCREEN),
-        inactive_text=UNICODE_NOT_CURRENT_SCREEN,
-        active_color=WHITE,
-        inactive_color=PURPLE_SOFT),
-
-    widget.CurrentLayoutIcon(
-        background=WIDGET_BG,
-        foreground=WIDGET_FG,
-        scale=0.8,
-        **widget_defaults),
-    
-    widget.WindowCount(background=GREY, show_zero=True),
-
-    groupbox1,
-
-    widget.Spacer(5),
-
-    widget.WindowName(),
-
-    widget.Spacer(),
-
-    widget.Chord(background=PURPLE, fmt=bold("MODE: ") + "{}"),
-
-    widget.Spacer(),
-
-    widget.CheckUpdates(
-        display_format=UNICODE_UPDATES + " {updates}",
-        colour_have_updates=YELLOW,
-        colour_no_updates=GREEN,
-        no_update_string=UNICODE_NO_UPDATES),
-
-    widget.Spacer(5),
-    widget.Mpris2(
-        name="spotify",
-        display_metadata=['xesam:title', 'xesam:artist'],
-        scroll_chars=None,
-        objname="org.mpris.MediaPlayer2.spotify",
-        scroll_interval=0,
-        background=GREEN_SOFT,
-        foreground=BLACK,
-        fmt='  {}',
-        paused_text='Paused: {track}'),
-    
-    widget.Spacer(2),
-    
-    widget.Clock(
-        format=f"{UNICODE_AGENDA}  %d/%m/%Y  %H:%M",
-        background=WIDGET_BG,
-        foreground=WIDGET_FG),
-
-    widget.Spacer(2),
-
     widget.TextBox(bold(UNICODE_AUDIO), background=WIDGET_BG,
                    foreground=WIDGET_FG, **widget_defaults),
     widget.Volume(background=WIDGET_BG,
                   foreground=WIDGET_FG, **widget_defaults),
-    widget.Spacer(2),
+
+    widget.Sep(),
 
     widget.Battery(
         background=WIDGET_BG,
         foreground=WIDGET_FG,
-        low_background=RED,
+        low_background=bright_red,
         low_foreground=WHITE,
         low_percentage=0.40,
         notify_below=40,
@@ -608,36 +581,21 @@ main_bottom_widgets = [
         discharge_char='',
         show_short_text=True,
         format=UNICODE_BATTERY + '  {percent:2.0%} {char}'),
-]  # main_bottom_widgets END
 
+    widget.Sep(), 
 
-secondary_bottom_widgets = [
-
-    widget.CurrentScreen(
-        active_text=bold(UNICODE_CURRENT_SCREEN),
-        inactive_text=UNICODE_NOT_CURRENT_SCREEN,
-        active_color=WHITE,
-        inactive_color=COFFEE),
-
-    widget.CurrentLayoutIcon(
+    widget.Clock(
+        format=f"{UNICODE_AGENDA}  %d/%m/%Y  %H:%M",
         background=WIDGET_BG,
-        foreground=WIDGET_FG,
-        scale=0.8,
-        **widget_defaults),
-    widget.WindowCount(background=GREY, show_zero=True),
-    widget.Spacer(length=2),
+        foreground=WIDGET_FG),
 
-    groupbox2,
+] # main_top_widgets END
 
-    widget.Sep(foreground=BAR_BACKGROUND),
-
-    widget.WindowName(),
-
+secondary_widgets = [
     widget.Spacer(),
-
-    widget.Sep(foreground=BAR_BACKGROUND),
-
-]  # secondary_bottom_widgets END
+    groupbox2,
+    widget.Spacer(),
+] 
 
 ###############################################################################
 # Screen and monitors
@@ -645,7 +603,7 @@ secondary_bottom_widgets = [
 bar_style = dict(
     background=BAR_BACKGROUND,
     border_color=BAR_BACKGROUND,
-    border_width=[0, 0, 0, 0],
+    border_width=[2, 2, 2, 2],
     margin=[0, 0, 0, 0])
 
 screens = []
@@ -654,14 +612,12 @@ for monitor in range(MONITORS):
         # Primary monitor
         screens.append(Screen(
             top=bar.Bar(
-                widgets=main_top_widgets, size=20, **bar_style),
-            bottom=bar.Bar(
-                widgets=main_bottom_widgets, size=20, **bar_style)))
+                widgets=main_top_widgets, size=25, **bar_style)))
     else:
         # Secondary monitors
         screens.append(Screen(
-            bottom=bar.Bar(
-                widgets=secondary_bottom_widgets, size=18, **bar_style)))
+            top=bar.Bar(
+                widgets=secondary_widgets, size=30, **bar_style)))
 
 ###############################################################################
 # MORE

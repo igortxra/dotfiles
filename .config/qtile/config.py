@@ -47,7 +47,7 @@ GREY = '#333333'
 bg = "#282A36"
 fg = "#F8F8F2"
 selection = "#44475A"
-selection_transparent = "#44475A20"
+selection_transparent = "#44475A80"
 comment = "#6272A4"
 red = "#FF5555"
 orange = "#FFB86C"
@@ -605,8 +605,7 @@ secondary_widgets = [
 bar_style = dict(
     background=BAR_BACKGROUND,
     border_color=BAR_BACKGROUND,
-    border_width=[2, 2, 2, 2],
-    margin=[0, 0, 0, 0])
+    margin=[10, 10, 10, 10])
 
 screens = []
 for monitor in range(MONITORS):
@@ -614,7 +613,7 @@ for monitor in range(MONITORS):
         # Primary monitor
         screens.append(Screen(
             top=bar.Bar(
-                widgets=main_top_widgets, size=25, **bar_style)))
+                widgets=main_top_widgets, size=35, **bar_style)))
     else:
         # Secondary monitors
         screens.append(Screen(

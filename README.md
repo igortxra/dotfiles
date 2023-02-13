@@ -2,7 +2,7 @@
 Dotfiles and instructions to make my SO portable and easy to replicate
 
 ## Last Screenshot
-![image](https://user-images.githubusercontent.com/91085060/200951007-c51a142a-c3b7-438c-bdb2-2f0c5468c4f2.png)
+![image](https://github.com/igortxra/dotfiles/blob/2023/screenshot.png?raw=true)
 
 # How I Installed Arch Linux
 

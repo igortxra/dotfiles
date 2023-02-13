@@ -18,7 +18,7 @@ Dotfiles and instructions to make my SO portable and easy to replicate
    Audio: pipeware
    NetworkConfiguration: Copy ISO
    AdditionalPackages: [
-   qtile, qutebrowser, zip, unzip, vi, vim, neovim, ly, picom, brightnessctl, zsh, kitty, arandr, autorandr, dunst, feh, git, tree, fzf]
+   qtile, qutebrowser, zip, unzip, vi, vim, neovim, ly, brightnessctl, zsh, kitty, arandr, autorandr, dunst, feh, git, tree, fzf]
    ```
    Set a password for root and add an non root user
 
@@ -74,6 +74,10 @@ See [documentation](http://docs.qtile.org/en/stable) to install required depende
     - Install python modules: iwlib psutil dbus-next
     - Install Font Awesome (Icons here: [https://fontawesome.com/v5/cheatsheet](https://fontawesome.com/v5/cheatsheet))
     - Install Flameshot (for screenshot)
+
+### Compositor
+- Make transparency, transitions, blur, etc. Work as expected
+    - I used [this](https://github.com/lcdse7en/jonaburg-picom) fork of picom
 
 ### Launcher
 

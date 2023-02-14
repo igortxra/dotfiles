@@ -84,6 +84,12 @@ See [documentation](http://docs.qtile.org/en/stable) to install required depende
 - Make Rofi works as expected
     - I used a part of [adi1090x/rofi](https://github.com/adi1090x/rofi) for my rofi theme
 
+### File Manager
+
+- Make Thunar works as expected
+    - Install and use lxappearence to set themes and icons. I used "Dracula".
+    - Check custom actions to see if they match your setup
+
 ### Developer utilities
 
 - Install asdf

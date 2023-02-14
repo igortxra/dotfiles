@@ -75,6 +75,7 @@ See [documentation](http://docs.qtile.org/en/stable) to install required depende
     - Install Font Awesome (Icons here: [https://fontawesome.com/v5/cheatsheet](https://fontawesome.com/v5/cheatsheet))
     - Install Flameshot (for screenshot)
 
+
 ### Compositor
 - Make transparency, transitions, blur, etc. Work as expected
     - I used [this](https://github.com/lcdse7en/jonaburg-picom) fork of picom
@@ -103,6 +104,9 @@ Make sure that you have:
 - ttf-firacode-nerd
 
 ### Configurations
+- Set Qutebrowser as default browser running: `xdg-settings set default-web-browser org.qutebrowser.qutebrowser.desktop`
+
+- Set your Qutebrowser quickmarks (I stored somewhere and downloaded)
 
 - Screen Profiles
     - First use **arandr** to configure screen layout

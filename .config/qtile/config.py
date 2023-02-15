@@ -135,7 +135,7 @@ def go_to_group(name: str, key: str):
         if len(qtile.screens) == 1:
             qtile.groups_map[name].cmd_toscreen()
             return
-        if key in '56789':
+        if key in '789':
             qtile.focus_screen(1)
             qtile.groups_map[name].cmd_toscreen()
         else:
@@ -173,7 +173,7 @@ def reconfigure_groupbox():
     """ Adapt visible groups depending on number of screens """
     groups_names = [g.name for g in qtile.groups]
     if len(qtile.screens) > 1:
-        groupbox1.visible_groups = groups_names[0:4]
+        groupbox1.visible_groups = groups_names[0:6]
     else:
         groupbox1.visible_groups = groups_names
 
@@ -467,8 +467,6 @@ groupbox2 = widget.GroupBox(
         hide_unused=False,
         borderwidth=3,
         visible_groups=[
-            groups_definitions[4].get("name"),
-            groups_definitions[5].get("name"),
             groups_definitions[6].get("name"),
             groups_definitions[7].get("name"),
             groups_definitions[8].get("name"),

@@ -36,7 +36,7 @@ alias g='git'
 # Alias for lazyness
 alias cc='clear'
 alias cromai='cd $HOME/github/cromai'
-alias config='cd $HOME/.config'
+alias config='. $HOME/shell_scripts/config.sh'
 
 # Load autosuggestions
 source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh

@@ -12,7 +12,8 @@ picom &
 # Update screens
 autorandr --change
 
-sleep 1
-
 # Set wallpaper
 ~/.fehbg &
+
+# Send welcome notification
+notify-send "Welcome, IgorTxra"

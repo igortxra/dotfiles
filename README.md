@@ -6,9 +6,11 @@ Dotfiles and instructions to make my SO portable and easy to replicate
 
 # How I Installed Arch Linux
 
+## Basic Steps
 - Boot live environment
-- Connect to the internet
-- Use archinstall command
+- Set your keyboard layout `loadkeys br-abnt2` (optional) 
+- Connect to the internet `iwctl station <INTERFACE> connect <SSID>`
+- Use archinstall command `archinstall`
     
     This command will make your life easier, some of my choices are:
     
@@ -18,13 +20,41 @@ Dotfiles and instructions to make my SO portable and easy to replicate
    Audio: pipeware
    NetworkConfiguration: Copy ISO
    AdditionalPackages: [
-   qtile, qutebrowser, zip, unzip, vi, vim, neovim, ly, brightnessctl, zsh, kitty, arandr, autorandr, dunst, feh, git, tree, fzf]
+        vi,                 # Text Editor
+        vim,                # Test Editor
+        git,                # Git
+        qtile,              # Window manager
+        qutebrowser,        # Web Browser
+        zip,                # Zip command
+        unzip,              # Unzip command
+        neovim,             # Text Editor / IDE
+        brightnessctl,      # Brightness control
+        zsh,                # Shell
+        kitty,              # Terminal Emulator
+        arandr,             # Screen profiles
+        autorandr,          # Screen profiles
+        dunst,              # Notifications
+        feh                 # Wallpapers
+  ]
    ```
-   Set a password for root and add an non root user
+   **Note 1:** Set a password for root and add an non root user \
+   **Note 2:** You dont need chroot into the installed SO, just reboot and login
 
+## AUR helper - [Yay](https://github.com/Jguer/yay#readme)
+- Install yay
+    ```bash
+        git clone https://aur.archlinux.org/yay.git
+        cd yay
+        makepkg -si
+    ```
+ 
+## Fonts
+- Install these fonts
+    ```bash
+        yay -S ttf-font-awesome ttf-noto-nerd ttf-fira-code
+    ```
 
-- Set public/private keys for SSH (note just to remember)
-
+## Dotfiles (This reposiory)
 - Clone and checkout dotfiles repository
     
     ```bash
@@ -36,74 +66,67 @@ Dotfiles and instructions to make my SO portable and easy to replicate
     ```
     **Obs.:** When checking out you may receive a message requesting to remove files when you already have them.
 
-### Shell
+## Shell - [Zsh](https://wiki.archlinux.org/title/Zsh)
+- Run `chsh -s /usr/bin/zsh` (to make it default shell)
+- Install `exa` and `procs` (that replace `ls` and `ps`. See more on [Rewritten in Rust Commands](https://zaiste.net/posts/shell-commands-rust))
+- Clone `zsh-autosuggestions` [from GitHub](https://github.com/zsh-users/zsh-autosuggestions/blob/master/INSTALL.md#manual-git-clone)
+- Install and configure [powerlevel10k](https://github.com/romkatv/powerlevel10k) (zsh theme)
+- Install `fzf` fuzzy finder 
 
-- Make Zsh works as expected
-    - Run `chsh -s /usr/bin/zsh` (to make it default shell)
-    - Install `exa` and `procs` (that replace `ls` and `ps`. See more on [Rewritten in Rust Commands](https://zaiste.net/posts/shell-commands-rust))
-    - Install `zsh-autosuggestions` from GitHub
-    - Install and configure [powerlevel10k](https://github.com/romkatv/powerlevel10k) (zsh theme)
-    - Custom as you want
+## Terminal Emulator - [Kitty](https://wiki.archlinux.org/title/Kitty)
+- Nothing to do
 
-### AUR helper
-- Install yay
+## Display Manager - [Ly](https://github.com/fairyglade/ly)
+- Enable Ly service
     ```bash
-    git clone https://aur.archlinux.org/yay.git
-    cd yay
-    makepkg -si
+        sudo systemctl enable ly.service
+    ```
+    
+## Window Manager - [Qtile](https://wiki.archlinux.org/title/Qtile)
+- Install these packages:
+    ```bash
+        yay -S wireless_tools iwgtk alsa-utils flameshot python-pip
+
+        # wireless_tools (for wlan widget)
+        # iwgtk (for GUI on click of wlan widget)
+        # alsa-utils (for volume)
+        # flameshot (for screenshots)
+        # pip (for install python packages)
+    ```
+    
+- Install these python packages
+    ```bash
+        pip install iwlib psutil dbus-next
     ```
 
-### Display Manager
+- Install a compositor (for transparency, transitions, blurs and more effects) \
+    I used [this](https://github.com/lcdse7en/jonaburg-picom) fork of picom
 
-- Make Ly works as expected
-    - Make sure Ly service is enabled
+**Note 1:** Fonts are required to see all symbols in Qtile. Otherwise you will see weird squares instead symbols. \
+**Note 2:** Check [Qtile documentation](http://docs.qtile.org/en/stable)
 
-### Screen Locker
+## Screen Locker - [Betterlockscreen](https://github.com/betterlockscreen/betterlockscreen)
+- Install
+    ```bash
+        yay -S betterlockscreen
+    ```
+- Use [Feh](https://wiki.archlinux.org/title/Feh) to set the wallpaper
 
-- Make betterlockscreen work as expected
-    - Install and configure betterlockscreen
-    - Install feh and set the wallpaper
+## App Launcher and menus - [Rofi](https://wiki.archlinux.org/title/Rofi)
+- Nothing to do
+**Note 1:** I used a part of [adi1090x/rofi](https://github.com/adi1090x/rofi) for my rofi theme
 
-### Window Manager
+## File Manager - [Thunar](https://wiki.archlinux.org/title/Thunar)
+- Check **custom actions** to see if they match your setup.
 
-- Make Qtile works as expected
-See [documentation](http://docs.qtile.org/en/stable) to install required dependencies for widgets
-    - Install wireless_tools (for wlan widget)
-    - Install iwgtk (for GUI on click of wlan widget)
-    - Install alsa-utils (for volume)
-    - Install python modules: iwlib psutil dbus-next
-    - Install Font Awesome (Icons here: [https://fontawesome.com/v5/cheatsheet](https://fontawesome.com/v5/cheatsheet))
-    - Install Flameshot (for screenshot)
-
-
-### Compositor
-- Make transparency, transitions, blur, etc. Work as expected
-    - I used [this](https://github.com/lcdse7en/jonaburg-picom) fork of picom
-
-### Launcher
-
-- Make Rofi works as expected
-    - I used a part of [adi1090x/rofi](https://github.com/adi1090x/rofi) for my rofi theme
-
-### File Manager
-
-- Make Thunar works as expected
-    - Install and use lxappearence to set themes and icons. I used "Dracula".
-    - Check custom actions to see if they match your setup
-
-### Developer utilities
-
-- Install asdf
+## Developer utilities
+- Install asdf-vm
 - Install neovim and use [my configuration](https://github.com/igortxra/nvim)
 - Install docker
 
-### Fonts
-Make sure that you have:
-- ttf-font-awesmoe
-- ttf-noto-nerd
-- ttf-firacode-nerd
+## More Configurations
+- Install and use **lxappearence** to set themes and icons. I used "Dracula".
 
-### Configurations
 - Set Qutebrowser as default browser running: `xdg-settings set default-web-browser org.qutebrowser.qutebrowser.desktop`
 
 - Set your Qutebrowser quickmarks (I stored somewhere and downloaded)
@@ -135,32 +158,38 @@ MOD → Super or CAPS LOCK (Caps lock is remapped to act as Super)
 
 | Modifier combination | Key | Action |
 | --- | --- | --- |
+| MOD | 0 | Remap capslock as super|
 | MOD | [1 ... 9] | Go to workspace |
+| MOD | N | Next Workspace/Group |
+| MOD | B | Previous Workspace/Group |
 | MOD | [H J K L] | Move between windows |
-| MOD | E | File Explorer |
+| MOD + SHIFT | [H J K L] | Move current window position |
+| MOD | ENTER | Open Terminal Emulator |
 | MOD | W | Close focused window |
+| MOD | E | File Explorer |
 | MOD | P | Power Menu |
 | MOD | M | Change screen focus |
-| MOD | G | Grow Panel (for monadTall layout) |
+| MOD + SHIFT | M | Move window to (the current group of) another screen |
+| MOD | G | Grow main Panel (for monadTall layout) |
+| MOD + SHIFT | G | Shrink main Panel (for monadTall layout) |
 | MOD | TAB | Next window layout |
+| MOD + SHIFT | TAB | Previous window layout |
 | MOD | SPACE | App Launcher |
 | MOD | PRTSC | Print Screen Menu |
-| MOD | ENTER | Open Terminal Emulator |
-| MOD + SHIFT | M | Move window to another screen |
-| MOD + SHIFT | TAB | Previous window layout |
-| MOD + SHIFT | [H J K L] | Move current window position |
 | MOD  + CTRL | Q | Shutdown Qtile |
-| MOD + CTRL | 0 | Set screen profile onlynotebook |
 | MOD  + CTRL | R | Reload Qtile config |
+| MOD + CTRL | 0 | Set screen profile onlynotebook |
 | MOD + CTRL | 1 | Set screen profile onlyexternal |
 | MOD + CTRL | 2 | Set screen profile dualmonitor |
-| MOD + ALT | [H L] | Previous/Next Workspace |
 
 ### Keychords
 
-For a better understand of table below, see KeyChords in qtile configuration.
+For a better understand of table below, see KeyChords in Qtile documentation.
 
 | Modifier combination | Key | Mode | Description |
 | --- | --- | --- | --- |
-| MOD | O | OPEN | Another key will open something |
 | MOD | S | SETTINGS | Another key to access modes: Audio, Brightness,  Wi-Fi,  Taskbar |
+
+## Notes
+- Fullscreen ArchLinux in VirtualBox: https://youtu.be/hmku7eW8UFg
+- Set public/private keys for SSH (note just to remember)

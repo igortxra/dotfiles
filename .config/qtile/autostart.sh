@@ -17,3 +17,6 @@ autorandr --change
 
 # Send welcome notification
 notify-send "Welcome, IgorTxra"
+
+# udiskie
+udiskie &

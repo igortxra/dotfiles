@@ -34,7 +34,8 @@ Dotfiles and instructions to make my SO portable and easy to replicate
         arandr,             # Screen profiles
         autorandr,          # Screen profiles
         dunst,              # Notifications
-        feh                 # Wallpapers
+        feh,                # Wallpapers
+        rofi                # Menus
   ]
    ```
    **Note 1:** Set a password for root and add an non root user \
@@ -51,7 +52,7 @@ Dotfiles and instructions to make my SO portable and easy to replicate
 ## Fonts
 - Install these fonts
     ```bash
-        yay -S ttf-font-awesome ttf-noto-nerd ttf-fira-code
+        yay -S ttf-font-awesome ttf-fira-code
     ```
 
 ## Dotfiles (This reposiory)
@@ -100,7 +101,7 @@ Dotfiles and instructions to make my SO portable and easy to replicate
     ```
 
 - Install a compositor (for transparency, transitions, blurs and more effects) \
-    I used [this](https://github.com/lcdse7en/jonaburg-picom) fork of picom
+    I used `picom-jonaburg-git`
 
 **Note 1:** Fonts are required to see all symbols in Qtile. Otherwise you will see weird squares instead symbols. \
 **Note 2:** Check [Qtile documentation](http://docs.qtile.org/en/stable)
@@ -113,8 +114,9 @@ Dotfiles and instructions to make my SO portable and easy to replicate
 - Use [Feh](https://wiki.archlinux.org/title/Feh) to set the wallpaper
 
 ## App Launcher and menus - [Rofi](https://wiki.archlinux.org/title/Rofi)
-- Nothing to do
-**Note 1:** I used a part of [adi1090x/rofi](https://github.com/adi1090x/rofi) for my rofi theme
+- I used [adi1090x/rofi](https://github.com/adi1090x/rofi) for my rofi theme
+    - Install adi1090x rofi theme
+    - Run `dotfiles restore ~/.config/rofi`
 
 ## File Manager - [Thunar](https://wiki.archlinux.org/title/Thunar)
 - Check **custom actions** to see if they match your setup.

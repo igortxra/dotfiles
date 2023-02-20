@@ -119,15 +119,24 @@ Dotfiles and instructions to make my SO portable and easy to replicate
     - Run `dotfiles restore ~/.config/rofi`
 
 ## File Manager - [Thunar](https://wiki.archlinux.org/title/Thunar)
-- Check **custom actions** to see if they match your setup.
+- Check **custom actions** to see if they match your setup.]
+- Install `ffmpegthumbnailer` and `tumbler`
 
 ## Developer utilities
 - Install asdf-vm
 - Install neovim and use [my configuration](https://github.com/igortxra/nvim)
 - Install docker
 
+## Other
+### Discord 
+`yay -S ttf-symbola noto-fonts-cjk and noto-fonts-emoji`
+### OBS Studio 
+`yay -S obs-studio-git`
+### udiskie 
+`yay -S udiskie` and see [permissions](https://github.com/coldfix/udiskie/wiki/Permissions)
+
 ## More Configurations
-- Install and use **lxappearance** to set themes and icons. I used "Dracula".
+- Install and use **lxappearance** to set themes and icons. I used [Dracula](https://draculatheme.com/).
 
 - Set Qutebrowser as default browser running: `xdg-settings set default-web-browser org.qutebrowser.qutebrowser.desktop`
 

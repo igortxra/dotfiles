@@ -156,8 +156,8 @@ Dotfiles and instructions to make my SO portable and easy to replicate
 - Install and use **lxappearance** to set themes and icons. I used [Dracula](https://draculatheme.com/).
 
 - Set Qutebrowser as default browser running: `xdg-settings set default-web-browser org.qutebrowser.qutebrowser.desktop`
-
 - Set your Qutebrowser quickmarks (I stored somewhere and downloaded)
+- Set a theme for Qutebrowser such as [Dracula](https://draculatheme.com/qutebrowser)
 
 - Screen Profiles
     - First use **arandr** to configure screen layout

@@ -140,7 +140,7 @@ Dotfiles and instructions to make my SO portable and easy to replicate
 
 ## Other
 ### Discord 
-`yay -S ttf-symbola noto-fonts-cjk and noto-fonts-emoji`
+`yay -S discord ttf-symbola noto-fonts-cjk noto-fonts-emoji`
 ### OBS Studio 
 `yay -S obs-studio-git`
 ### udiskie 

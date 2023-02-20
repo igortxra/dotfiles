@@ -127,7 +127,7 @@ Dotfiles and instructions to make my SO portable and easy to replicate
 - Install docker
 
 ## More Configurations
-- Install and use **lxappearence** to set themes and icons. I used "Dracula".
+- Install and use **lxappearance** to set themes and icons. I used "Dracula".
 
 - Set Qutebrowser as default browser running: `xdg-settings set default-web-browser org.qutebrowser.qutebrowser.desktop`
 

@@ -481,7 +481,7 @@ groupbox1 = widget.GroupBox(
     other_current_screen_border=GROUPBOX_OTHER_CURRENT_SCREEN_BORDER,
     highlight_method='block',
     disable_drag=True,
-    hide_unused=False,
+    hide_unused=True,
     borderwidth=3,
     **widget_defaults)
 
@@ -494,7 +494,7 @@ groupbox2 = widget.GroupBox(
     other_current_screen_border=GROUPBOX_OTHER_CURRENT_SCREEN_BORDER,
     highlight_method='block',
     disable_drag=True,
-    hide_unused=False,
+    hide_unused=True,
     borderwidth=3,
     visible_groups=[
         groups_definitions[6].get("name"),

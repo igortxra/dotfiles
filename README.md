@@ -106,12 +106,18 @@ Dotfiles and instructions to make my SO portable and easy to replicate
 **Note 1:** Fonts are required to see all symbols in Qtile. Otherwise you will see weird squares instead symbols. \
 **Note 2:** Check [Qtile documentation](http://docs.qtile.org/en/stable)
 
-## Screen Locker - [Betterlockscreen](https://github.com/betterlockscreen/betterlockscreen)
-- Install
+## Wallpapers and Screen Locker - [Betterlockscreen](https://github.com/betterlockscreen/betterlockscreen)
+- Download some wallpaper images into `~/.wallpapers`
+- Install the screen locker
     ```bash
         yay -S betterlockscreen
+        betterlockscreen -u ~/.wallpapers
     ```
 - Use [Feh](https://wiki.archlinux.org/title/Feh) to set the wallpaper
+    ```bash
+        # Example
+        feh --bg-fill --randomize ~/.wallpapers/*
+    ```
 
 ## App Launcher and menus - [Rofi](https://wiki.archlinux.org/title/Rofi)
 - I used [adi1090x/rofi](https://github.com/adi1090x/rofi) for my rofi theme

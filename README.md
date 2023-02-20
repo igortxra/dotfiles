@@ -140,9 +140,10 @@ Dotfiles and instructions to make my SO portable and easy to replicate
 - Install `ffmpegthumbnailer` and `tumbler`
 
 ## Developer utilities
-- Install asdf-vm
-- Install neovim and use [my configuration](https://github.com/igortxra/nvim)
-- Install docker
+- asdf-vm
+- neovim with [my configuration](https://github.com/igortxra/nvim)
+- docker
+- github-cli
 
 ## Other
 ### Discord 

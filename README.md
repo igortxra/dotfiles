@@ -117,6 +117,17 @@ Dotfiles and instructions to make my SO portable and easy to replicate
 - I used [adi1090x/rofi](https://github.com/adi1090x/rofi) for my rofi theme
     - Install adi1090x rofi theme
     - Run `dotfiles restore ~/.config/rofi`
+    - For power menu works as expected:
+        - run visudo and add these lines:
+            ```bash
+                ## Admin user group is allowed to execute halt and reboot 
+                %admin ALL=NOPASSWD: /sbin/halt, /sbin/reboot, /sbin/poweroff
+            ```
+        - And add your user to admin group
+            ```bash
+                sudo groupadd admin
+                sudo usermod igortxra -a -G admin
+            ```
 
 ## File Manager - [Thunar](https://wiki.archlinux.org/title/Thunar)
 - Check **custom actions** to see if they match your setup.]

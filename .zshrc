@@ -18,6 +18,10 @@ zstyle :compinstall filename '/home/igortxra/.zshrc'
 autoload -Uz compinit
 compinit
 # End of lines added by compinstall
+
+# Poetry completions
+fpath+=~/.zfunc
+
 source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
@@ -47,4 +51,5 @@ source /opt/asdf-vm/asdf.sh
 # Load fuzzy finder
 source /usr/share/fzf/key-bindings.zsh
 source /usr/share/fzf/completion.zsh
+
 

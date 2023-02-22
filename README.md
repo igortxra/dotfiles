@@ -1,6 +1,9 @@
 # Dotfiles
 Dotfiles and instructions to make my SO portable and easy to replicate
 
+## Demo
+https://youtu.be/vizMUgAVkjg
+
 ## Last Screenshot
 ![image](https://github.com/igortxra/dotfiles/blob/main/screenshot.png?raw=true)
 

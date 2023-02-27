@@ -6,9 +6,6 @@ numlockx on &
 # Remap caps to super
 setxkbmap -option caps:super
 
-# Fancy visuals (E.g: enable opacity)
-picom &
-
 # Update screens
 autorandr --change
 
@@ -20,3 +17,6 @@ notify-send "Welcome, IgorTxra"
 
 # udiskie
 udiskie &
+#
+# Fancy visuals (E.g: enable opacity)
+picom &

@@ -82,15 +82,15 @@ WINDOW_FOCUSED_BORDER = bright_white
 WINDOW_BORDER = visual
 
 # Unicodes - https://fontawesome.com/v5/cheatsheet
-UNICODE_NET = ''
-UNICODE_AUDIO = ''
-UNICODE_BRIGHTNESS = ''
-UNICODE_BATTERY = ''
-UNICODE_CHARGING = ' '
-UNICODE_UPDATES = ''
+UNICODE_NET = ' '
+UNICODE_AUDIO = ' '
+UNICODE_BRIGHTNESS = ' '
+UNICODE_BATTERY = ' '
+UNICODE_CHARGING = '  '
+UNICODE_UPDATES = ' '
 UNICODE_NO_UPDATES = ''
-UNICODE_CLOCK = ""
-UNICODE_AGENDA = ""
+UNICODE_CLOCK = " "
+UNICODE_AGENDA = " "
 UNICODE_CLIPBOARD = " Copied"
 
 # Scripts
@@ -514,11 +514,10 @@ main_top_widgets = [
 
     widget.Spacer(5),
 
-
     widget.CurrentLayoutIcon(
         background=WIDGET_BG,
         foreground=WIDGET_FG,
-        scale=0.8,
+        scale=0.6,
         **widget_defaults),
 
     widget.WindowCount(background=WIDGET_BG, show_zero=True),
@@ -530,7 +529,7 @@ main_top_widgets = [
 
     # Memory
     widget.TextBox(
-        bold('RAM'),
+        bold(' RAM'),
         background=WIDGET_BG,
         foreground=WIDGET_FG,
         **widget_defaults),
@@ -551,7 +550,7 @@ main_top_widgets = [
         scroll_interval=0,
         background=bright_green,
         foreground=BLACK,
-        fmt='{}  ',
+        fmt='{}   ',
         paused_text=' {track}'),
 
 
@@ -570,11 +569,11 @@ main_top_widgets = [
     widget.Spacer(20),
 
     widget.CheckUpdates(
-        display_format=bold(UNICODE_UPDATES + " {updates}"),
+        display_format=bold(UNICODE_UPDATES + " {updates} updates"),
         colour_have_updates=bright_yellow,
         no_update_string=UNICODE_NO_UPDATES),
 
-    widget.Sep(),
+    widget.Spacer(10),
 
     # Internet
     widget.TextBox(
@@ -619,6 +618,8 @@ main_top_widgets = [
         background=WIDGET_BG,
         foreground=WIDGET_FG),
 
+    widget.Spacer(10),
+
 ]  # main_top_widgets END
 
 secondary_widgets = [
@@ -633,7 +634,7 @@ secondary_widgets = [
 bar_style = dict(
     background=BAR_BACKGROUND,
     border_color=BAR_BACKGROUND,
-    margin=[10, 10, 10, 10])
+    margin=[5, 10, 0, 10])
 
 screens = []
 for monitor in range(MONITORS):
@@ -641,7 +642,7 @@ for monitor in range(MONITORS):
         # Primary monitor
         screens.append(Screen(
             top=bar.Bar(
-                widgets=main_top_widgets, size=35, **bar_style)))
+                widgets=main_top_widgets, size=30, **bar_style)))
     else:
         # Secondary monitors
         screens.append(Screen(

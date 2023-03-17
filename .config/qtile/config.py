@@ -81,7 +81,7 @@ GROUPBOX_OTHER_CURRENT_SCREEN_BORDER = GREY
 WINDOW_FOCUSED_BORDER = bright_white
 WINDOW_BORDER = visual
 
-# Unicodes - https://fontawesome.com/v5/cheatsheet
+# Unicodes - https://fontawesome.com/search
 UNICODE_NET = ' '
 UNICODE_AUDIO = ' '
 UNICODE_BRIGHTNESS = ' '
@@ -101,6 +101,7 @@ SCRIPT_APP_MENU = f"{HOME}/.config/rofi/launcher/launcher.sh &"
 SCRIPT_WALLPAPER = f"{HOME}/.fehbg"
 
 # Commands
+CMD_TODO_LIST = "todour"
 CMD_SCREENSHOT = "flameshot gui"
 CMD_REMAP_CAPS = "setxkbmap -option caps:super"
 CMD_LOCK_SCREEN = "betterlockscreen -l blur"  # UNUSED
@@ -377,7 +378,7 @@ regex_beekeper = re.compile(".*beekeeper.*")
 groups_definitions = [
     {"name": " ₁", "key": "1", "layout": "monadtall", "matches": [
         Match(title=regex_qutebrowser), Match(title=regex_firefox)]},
-    {"name": " ₂", "key": "2", "layout": "monadtall", "matches": []},
+    {"name": " ₂", "key": "2", "layout": "monadtall", "matches": []},
     {"name": " ₃", "key": "3", "layout": "monadtall", "matches": []},
     {"name": " ₄", "key": "4", "layout": "monadtall", "matches": []},
     {"name": " ₅", "key": "5", "layout": "monadtall", "matches": []},
@@ -426,14 +427,15 @@ for group_dict in groups_definitions:
 groups.append(
     ScratchPad('scratchpad', [
         DropDown('terminal', terminal, width=0.6, height=0.7, x=0.2, y=0.15),
-        DropDown('files', CMD_FILE_MANAGER, width=0.6,
-                 height=0.7, x=0.2, y=0.15),
+        DropDown('files', CMD_FILE_MANAGER, width=0.6, height=0.7, x=0.2, y=0.15),
+        DropDown('todo', CMD_TODO_LIST, width=0.6, height=0.7, x=0.2, y=0.15),
     ]))
 
 keys.extend([
     Key(["control"], "Return",
         lazy.group["scratchpad"].dropdown_toggle('terminal')),
-    Key([mod], "e", lazy.group["scratchpad"].dropdown_toggle('files'))
+    Key([mod], "e", lazy.group["scratchpad"].dropdown_toggle('files')),
+    Key([mod], "t", lazy.group["scratchpad"].dropdown_toggle('todo'))
 ])
 
 

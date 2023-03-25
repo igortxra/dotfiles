@@ -263,7 +263,7 @@ c.tabs.indicator.padding = {'bottom': 2, 'left': 0, 'right': 4, 'top': 2}
 # the search engine name to the search term, e.g. `:open google
 # qutebrowser`.
 # Type: Dict
-c.url.searchengines = {'DEFAULT': 'https://start.duckduckgo.com/?q={}', 'aw': 'https://wiki.archlinux.org/?search={}', 'goog': 'https://www.google.com/search?q={}', 're': 'https://www.reddit.com/search?q={}', 'gh': 'https://github.com/search?q={}', 'ghr': 'https://github.com/{unquoted}', 'wiki': 'https://en.wikipedia.org/wiki/{}', 'yt': 'https://www.youtube.com/results?search_query={}'}
+c.url.searchengines = {'DEFAULT': 'https://start.duckduckgo.com/?q={}', 'aw': 'https://wiki.archlinux.org/?search={}', 'goog': 'https://www.google.com/search?q={}', 're': 'https://www.reddit.com/search?q={}', 'gh': 'https://github.com/search?q={}', 'ghr': 'https://github.com/{unquoted}', 'wiki': 'https://en.wikipedia.org/wiki/{}', 'yt': 'https://www.youtube.com/results?search_query={}', 'qtile': 'http://docs.qtile.org/en/stable/search.html?q={}'}
 
 # Page(s) to open at the start.
 # Type: List of FuzzyUrl, or FuzzyUrl

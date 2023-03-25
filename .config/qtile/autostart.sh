@@ -17,6 +17,6 @@ notify-send "Welcome, IgorTxra"
 
 # udiskie
 udiskie &
-#
+
 # Fancy visuals (E.g: enable opacity)
 picom &

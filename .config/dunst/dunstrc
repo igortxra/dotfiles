@@ -24,22 +24,22 @@
     # dynamic width from 0 to 300
     # width = (0, 300)
     # constant width of 300
-    width = 300
+    width = 800
 
     # The maximum height of a single notification, excluding the frame.
     height = 300
 
     # Position the notification in the top right corner
-    origin = top-right
+    origin = top-center
 
     # Offset from the origin
-    offset = 10x50
+    offset = 40x50
 
     # Scale factor. It is auto-detected if value is 0.
     scale = 0
 
     # Maximum number of notification (0 means no limit)
-    notification_limit = 0
+    notification_limit = 1
 
     ### Progress bar ###
 
@@ -68,7 +68,7 @@
     # The transparency of the window.  Range: [0; 100].
     # This option will only work if a compositing window manager is
     # present (e.g. xcompmgr, compiz, etc.). (X11 only)
-    transparency = 25
+    transparency = 0
 
     # Draw a line of "separator_height" pixel height between two
     # notifications.
@@ -87,7 +87,7 @@
 
     # Defines width in pixels of frame around the notification window.
     # Set to 0 to disable.
-    frame_width = 3
+    frame_width = 1
 
     # Defines color of the frame around the notification window.
     frame_color = "#FFF"
@@ -162,7 +162,7 @@
 
     # Alignment of message text.
     # Possible values are "left", "center" and "right".
-    alignment = left
+    alignment = center
 
     # Vertical alignment of message text and icon.
     # Possible values are "top", "center" and "bottom".
@@ -245,7 +245,7 @@
     # corners.
     # The radius will be automatically lowered if it exceeds half of the
     # notification height to avoid clipping text and/or icons.
-    corner_radius = 20
+    corner_radius = 5
 
     # Ignore the dbus closeNotification message.
     # Useful to enforce the timeout set by dunst configuration. Without this
@@ -310,16 +310,16 @@
     # Otherwise the "#" and following would be interpreted as a comment.
     background = "#44475A80"
     foreground = "#FFFFFF"
-    timeout = 10
+    timeout = 3
     # Icon for notifications with low urgency, uncomment to enable
-    default_icon = /home/igortxra/.config/dunst/bell.png
+    # default_icon = /home/igortxra/.config/dunst/bell.png
 
 [urgency_normal]
     background = "#44475A80"
     foreground = "#FFFFFF"
-    timeout = 10
+    timeout = 5
     # Icon for notifications with normal urgency, uncomment to enable
-    default_icon = /home/igortxra/.config/dunst/bell.png
+    # default_icon = /home/igortxra/.config/dunst/bell.png
 
 [urgency_critical]
     background = "#FF6E6E"
@@ -327,7 +327,7 @@
     frame_color = "#FFF"
     timeout = 0
     # Icon for notifications with critical urgency, uncomment to enable
-    default_icon = /home/igortxra/.config/dunst/bell.png
+    # default_icon = /home/igortxra/.config/dunst/bell.png
 
 # Every section that isn't one of the above is interpreted as a rules to
 # override settings for certain messages.

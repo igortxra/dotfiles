@@ -1,123 +1,141 @@
 from __future__ import annotations
 from typing import Dict
 
+BLACK = "#000000"
+WHITE = "#FFFFFF"
 
 class Colors:
     def __init__(self, fg: str, bg: str) -> None:
         self.fg = fg
         self.bg = bg
 
-
 class Theme():
-    wifi: Colors
-    audio: Colors
-    battery: Colors
-    calendar: Colors
-    ram: Colors
-    window_count: Colors
-    current_layout: Colors
-
-
-class Dracula(Theme):
-    BASIC_BLACK       = "#000000"
-    BASIC_WHITE       = "#FFFFFF"
-    GREY              = "#44475A50"
-    BLACK             = "#282A36"
-    WHITE             = "#F8F8F2"
-    RED               = "#FF5555"
-    ORANGE            = "#FFB86C"
-    YELLOW            = "#F1FA8C"
-    GREEN             = "#50fa7b"
-    PURPLE            = "#BD93F9"
-    CYAN              = "#8BE9FD"
-    PINK              = "#FF79C6"
-    BRIGHT_RED        = "#FF6E6E"
-    BRIGHT_GREEN      = "#69FF94"
-    BRIGHT_YELLOW     = "#FFFFA5"
-    BRIGHT_BLUE       = "#D6ACFF"
-    BRIGHT_MAGENTA    = "#FF92DF"
-    BRIGHT_CYAN       = "#A4FFFF"
-    BRIGHT_WHITE      = "#FFFFFF"
-    MENU              = "#21222C"
-    VISUAL            = "#3E4452"
-    GUTTER_FG         = "#4B5263"
-    NONTEXT           = "#3B4048"
-
-    # Foreground and Background
-    audio                   = Colors(BASIC_WHITE, bg=GREY)
-    battery                 = Colors(BASIC_WHITE, bg=GREY)
-    battery_low             = Colors(BRIGHT_RED, bg=GREY)
-    calendar                = Colors(BASIC_WHITE, bg=GREY)
-    clipboard               = Colors(BLACK, bg=BRIGHT_CYAN)
-    clock                   = Colors(BASIC_WHITE, bg=GREY)   
-    current_layout          = Colors(BASIC_WHITE, bg=GREY)
-    check_updates           = Colors(BRIGHT_YELLOW, bg=GREY)   
-    chord                   = Colors(BLACK, bg=WHITE)
-    ram                     = Colors(PINK, bg=GREY)
-    spotify                 = Colors(BRIGHT_GREEN, bg=GREY)
-    wifi                    = Colors(BRIGHT_GREEN, bg=GREY)
-    window_count            = Colors(BASIC_WHITE, bg=GREY)
-    bar                     = Colors(BRIGHT_BLUE, GREY)
-    cpu_graph               = Colors(CYAN, GREY)
+    audio          : Colors
+    battery        : Colors
+    battery_low    : Colors
+    calendar       : Colors
+    clipboard      : Colors
+    clock          : Colors
+    current_layout : Colors
+    check_updates  : Colors
+    chord          : Colors
+    ram            : Colors
+    spotify        : Colors
+    wifi           : Colors
+    window_count   : Colors
+    bar            : Colors
+    cpu_graph      : Colors
 
     # Simple Color
+    groupbox_active         : str
+    groupbox_inactive       : str
+    groupbox_this_current   : str
+    groupbox_this           : str
+    groupbox_other_current  : str
+    groupbox_other          : str
+    window_focused_border   : str
+    window_border           : str
+
+class Dracula(Theme):
+
+    # Colors
+    Background             = "#282a36"
+    CurrentLine            = "#44475a"
+    Selection              = "#44475a"
+    Foreground             = "#f8f8f2"
+    Comment                = "#6272a4"
+    Cyan                   = "#8be9fd"
+    Green                  = "#50fa7b"
+    Orange                 = "#ffb86c"
+    Pink                   = "#ff79c6"
+    Purple                 = "#bd93f9"
+    Red                    = "#ff5555"
+    Yellow                 = "#f1fa8c"
+
+    # Colors Applied
+    audio                  = Colors(WHITE, bg=Background)
+    battery                = Colors(WHITE, bg=Background)
+    battery_low            = Colors(Red, bg=Background)
+    calendar               = Colors(WHITE, bg=Background)
+    clipboard              = Colors(BLACK, bg=Green)
+    clock                  = Colors(WHITE, bg=Background)   
+    current_layout         = Colors(WHITE, bg=Background)
+    check_updates          = Colors(Yellow, bg=Background)   
+    chord                  = Colors(BLACK, bg=WHITE)
+    ram                    = Colors(Pink, bg=Background)
+    spotify                = Colors(Green, bg=Background)
+    wifi                   = Colors(Green, bg=Background)
+    window_count           = Colors(WHITE, bg=Background)
+    bar                    = Colors(Purple, Background)
+    cpu_graph              = Colors(Green, Background)
     groupbox_active         = WHITE
     groupbox_inactive       = WHITE
-    groupbox_this_current   = PURPLE
-    groupbox_this           = GREY
-    groupbox_other_current  = PURPLE
-    groupbox_other          = GREY
-
-    window_focused_border   = BRIGHT_BLUE
+    groupbox_this_current   = Purple
+    groupbox_this           = Background
+    groupbox_other_current  = Purple
+    groupbox_other          = Background
+    window_focused_border   = Cyan
     window_border           = BLACK
 
 class Catppuccin(Theme):
-    BASIC_BLACK       = "#000000"
-    BASIC_WHITE       = "#FFFFFF"
-    GREY              = "#5b607850"
-    BLACK             = "#181926"
-    WHITE             = "#cad3f5"
-    RED               = "#ed8796"
-    ORANGE            = "#f5a97f"
-    YELLOW            = "#eed49f"
-    GREEN             = "#a6da95"
-    PURPLE            = "#c6a0f6"
-    CYAN              = "#91d7e3"
-    PINK              = "#f5bde6"
-    BLUE              = "#8aadf4"
-    MAROON            = "#ee99a0"
 
-    audio                   = Colors(BASIC_WHITE, bg=GREY)
-    battery                 = Colors(BASIC_WHITE, bg=GREY)
-    battery_low             = Colors(RED, bg=GREY)
-    calendar                = Colors(BASIC_WHITE, bg=GREY)
-    clipboard               = Colors(BLACK, bg=CYAN)
-    clock                   = Colors(BASIC_WHITE, bg=GREY)   
-    current_layout          = Colors(BASIC_WHITE, bg=GREY)
-    check_updates           = Colors(YELLOW, bg=GREY)   
+    # Colors
+    Rosewater = "#f5e0dc"
+    Flamingo = "#f2cdcd"
+    Pink = "#f5c2e7"
+    Mauve = "#cba6f7"
+    Red = "#f38ba8"
+    Maroon = "#eba0ac"
+    Peach = "#fab387"
+    Yellow = "#f9e2af"
+    Green = "#a6e3a1"
+    Teal = "#94e2d5"
+    Sky = "#89dceb"
+    Sapphire = "#74c7ec"
+    Blue = "#89b4fa"
+    Lavender = "#b4befe"
+    Text = "#cdd6f4"
+    Subtext1 = "#bac2de"
+    Subtext0 = "#a6adc8"
+    Overlay2 = "#9399b2"
+    Overlay1 = "#7f849c"
+    Overlay0 = "#6c7086"
+    Surface2 = "#585b70"
+    Surface1 = "#45475a"
+    Surface0 = "#313244"
+    Base = "#1e1e2e"
+    Mantle = "#181825"
+    Crust = "#11111b"
+
+    # Colors Applied
+    audio                   = Colors(WHITE, bg=Mantle)
+    battery                 = Colors(WHITE, bg=Mantle)
+    battery_low             = Colors(Red, bg=Mantle)
+    calendar                = Colors(WHITE, bg=Mantle)
+    clipboard               = Colors(BLACK, bg=Green)
+    clock                   = Colors(WHITE, bg=Mantle)   
+    current_layout          = Colors(WHITE, bg=Mantle)
+    check_updates           = Colors(Yellow, bg=Mantle)   
     chord                   = Colors(BLACK, bg=WHITE)
-    ram                     = Colors(PINK, bg=GREY)
-    spotify                 = Colors(GREEN, bg=GREY)
-    wifi                    = Colors(GREEN, bg=GREY)
-    window_count            = Colors(BASIC_WHITE, bg=GREY)
-    bar                     = Colors(BLUE, GREY)
-    cpu_graph               = Colors(CYAN, GREY)
-
-    # Simple Color
-    groupbox_active         = BASIC_WHITE
-    groupbox_inactive       = BASIC_WHITE
-    groupbox_this_current   = PURPLE
-    groupbox_this           = GREY
-    groupbox_other_current  = PURPLE
-    groupbox_other          = GREY
-
-    window_focused_border   = PURPLE
-    window_border   = BLACK
+    ram                     = Colors(Pink, bg=Mantle)
+    spotify                 = Colors(Green, bg=Mantle)
+    wifi                    = Colors(Green, bg=Mantle)
+    window_count            = Colors(WHITE, bg=Mantle)
+    bar                     = Colors(Blue, bg=Mantle)
+    cpu_graph               = Colors(Green, bg=Mantle)
+    groupbox_active         = WHITE
+    groupbox_inactive       = WHITE
+    groupbox_this_current   = Overlay1
+    groupbox_this           = Mantle
+    groupbox_other_current  = Overlay1
+    groupbox_other          = Mantle
+    window_focused_border   = Overlay1
+    window_border           = BLACK
 
 THEMES : Dict[str, Theme] = {
-    "dracula": Dracula(),
-    "catppuccin": Catppuccin()
+    "catppuccin": Catppuccin(),
+    "dracula": Dracula()
 }
 
 def get_theme(theme_name: str) -> Theme:
-    return THEMES.get(theme_name, Dracula()) 
+    return THEMES.get(theme_name, Catppuccin())

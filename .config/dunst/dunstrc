@@ -24,22 +24,22 @@
     # dynamic width from 0 to 300
     # width = (0, 300)
     # constant width of 300
-    width = 800
+    width = 500
 
     # The maximum height of a single notification, excluding the frame.
     height = 300
 
     # Position the notification in the top right corner
-    origin = top-center
+    origin = top-right
 
     # Offset from the origin
-    offset = 40x50
+    offset = 20x50
 
     # Scale factor. It is auto-detected if value is 0.
     scale = 0
 
     # Maximum number of notification (0 means no limit)
-    notification_limit = 1
+    notification_limit = 4
 
     ### Progress bar ###
 
@@ -77,7 +77,7 @@
     separator_height = 2
 
     # Padding between text and separator.
-    padding = 10
+    padding = 30
 
     # Horizontal padding.
     horizontal_padding = 10
@@ -90,7 +90,7 @@
     frame_width = 1
 
     # Defines color of the frame around the notification window.
-    frame_color = "#FFF"
+    frame_color = "#7f849c"
 
     # Size of gap to display between notifications - requires a compositor.
     # If value is greater than 0, separator_height will be ignored and a border
@@ -118,11 +118,11 @@
 
     ### Text ###
 
-    font = Nerd Font 10
+    font = Iosevka 12
 
     # The spacing between lines.  If the height is smaller than the
     # font height, it will get raised to the font height.
-    line_height = 0
+    line_height = 14
 
     # Possible values are:
     # full: Allow a small subset of html markup in notifications:
@@ -245,7 +245,7 @@
     # corners.
     # The radius will be automatically lowered if it exceeds half of the
     # notification height to avoid clipping text and/or icons.
-    corner_radius = 5
+    corner_radius = 0
 
     # Ignore the dbus closeNotification message.
     # Useful to enforce the timeout set by dunst configuration. Without this
@@ -308,14 +308,14 @@
 [urgency_low]
     # IMPORTANT: colors have to be defined in quotation marks.
     # Otherwise the "#" and following would be interpreted as a comment.
-    background = "#44475A80"
+    background = "#f38ba8"
     foreground = "#FFFFFF"
     timeout = 3
     # Icon for notifications with low urgency, uncomment to enable
     # default_icon = /home/igortxra/.config/dunst/bell.png
 
 [urgency_normal]
-    background = "#44475A80"
+    background = "#11111b"
     foreground = "#FFFFFF"
     timeout = 5
     # Icon for notifications with normal urgency, uncomment to enable

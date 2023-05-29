@@ -1,74 +1,48 @@
 # Dotfiles
 Dotfiles and instructions to make my SO portable and easy to replicate
 
-## Demo
-https://youtu.be/vizMUgAVkjg
+## Demo video
+>_TODO_
 
 ## Last Screenshot
-![image](https://github.com/igortxra/dotfiles/blob/main/screenshot.png?raw=true)
+![image](https://github.com/igortxra/dotfiles/assets/91085060/e8d16f8e-2442-472f-b361-f745fb0ea17e)
+
 
 # How I Installed Arch Linux
 
-## Basic Steps
+## Installation Steps
 - Boot live environment
-- Set your keyboard layout `loadkeys br-abnt2` (optional) 
-- Connect to the internet `iwctl station <INTERFACE> connect <SSID>`
+- Set your keyboard layout `loadkeys <layout>`
+- Connect to the internet 
+    - Plug the ethernet cable or use iwctl for wireless connections `iwctl station <INTERFACE> connect <SSID>`
 - Use archinstall command `archinstall`
     
     This command will make your life easier, some of my choices are:
     
    ```yaml
-   Bootloader: grub
+   Bootloader: systemd-bootctl
    Profile: xorg
    Audio: pipeware
    NetworkConfiguration: Copy ISO
    AdditionalPackages: [
-        vi,                 # Text Editor
         vim,                # Test Editor
         git,                # Git
-        qtile,              # Window manager
-        qutebrowser,        # Web Browser
-        zip,                # Zip command
-        unzip,              # Unzip command
-        neovim,             # Text Editor / IDE
-        brightnessctl,      # Brightness control
-        zsh,                # Shell
-        kitty,              # Terminal Emulator
-        arandr,             # Screen profiles
-        autorandr,          # Screen profiles
-        dunst,              # Notifications
-        feh,                # Wallpapers
-        rofi                # Menus
   ]
    ```
    **Note 1:** Set a password for root and add an non root user \
-   **Note 2:** You dont need chroot into the installed SO, just reboot and login
+   **Note 2:** You do not need chroot into the installed SO, just reboot and login \
+   **Note 3:** I only install vim and git as additional packages at this point.
+    
+
+# Post Installation
 
 ## AUR helper - [Yay](https://github.com/Jguer/yay#readme)
-- Install yay
+- Install yay. (I will use it for all packages installations)
     ```bash
         git clone https://aur.archlinux.org/yay.git
         cd yay
         makepkg -si
     ```
- 
-## Fonts
-- Install these fonts
-    ```bash
-        yay -S ttf-font-awesome ttf-fira-code
-    ```
-
-## Dotfiles (This reposiory)
-- Clone and checkout dotfiles repository
-    
-    ```bash
-    echo ".dotfiles" >> .gitignore
-    git clone --bare <https://github.com/igortxra/dotfiles.git> $HOME/.dotfiles
-    alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
-    dotfiles config --local status.showUntrackedFiles no
-    dotfiles checkout
-    ```
-    **Obs.:** When checking out you may receive a message requesting to remove files when you already have them.
 
 ## Shell - [Zsh](https://wiki.archlinux.org/title/Zsh)
 - Run `chsh -s /usr/bin/zsh` (to make it default shell)
@@ -78,14 +52,13 @@ https://youtu.be/vizMUgAVkjg
 - Install `fzf` fuzzy finder 
 
 ## Terminal Emulator - [Kitty](https://wiki.archlinux.org/title/Kitty)
-- Nothing to do
 
 ## Display Manager - [Ly](https://github.com/fairyglade/ly)
 - Enable Ly service
     ```bash
         sudo systemctl enable ly.service
     ```
-    
+
 ## Window Manager - [Qtile](https://wiki.archlinux.org/title/Qtile)
 - Install these packages:
     ```bash
@@ -104,43 +77,70 @@ https://youtu.be/vizMUgAVkjg
     ```
 
 - Install a compositor (for transparency, transitions, blurs and more effects) \
-    I used `picom-jonaburg-git`
+    I use `picom-jonaburg-git`
 
-**Note 1:** Fonts are required to see all symbols in Qtile. Otherwise you will see weird squares instead symbols. \
+**Note 1:** If Qtile renders broken icons (retangles), check your fonts. \
 **Note 2:** Check [Qtile documentation](http://docs.qtile.org/en/stable)
+**Note 3:** Make sure you have an terminal emulator installed before use Qtile.
+    
+## Fonts
+I use Font Awesome because of icons and Iosevka because of ligations.
+**Note:** I tried FiraCode, but somehow font awesome icons gets weird after FiraCode installation.
+- I Install these fonts:
+    ```bash
+        yay -S ttf-font-awesome ttc-iosevka
+    ```
 
 ## Wallpapers and Screen Locker - [Betterlockscreen](https://github.com/betterlockscreen/betterlockscreen)
-- Download some wallpaper images into `~/.wallpapers`
+- Download some wallpaper images into `~/wallpapers`
+
 - Install the screen locker
     ```bash
         yay -S betterlockscreen
-        betterlockscreen -u ~/.wallpapers
+        betterlockscreen -u ~/wallpapers
     ```
-- Use [Feh](https://wiki.archlinux.org/title/Feh) to set the wallpaper
+
+- Use [Nitrogen](https://wiki.archlinux.org/title/Nitrogen) to set the wallpaper (or [Feh](https://wiki.archlinux.org/title/Feh) but remember to modify `~/.config/qtile/autostart.sh`)
     ```bash
         # Example
-        feh --bg-fill --randomize ~/.wallpapers/*
+        nitrogen --set-auto wallpapers/your-image.png
     ```
 
 ## App Launcher and menus - [Rofi](https://wiki.archlinux.org/title/Rofi)
-- I used [adi1090x/rofi](https://github.com/adi1090x/rofi) for my rofi theme
-    - Install adi1090x rofi theme
-    - Run `dotfiles restore ~/.config/rofi`
-    - For power menu works as expected:
-        - run visudo and add these lines:
-            ```bash
-                ## Admin user group is allowed to execute halt and reboot 
-                %admin ALL=NOPASSWD: /sbin/halt, /sbin/reboot, /sbin/poweroff
-            ```
-        - And add your user to admin group
-            ```bash
-                sudo groupadd admin
-                sudo usermod igortxra -a -G admin
-            ```
+-   - Run `dotfiles restore ~/.config/rofi`
+    - For power menu works as expected with you have to find a way to allow your user run poweroff and reboot commands without sudo. I Used [**polkit**](https://wiki.archlinux.org/title/Polkit) and created a file for these rules:
+```javascript
+polkit.addRule(function(action, subject) {
+	if (	action.id == "org.freedesktop.login1.power-off" ||
+		action.id == "org.freedesktop.login1.reboot" ||
+		action.id == "org.freedesktop.login1.suspend" ||
+		action.id == "org.freedesktop.login1.hibernate"
+	) {
+		if (subject.isInGroup("wheel")) {
+			return polkit.Result.YES;
+		}
+	}
+});
+```
+**Note:** It is possible use sudo for this too.
 
 ## File Manager - [Thunar](https://wiki.archlinux.org/title/Thunar)
 - Check **custom actions** to see if they match your setup.]
 - Install `ffmpegthumbnailer` and `tumbler`
+
+
+# Dotfiles (This reposiory)
+- Clone and checkout dotfiles repository
+    
+    ```bash
+    echo ".dotfiles" >> .gitignore
+    git clone --bare <https://github.com/igortxra/dotfiles.git> $HOME/.dotfiles
+    alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
+    dotfiles config --local status.showUntrackedFiles no
+    dotfiles checkout
+    ```
+    **Obs.:** When checking out you may receive a message requesting to remove files when you already have them.
+
 
 ## Developer utilities
 - asdf-vm
@@ -157,10 +157,12 @@ https://youtu.be/vizMUgAVkjg
 `yay -S udiskie` and see [permissions](https://github.com/coldfix/udiskie/wiki/Permissions)
 
 ## More Configurations
-- Install and use **lxappearance** to set themes and icons. I used [Dracula](https://draculatheme.com/).
+- Install and use **lxappearance** to set themes and icons. I like [Catppuccin](https://github.com/catppuccin) for colors and [Dracula](https://draculatheme.com/) icons.
 
 - Set Qutebrowser as default browser running: `xdg-settings set default-web-browser org.qutebrowser.qutebrowser.desktop`
+
 - Set your Qutebrowser quickmarks (I stored somewhere and downloaded)
+
 - Set a theme for Qutebrowser such as [Dracula](https://draculatheme.com/qutebrowser)
 
 - Screen Profiles
@@ -180,8 +182,7 @@ https://youtu.be/vizMUgAVkjg
         | SUPER + CTRL + 2 | dualmonitor | To use both, notebook and external screen. External as primary and notebook as secondary |
         
         In **qtile** configuration i have shortcuts to set these profiles
-        
-
+       
 ## About Qtile configuration
 
 ### Keybindings

@@ -10,7 +10,8 @@ setxkbmap -option caps:super
 autorandr --change
 
 # Set wallpaper
-~/.fehbg &
+# ~/.fehbg &
+nitrogen --restore
 
 # Send welcome notification
 notify-send "Welcome, IgorTxra"

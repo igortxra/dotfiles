@@ -39,8 +39,8 @@ from colors import get_theme
 ###################################################################################################
 # GLOBALS #########################################################################################
 
-colors = get_theme("dracula")
-#colors = get_theme("catppuccin")
+# colors = get_theme("dracula")
+colors = get_theme("catppuccin")
 
 # Globals
 WIDGET_FONT = "Font Awesome 6 Bold"

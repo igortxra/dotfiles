@@ -1,18 +1,18 @@
 #!/bin/sh
 
 # Options
-shutdown='   Shutdown'
-reboot='   Reboot'
-lock='   Lock'
-suspend='   Suspend'
-logout='   Logout'
+shutdown='   Shutdown'
+reboot='   Reboot'
+lock='   Lock'
+suspend='   Suspend'
+logout='   Logout'
 
 # Rofi CMD
 rofi_cmd() {
 	rofi -dmenu \
 		-theme "$HOME/.config/rofi/config.rasi" \
     -location 0 \
-		-theme-str 'window {width: 200px; height: 260px; padding: 0;}' \
+		-theme-str 'window {width: 200px; height: 285px; padding: 0;}' \
     -theme-str 'inputbar {enabled: false;}' \
     -theme-str 'listview {border: 0px; scrollbar: 0;}' \
     -yoffset -50 \

@@ -31,7 +31,7 @@ source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme
 alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 
 # Alias for adapt commands to rewritten in rust commands
-alias ls='exa --icons'
+alias ls='exa'
 alias ps='procs'
 
 # Git alias

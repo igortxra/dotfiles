@@ -9,6 +9,13 @@ class Colors:
         self.fg = fg
         self.bg = bg
 
+class Pomodoro:
+    def __init__(self, active: str, inactive: str, pause: str) -> None:
+        self.active = active
+        self.inactive = inactive
+        self.pause = pause
+
+
 class Theme():
     audio          : Colors
     battery        : Colors
@@ -25,6 +32,7 @@ class Theme():
     window_count   : Colors
     bar            : Colors
     cpu_graph      : Colors
+    pomodoro       : Pomodoro
 
     # Simple Color
     groupbox_active         : str
@@ -68,6 +76,7 @@ class Dracula(Theme):
     window_count           = Colors(WHITE, bg=Background)
     bar                    = Colors(Purple, Background)
     cpu_graph              = Colors(Green, Background)
+    pomodoro                = Pomodoro(active=Green, inactive=Selection, pause=Yellow)
     groupbox_active         = WHITE
     groupbox_inactive       = WHITE
     groupbox_this_current   = Purple
@@ -123,6 +132,7 @@ class Catppuccin(Theme):
     window_count            = Colors(WHITE, bg=Mantle)
     bar                     = Colors(Blue, bg=Mantle)
     cpu_graph               = Colors(Green, bg=Mantle)
+    pomodoro                = Pomodoro(active=Green, inactive=Text, pause=Yellow)
     groupbox_active         = WHITE
     groupbox_inactive       = WHITE
     groupbox_this_current   = Overlay1

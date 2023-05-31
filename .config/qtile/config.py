@@ -470,6 +470,7 @@ main_top_widgets = [
     ),
 
     widget.Spacer(5),
+   
 
     widget.Clipboard(
         fmt=bold(UNICODE_CLIPBOARD),
@@ -479,12 +480,28 @@ main_top_widgets = [
         **widget_defaults),
 
     widget.Spacer(),
+ 
+    widget.Pomodoro(
+        fmt="  {}",
+        color_active=colors.pomodoro.active,
+        color_inactive=colors.pomodoro.inactive,
+        color_break=colors.pomodoro.pause,
+        lenght_short_break=5,
+        length_long_break=15,
+        length_pomodori=25,
+        notification_on=False,
+        num_pomodri=4,
+        **widget_defaults
+    ),
+
+    widget.Spacer(5),
 
     widget.Chord(
         font="Fira Code", # TEMP
         background=colors.chord.bg, 
         foreground=colors.chord.fg, 
         fmt=bold(" -> ") + "{}"),
+
 
     widget.Spacer(),
 

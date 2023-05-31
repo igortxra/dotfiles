@@ -69,7 +69,7 @@ SCRIPT_OPEN_IN_QUTEBROWSER = f"{HOME}/.config/rofi/open-in-qutebrowser.sh &"
 SCRIPT_OPEN_PROJECT = f"{HOME}/.config/rofi/open-project.sh &"
 SCRIPT_CALC = f"{HOME}/.config/rofi/calc.sh &" 
 SCRIPT_EMOJI = f"{HOME}/.config/rofi/emoji.sh &" 
-SCRIPT_WALLPAPER = f"{HOME}/.fehbg"
+SCRIPT_WALLPAPER = f"nitrogen --restore"
 
 # Commands
 CMD_REMAP_CAPS = "setxkbmap -option caps:super"
@@ -340,7 +340,7 @@ groups: List[Group] = [
         Group("4", label=" ₄", layout="monadtall", matches=[]), 
         Group("5", label=" ₅", layout="monadtall", matches=[]),    
         Group("6", label=" ₆", layout="monadtall", matches=[]), 
-        Group("7", label=" ₇", layout="monadtall", matches=[]), 
+        Group("7", label=" ₇", layout="monadtall", matches=[]), 
         Group("8", label=" ₈", layout="max", matches=[]), 
         Group("9", label=" ₉", layout="max", matches=[]), 
 ]

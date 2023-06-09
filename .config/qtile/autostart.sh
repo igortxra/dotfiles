@@ -20,4 +20,4 @@ notify-send "Welcome, IgorTxra"
 udiskie &
 
 # Fancy visuals (E.g: enable opacity)
-picom &
+picom --experimental-backend &

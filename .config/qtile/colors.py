@@ -15,7 +15,6 @@ class Pomodoro:
         self.inactive = inactive
         self.pause = pause
 
-
 class Theme():
     audio          : Colors
     battery        : Colors
@@ -129,12 +128,12 @@ class Catppuccin(Theme):
     ram                     = Colors(Pink, bg=Mantle)
     spotify                 = Colors(Green, bg=Mantle)
     wifi                    = Colors(Green, bg=Mantle)
-    window_count            = Colors(WHITE, bg=Mantle)
+    window_count            = Colors(WHITE, bg=Surface0)
     bar                     = Colors(Blue, bg=Mantle)
     cpu_graph               = Colors(Green, bg=Mantle)
     pomodoro                = Pomodoro(active=Green, inactive=Text, pause=Yellow)
     groupbox_active         = WHITE
-    groupbox_inactive       = WHITE
+    groupbox_inactive       = Overlay2
     groupbox_this_current   = Overlay1
     groupbox_this           = Mantle
     groupbox_other_current  = Overlay1

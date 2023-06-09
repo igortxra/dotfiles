@@ -28,4 +28,4 @@ if [[ $chosen = "" ]]; then
 fi
 
 project_chosen="$root_dir$chosen"
-kitty -d "$project_chosen" nvim +NvimTreeToggle
+kitty -d "$project_chosen"

@@ -284,7 +284,7 @@ keys = [
             Key([], "k", lazy.hide_show_bar(position="top"), desc="Toggle top bar"),
             Key([], "j", lazy.hide_show_bar(position="bottom"), desc="Toggle bottom bar")
         ],
-        mode="Toggle Bar:    j -> Bottom Bar   k -> Top Bar"
+        name="Toggle Bar:    j -> Bottom Bar   k -> Top Bar"
     ),
 
     Key([SUPER, 'control'], 'w',
@@ -306,16 +306,20 @@ keys = [
 
         # Audio submenu
         KeyChord([], "a", [
-            Key([], "j", lazy.spawn(CMD_AUDIO_DOWN)),
-            Key([], "k", lazy.spawn(CMD_AUDIO_UP)),
-            Key([], "m", lazy.spawn(CMD_AUDIO_MUTE_UNMUTE))
-        ], mode='Audio Volume:    j -> Decrease   k -> Increase   m -> Mute'),
+                Key([], "j", lazy.spawn(CMD_AUDIO_DOWN)),
+                Key([], "k", lazy.spawn(CMD_AUDIO_UP)),
+                Key([], "m", lazy.spawn(CMD_AUDIO_MUTE_UNMUTE))
+            ], 
+            name='Audio Volume:    j -> Decrease   k -> Increase   m -> Mute',
+            mode=True),
 
         # Brightness submenu
         KeyChord([], "b", [
-            Key([], "j", lazy.spawn(CMD_BRIGHTNESS_DOWN)),
-            Key([], "k", lazy.spawn(CMD_BRIGHTNESS_UP))
-        ], mode='Brightness:   j -> Decrease   k -> Increase'),
+                Key([], "j", lazy.spawn(CMD_BRIGHTNESS_DOWN)),
+                Key([], "k", lazy.spawn(CMD_BRIGHTNESS_UP))
+            ], 
+            name='Brightness:   j -> Decrease   k -> Increase',
+            mode=True),
 
 
         # Settings / Screen layout
@@ -339,9 +343,11 @@ keys = [
                 lazy.spawn(send_notification("Screens", "Using both screens", 4000)),
                 desc='Use both screens, notebook and external'),
             ],
-            mode="Screens:   0 -> Only Notebook   1 -> Only External   2 -> Both"),
+            name="Screens:   0 -> Only Notebook   1 -> Only External   2 -> Both",
+            mode=False)
         ],
-        mode="Configuration:    a -> Audio   b -> Brightness   s -> Screens   w -> Wifi   k -> Remap Caps"
+        name="Configuration:    a -> Audio   b -> Brightness   s -> Screens   w -> Wifi   k -> Remap Caps",
+        mode=True
     ),
 
 
@@ -445,7 +451,7 @@ groupbox_main = widget.GroupBox(
     highlight_method='block',
     disable_drag=True,
     hide_unused=True,
-    borderwidth=3,
+    borderwidth=0,
     **widget_defaults)
 
 groupbox_secondary = widget.GroupBox(

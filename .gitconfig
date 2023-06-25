@@ -19,3 +19,5 @@
 	helper = !/usr/bin/gh auth git-credential
 [protocol "file"]
 	allow = always
+[core]
+	editor = nvim

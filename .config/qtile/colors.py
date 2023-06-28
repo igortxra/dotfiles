@@ -1,21 +1,18 @@
 from __future__ import annotations
 from typing import Dict
 
+
 BLACK = "#000000"
 WHITE = "#FFFFFF"
+
 
 class Colors:
     def __init__(self, fg: str, bg: str) -> None:
         self.fg = fg
         self.bg = bg
 
-class Pomodoro:
-    def __init__(self, active: str, inactive: str, pause: str) -> None:
-        self.active = active
-        self.inactive = inactive
-        self.pause = pause
 
-class Theme():
+class IColorscheme():
     audio          : Colors
     battery        : Colors
     battery_low    : Colors
@@ -31,7 +28,6 @@ class Theme():
     window_count   : Colors
     bar            : Colors
     cpu_graph      : Colors
-    pomodoro       : Pomodoro
 
     # Simple Color
     groupbox_active         : str
@@ -43,49 +39,7 @@ class Theme():
     window_focused_border   : str
     window_border           : str
 
-class Dracula(Theme):
-
-    # Colors
-    Background             = "#282a36"
-    CurrentLine            = "#44475a"
-    Selection              = "#44475a"
-    Foreground             = "#f8f8f2"
-    Comment                = "#6272a4"
-    Cyan                   = "#8be9fd"
-    Green                  = "#50fa7b"
-    Orange                 = "#ffb86c"
-    Pink                   = "#ff79c6"
-    Purple                 = "#bd93f9"
-    Red                    = "#ff5555"
-    Yellow                 = "#f1fa8c"
-
-    # Colors Applied
-    audio                  = Colors(WHITE, bg=Background)
-    battery                = Colors(WHITE, bg=Background)
-    battery_low            = Colors(Red, bg=Background)
-    calendar               = Colors(WHITE, bg=Background)
-    clipboard              = Colors(BLACK, bg=Green)
-    clock                  = Colors(WHITE, bg=Background)   
-    current_layout         = Colors(WHITE, bg=Background)
-    check_updates          = Colors(Yellow, bg=Background)   
-    chord                  = Colors(BLACK, bg=WHITE)
-    ram                    = Colors(Pink, bg=Background)
-    spotify                = Colors(Green, bg=Background)
-    wifi                   = Colors(Green, bg=Background)
-    window_count           = Colors(WHITE, bg=Background)
-    bar                    = Colors(Purple, Background)
-    cpu_graph              = Colors(Green, Background)
-    pomodoro                = Pomodoro(active=Green, inactive=Selection, pause=Yellow)
-    groupbox_active         = WHITE
-    groupbox_inactive       = WHITE
-    groupbox_this_current   = Purple
-    groupbox_this           = Background
-    groupbox_other_current  = Purple
-    groupbox_other          = Background
-    window_focused_border   = Cyan
-    window_border           = BLACK
-
-class Catppuccin(Theme):
+class Catppuccin(IColorscheme):
 
     # Colors
     Rosewater = "#f5e0dc"
@@ -131,7 +85,6 @@ class Catppuccin(Theme):
     window_count            = Colors(WHITE, bg=Mantle)
     bar                     = Colors(Blue, bg=Mantle)
     cpu_graph               = Colors(Green, bg=Mantle)
-    pomodoro                = Pomodoro(active=Green, inactive=Text, pause=Yellow)
     groupbox_active         = WHITE
     groupbox_inactive       = Overlay2
     groupbox_this_current   = Overlay1
@@ -141,10 +94,9 @@ class Catppuccin(Theme):
     window_focused_border   = Overlay1
     window_border           = BLACK
 
-THEMES : Dict[str, Theme] = {
+THEMES : Dict[str, IColorscheme] = {
     "catppuccin": Catppuccin(),
-    "dracula": Dracula()
 }
 
-def get_theme(theme_name: str) -> Theme:
+def get_theme(theme_name: str) -> IColorscheme:
     return THEMES.get(theme_name, Catppuccin())

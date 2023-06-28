@@ -6,14 +6,14 @@ numlockx on &
 # Remap caps to super
 setxkbmap -option caps:super
 
-# Update screens
+# Update screen profile
 autorandr --change
 
 # Set wallpaper
 # ~/.fehbg &
 nitrogen --restore
 
-# Send welcome notification
+# Send welcome notification - Good to verify notification is working
 notify-send "Welcome, IgorTxra"
 
 # udiskie

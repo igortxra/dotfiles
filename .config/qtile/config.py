@@ -23,113 +23,27 @@
 # SOFTWARE.
 
 import asyncio
-import os
 import subprocess
 from typing import List
 
 from libqtile import bar, hook, layout, qtile, widget
-from libqtile.config import (Click, Drag, DropDown, Group, Key, KeyChord,
-                             Match, ScratchPad, Screen)
-from libqtile.core.manager import Qtile
+from libqtile.config import Click, Drag, DropDown, Group, Key, KeyChord, Match, ScratchPad, Screen
 from libqtile.lazy import lazy
-from libqtile.utils import guess_terminal
 
-from colors import get_theme
+import utils, scripts, colors
 
 ###################################################################################################
 # GLOBALS #########################################################################################
 
-# colors = get_theme("dracula")
-colors = get_theme("catppuccin")
-
-# Globals
-WIDGET_FONT = "Font Awesome 6 Bold"
 BACKLIGHT_NAME = 'intel_backlight'
-
-# Unicodes - https://fontawesome.com/search
-UNICODE_NET = ' '
-UNICODE_AUDIO = ' '
-UNICODE_BRIGHTNESS = ' '
-UNICODE_BATTERY = ' '
-UNICODE_CHARGING = '  '
-UNICODE_UPDATES = ' '
-UNICODE_NO_UPDATES = ''
-UNICODE_CLOCK = " "
-UNICODE_AGENDA = "  "
-UNICODE_CLIPBOARD = "   Copied"
-UNICODE_RAM = " "
-UNICODE_CPU = " "
-
-# Scripts
-HOME = os.path.expanduser('~')
-SCRIPT_AUTOSTART = f'{HOME}/.config/qtile/autostart.sh'
-SCRIPT_POWER_MENU = f"{HOME}/.config/rofi/powermenu.sh &" 
-SCRIPT_APP_MENU = f"{HOME}/.config/rofi/launcher.sh &" 
-SCRIPT_OPEN_IN_QUTEBROWSER = f"{HOME}/.config/rofi/open-in-qutebrowser.sh &"
-SCRIPT_OPEN_PROJECT = f"{HOME}/.config/rofi/open-project.sh &"
-SCRIPT_CALC = f"{HOME}/.config/rofi/calc.sh &" 
-SCRIPT_EMOJI = f"{HOME}/.config/rofi/emoji.sh &" 
-SCRIPT_RELOAD_PICOM = f"/bin/sh {HOME}/shell_scripts/reload_picom.sh &" 
-SCRIPT_WALLPAPER = f"nitrogen --restore"
-
-# Commands
-CMD_REMAP_CAPS = "setxkbmap -option caps:super"
-CMD_OPEN_CALENDAR = "kitty --class calcurse  -o confirm_os_window_close=0 --execute calcurse"
-CMD_SCREENSHOT = "flameshot gui"
-CMD_TODO_LIST = "todour"
-CMD_LOCK_SCREEN = "betterlockscreen -l blur"
-CMD_WIFI_MENU = "iwgtk"
-CMD_FILE_MANAGER = "thunar"
-CMD_MONITOR_ONLYNOTEBOOK = "autorandr --change onlynotebook"
-CMD_MONITOR_ONLYEXTERNAL = "autorandr --change onlyexternal"
-CMD_MONITOR_DUAL = "autorandr --change dualmonitor"
-
-CMD_BRIGHTNESS_UP = 'brightnessctl set 5%+'
-CMD_BRIGHTNESS_DOWN = 'brightnessctl set 5%-'
-
-CMD_AUDIO_MIC_MUTE = 'pactl set-source-mute @DEFAULT_SOURCE@ toggle'
-CMD_AUDIO_MUTE_UNMUTE = 'pactl set-sink-mute @DEFAULT_SINK@ toggle'
-CMD_AUDIO_UP = 'pactl set-sink-volume @DEFAULT_SINK@ +2%'
-CMD_AUDIO_DOWN = 'pactl set-sink-volume @DEFAULT_SINK@ -2%'
-
+WIDGET_FONT = "Font Awesome 6 Bold" # Unicodes - https://fontawesome.com/search
+MONITORS = utils.get_monitors()
+COLOR = colors.get_theme("catppuccin")
+SUPER = "mod4"
+ALT = "mod1"
 
 ###################################################################################################
-# Utils functions #################################################################################
-
-
-def send_notification(title: str = "Message", msg: str = "", expire=2000):
-    """ Return a notfication command """
-    return f"notify-send '{title}' '{msg}' --expire-time={expire}"
-
-
-def bold(text: str):
-    """ Return text between bold tags """
-    return f'<b>{text}</b>'
-
-
-def go_to_group(name: str):
-    """ Go to group but keeping it predefined screen """
-    def _inner(qtile):
-        if len(qtile.screens) == 1:
-            qtile.groups_map[name].cmd_toscreen()
-            return
-        if name in '7890':
-            qtile.focus_screen(1)
-            qtile.groups_map[name].cmd_toscreen()
-        else:
-            qtile.focus_screen(0)
-            qtile.groups_map[name].cmd_toscreen()
-    return _inner
-
-
-def get_monitors():
-    """ Get number of connected monitors """
-    xr = subprocess.check_output(
-        'xrandr --query | grep " connected"', shell=True).decode().split('\n')
-    monitors = len(xr) - 1 if len(xr) > 2 else len(xr)
-    return monitors
-MONITORS = get_monitors()
-
+# Lazy functions #################################################################################
 @lazy.function
 def move_window_to_next_screen(qtile):
     """ Moves a window to a screen and focuses it, allowing you to move it """
@@ -137,63 +51,28 @@ def move_window_to_next_screen(qtile):
     qtile.cmd_next_screen()
     window.togroup(qtile.current_screen.group.name)
 
-
 ###############################################################################
 # Keys ########################################################################
 # Obs: ALMOST all keys are specified in this section ##########################
 
-
-SUPER = "mod4"
-ALT = "mod1"
-TERMINAL = "kitty"
-# TERMINAL = guess_terminal()
-
 keys = [
 
-    Key([SUPER, "control"], "q",
-        lazy.shutdown(),
-        desc="Shutdown Qtile"),
+    # Qtile basics
+    Key([SUPER], "Return", lazy.spawn(scripts.TERMINAL), desc="Launch terminal"),
+    Key([SUPER, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
+    Key([SUPER, "control"], "r", lazy.reload_config(), desc="Reload the config"),
 
-    Key([SUPER, "control"], "r",
-        lazy.reload_config(),
-        desc="Reload the config"),
-
-    Key([SUPER], "Return",
-        lazy.spawn(TERMINAL),
-        desc="Launch terminal"),
-
-    Key([SUPER], "Tab",
-        lazy.next_layout(),
-        desc='Next layout'),
-
-    Key([SUPER, "shift"], "Tab",
-        lazy.prev_layout(),
-        desc="Previous layout"),
+    # Change Layouts
+    Key([SUPER], "Tab", lazy.next_layout(), desc='Next layout'),
+    Key([SUPER, "shift"], "Tab", lazy.prev_layout(), desc="Previous layout"),
 
     # Laptop keys
-    Key([], "XF86MonBrightnessUp", 
-        lazy.spawn(CMD_BRIGHTNESS_UP), 
-        desc='Increase brightness'),
-
-    Key([], "XF86MonBrightnessDown", 
-        lazy.spawn(CMD_BRIGHTNESS_DOWN), 
-        desc='Decrease brightness'),
-
-    Key([], "XF86AudioMicMute", 
-        lazy.spawn(CMD_AUDIO_MIC_MUTE), 
-        desc='Mute microphone'),
-
-    Key([], "XF86AudioMute", 
-        lazy.spawn(CMD_AUDIO_MUTE_UNMUTE),
-        desc='Mute audio'),
-
-    Key([], "XF86AudioRaiseVolume",
-        lazy.spawn(CMD_AUDIO_UP),
-        desc='Increase audio volume'),
-
-    Key([], "XF86AudioLowerVolume", 
-        lazy.spawn(CMD_AUDIO_DOWN), 
-        desc='Decrease audio volume'),
+    Key([], "XF86MonBrightnessUp", lazy.spawn(scripts.BRIGHTNESS_UP), desc='Increase brightness'),
+    Key([], "XF86MonBrightnessDown", lazy.spawn(scripts.BRIGHTNESS_DOWN), desc='Decrease brightness'),
+    Key([], "XF86AudioMicMute", lazy.spawn(scripts.AUDIO_MIC_MUTE), desc='Mute microphone'),
+    Key([], "XF86AudioMute", lazy.spawn(scripts.AUDIO_MUTE_UNMUTE), desc='Mute audio'),
+    Key([], "XF86AudioRaiseVolume", lazy.spawn(scripts.AUDIO_UP), desc='Increase audio volume'),
+    Key([], "XF86AudioLowerVolume", lazy.spawn(scripts.AUDIO_DOWN), desc='Decrease audio volume'),
 
     # Move focus
     Key([SUPER], "h", lazy.layout.left(), desc="Move focus to left"),
@@ -201,84 +80,43 @@ keys = [
     Key([SUPER], "k", lazy.layout.up(), desc="Move focus up"),
     Key([SUPER], "l", lazy.layout.right(), desc="Move focus to right"),
     Key([SUPER], 'm', lazy.next_screen(), desc='Change focused screen'), 
-
-    Key([SUPER, "shift"], "m", move_window_to_next_screen(), desc="Move window to next screen group"),
+    Key([SUPER], "w", lazy.window.kill(), desc="Kill focused window"),
+    Key([SUPER], "f", lazy.window.disable_floating(),desc="Disable floating behavior for focused window"),
 
     # Move window
+    Key([SUPER, "shift"], "m", move_window_to_next_screen(), desc="Move window to next screen group"),
     Key([SUPER, "shift"], "h", lazy.layout.shuffle_left(), desc="Move window to the left"),
     Key([SUPER, "shift"], "j", lazy.layout.shuffle_down(), desc="Move window down"),
     Key([SUPER, "shift"], "k", lazy.layout.shuffle_up(), desc="Move window up"),
     Key([SUPER, "shift"], "l", lazy.layout.shuffle_right(), desc="Move window to the right"),
     Key([SUPER, "shift"], "f", lazy.layout.flip()),
+    
+    # Window Resizes 
+    Key([SUPER, "control"], "h", lazy.layout.grow_left(), desc="Grow window to left"),
+    Key([SUPER, "control"], "j", lazy.layout.grow_down(), desc="Grow window down"),
+    Key([SUPER, "control"], "k", lazy.layout.grow_up(), desc="Grow window up"),
+    Key([SUPER, "control"], "l", lazy.layout.grow_right(), desc="Grow window right"),
+   
+    # Layout resizes
     Key([SUPER], "r", lazy.layout.normalize()),
     Key([SUPER], "g", lazy.layout.maximize()),
     Key([SUPER], "i", lazy.layout.grow()),
     Key([SUPER, "shift"], "i", lazy.layout.shrink()),
-
-    # Resive window
-    Key([SUPER, "control"], "h",
-        lazy.layout.grow_left(),
-        desc="Grow window to left"),
-
-    Key([SUPER, "control"], "j",
-        lazy.layout.grow_down(),
-        desc="Grow window down"),
-
-    Key([SUPER, "control"], "k", 
-        lazy.layout.grow_up(),
-        desc="Grow window up"),
-
-    Key([SUPER, "control"], "l", 
-        lazy.layout.grow_right(),
-        desc="Grow window right"),
  
-#    Key([SUPER], "g", 
-#        lazy.layout.grow_main(),
-#        desc="Grow main panel (Useful for specific layouts)"),
-#
-#    Key([SUPER, "shift"], "g",
-#        lazy.layout.shrink_main(),
-#        desc="Shrink main panel (Useful for specific layouts)"),
-
-    Key([SUPER], "w",
-        lazy.window.kill(),
-        desc="Kill focused window"),
-    
-    # Launchers
-    Key([SUPER], "space",
-        lazy.spawn(SCRIPT_APP_MENU),
-        desc="Launch app menu"),
- 
-    Key([SUPER], "e", 
-        lazy.spawn(CMD_FILE_MANAGER),
-        desc="Open a file manager"),
-
-    Key([], "Print",
-        lazy.spawn(CMD_SCREENSHOT),
-        desc='Launch screenshot'),
-
     # Menus
-    Key([SUPER], "q", 
-        lazy.spawn(SCRIPT_OPEN_IN_QUTEBROWSER), 
-        desc="Open qutebrowser shortcut"),
-
-    Key([SUPER], "o", 
-        lazy.spawn(SCRIPT_OPEN_PROJECT), 
-        desc="Open projects menu (A custom script for open a dir in a text editor)"),
-
-    Key([SUPER], "p",
-        lazy.spawn(SCRIPT_POWER_MENU),
-        desc="Launch power menu"),
-
-    Key([SUPER], "c",
-        lazy.spawn(SCRIPT_CALC),
-        desc="Launch calculator"),
-
-    Key([SUPER, "shift"], "Equal",
-        lazy.spawn(SCRIPT_EMOJI),
-        desc="Launch emoji list"),
+    Key([SUPER], "s", lazy.spawn(scripts.MENU_POWER), desc="Search in browser"),
+    Key([SUPER], "o", lazy.spawn(scripts.MENU_PROJECT), desc="Open projects menu"),
+    Key([SUPER], "p", lazy.spawn(scripts.MENU_POWER), desc="Launch power menu"),
+    Key([SUPER], "c", lazy.spawn(scripts.MENU_CALC), desc="Launch calculator"),
+    Key([SUPER], "space", lazy.spawn(scripts.MENU_APP), desc="Launch app menu"),
+    Key([SUPER, "shift"], "Equal", lazy.spawn(scripts.MENU_EMOJI), desc="Launch emoji list"),
+    
+    # Launch
+    Key([], "Print", lazy.spawn(scripts.OPEN_SCREENSHOT), desc='Launch screenshot'),
 
     # Settings
+    Key([SUPER, 'control'], 'p',lazy.spawn(scripts.RELOAD_PICOM), desc='Reload picom'),
+
     KeyChord([SUPER], "b", 
         [
             Key([], "k", lazy.hide_show_bar(position="top"), desc="Toggle top bar"),
@@ -288,59 +126,49 @@ keys = [
     ),
 
     Key([SUPER, 'control'], 'w',
-        lazy.spawn(SCRIPT_WALLPAPER),
-        lazy.spawn(send_notification("Screens", "Wallpaper fixed", 4000)),
+        lazy.spawn(scripts.RESTORE_WALLPAPER),
+        lazy.spawn(utils.send_notification("Screens", "Wallpaper fixed", 4000)),
         desc='Update wallpaper (Used when screen layout change and the wallpaper brake)'),
-
-    Key([SUPER], "f", 
-        lazy.window.disable_floating(),
-        desc="Disable floating behavior for focused window"),
-
 
     # Settings Menu
     KeyChord([SUPER], "Equal", [
-        Key([], "k",  lazy.spawn(CMD_REMAP_CAPS), desc="Remap caps to act as super"),
-
-        # Wi-fi submenu
-        Key([], "w", lazy.spawn(CMD_WIFI_MENU)),
+        Key([], "k",  lazy.spawn(scripts.REMAP_CAPS), desc="Remap caps to act as super"),
+        Key([], "w", lazy.spawn(scripts.OPEN_WIFI), desc="Open WIFI Menu"),
 
         # Audio submenu
         KeyChord([], "a", [
-                Key([], "j", lazy.spawn(CMD_AUDIO_DOWN)),
-                Key([], "k", lazy.spawn(CMD_AUDIO_UP)),
-                Key([], "m", lazy.spawn(CMD_AUDIO_MUTE_UNMUTE))
+                Key([], "k", lazy.spawn(scripts.AUDIO_UP), desc="Increase audio volume"),
+                Key([], "j", lazy.spawn(scripts.AUDIO_DOWN), desc="Decrease audio volume"),
+                Key([], "m", lazy.spawn(scripts.AUDIO_MUTE_UNMUTE), desc="Toggle mute")
             ], 
             name='Audio Volume:    j -> Decrease   k -> Increase   m -> Mute',
             mode=True),
 
         # Brightness submenu
         KeyChord([], "b", [
-                Key([], "j", lazy.spawn(CMD_BRIGHTNESS_DOWN)),
-                Key([], "k", lazy.spawn(CMD_BRIGHTNESS_UP))
+                Key([], "k", lazy.spawn(scripts.BRIGHTNESS_UP), desc="Increase brightness"),
+                Key([], "j", lazy.spawn(scripts.BRIGHTNESS_DOWN), desc="Descrease brightness")
             ], 
             name='Brightness:   j -> Decrease   k -> Increase',
             mode=True),
 
-
         # Settings / Screen layout
-
-        Key([], "w", lazy.spawn(CMD_WIFI_MENU)),
         KeyChord([], "s", [
             Key([], '0',
-                lazy.spawn(CMD_MONITOR_ONLYNOTEBOOK),
+                lazy.spawn(scripts.MONITOR_ONLYNOTEBOOK),
                 lazy.spawn(
-                    send_notification("Screens", "Using only notebook screen", 4000)),
+                    utils.send_notification("Screens", "Using only notebook screen", 4000)),
                 desc='Use only notebook screen'),
 
             Key([], '1',
-                lazy.spawn(CMD_MONITOR_ONLYEXTERNAL),
+                lazy.spawn(scripts.MONITOR_ONLYEXTERNAL),
                 lazy.spawn(
-                    send_notification("Screens", "Using only external screen", 4000)),
+                    utils.send_notification("Screens", "Using only external screen", 4000)),
                 desc='Use only external screen'),
 
             Key([], '2',
-                lazy.spawn(CMD_MONITOR_DUAL),
-                lazy.spawn(send_notification("Screens", "Using both screens", 4000)),
+                lazy.spawn(scripts.MONITOR_DUAL),
+                lazy.spawn(utils.send_notification("Screens", "Using both screens", 4000)),
                 desc='Use both screens, notebook and external'),
             ],
             name="Screens:   0 -> Only Notebook   1 -> Only External   2 -> Both",
@@ -350,11 +178,6 @@ keys = [
         mode=True
     ),
 
-
-    # Restart picom -> Systrat BUG
-    Key([SUPER, 'control'], 'p',
-        lazy.spawn(SCRIPT_RELOAD_PICOM),
-        desc='Reload picom'),
 ]
 
 ###############################################################################
@@ -363,11 +186,9 @@ keys = [
 
 groups: List[Group] = [
         Group("1", label="1", layout="max", matches=[]),
-        Group("2", label="2", layout="max", matches=[]),
+        Group("2", label="2", layout="monadtall", matches=[]),
         Group("3", label="3", layout="max", matches=[]), 
         Group("4", label="4", layout="max", matches=[]), 
-        # Group("5", label="5", layout="monadtall", matches=[]),
-        # Group("6", label="6", layout="monadtall", matches=[]), 
         Group("7", label="7", layout="max", matches=[]), 
         Group("8", label="8", layout="max", matches=[]), 
         Group("9", label="9", layout="max", matches=[]), 
@@ -375,16 +196,14 @@ groups: List[Group] = [
 ]
 
 for group in groups:
-
     keys.append(
         Key([SUPER], group.name,
-            lazy.function(go_to_group(group.name)),
+            lazy.function(utils.go_to_group(group.name)),
             desc="Go to specified group"))
-
     keys.append(
         Key([SUPER, "shift"], group.name,
             lazy.window.togroup(group.name),
-            lazy.function(go_to_group(group.name)),
+            lazy.function(utils.go_to_group(group.name)),
             desc="Move window to specified group"))
 
 ###############################################################################
@@ -392,13 +211,13 @@ for group in groups:
 
 groups.append(
     ScratchPad('scratchpad', [
-        DropDown('terminal', TERMINAL, width=0.6, height=0.7, x=0.2, y=0.15),
-        DropDown('todo', CMD_TODO_LIST, width=0.6, height=0.7, x=0.2, y=0.15),
+        DropDown('notes', scripts.OPEN_NOTES, width=0.8, height=0.9, x=0.08, y=0.05, on_focus_lost_hide=False),
+        DropDown('file_manager', scripts.OPEN_FILE_MANAGER, width=0.8, height=0.9, x=0.08, y=0.05, on_focus_lost_hide=False),
     ]))
 
 keys.extend([
-    # Key(["control"], "Return", lazy.group["scratchpad"].dropdown_toggle('terminal')),
-    # Key([SUPER], "t", lazy.group["scratchpad"].dropdown_toggle('todo'))
+    Key([SUPER], "n", lazy.group["scratchpad"].dropdown_toggle('notes')),
+    Key([SUPER], "e", lazy.group["scratchpad"].dropdown_toggle('file_manager'))
 ])
 
 
@@ -408,8 +227,8 @@ keys.extend([
 # Default params for layouts
 layout_theme = dict(
     border_width=2,
-    border_focus=colors.window_focused_border,
-    border_normal=colors.window_border,
+    border_focus=COLOR.window_focused_border,
+    border_normal=COLOR.window_border,
     margin=10,
     padding=2)
 
@@ -441,26 +260,27 @@ icons_defaults = dict(
     padding=0)
  
 
-groupbox_main = widget.GroupBox(
-    active=colors.groupbox_active,
-    inactive=colors.groupbox_inactive,
-    this_screen_border=colors.groupbox_this,
-    other_screen_border=colors.groupbox_other,
-    this_current_screen_border=colors.groupbox_this_current,
-    other_current_screen_border=colors.groupbox_other_current,
+main_groupbox = widget.GroupBox(
+    active=COLOR.groupbox_active,
+    inactive=COLOR.groupbox_inactive,
+    this_screen_border=COLOR.groupbox_this,
+    other_screen_border=COLOR.groupbox_other,
+    this_current_screen_border=COLOR.groupbox_this_current,
+    other_current_screen_border=COLOR.groupbox_other_current,
     highlight_method='block',
     disable_drag=True,
     hide_unused=True,
     borderwidth=0,
     **widget_defaults)
 
-groupbox_secondary = widget.GroupBox(
-    active=colors.groupbox_active,
-    inactive=colors.groupbox_inactive,
-    this_screen_border=colors.groupbox_this,
-    other_screen_border=colors.groupbox_other,
-    this_current_screen_border=colors.groupbox_this_current,
-    other_current_screen_border=colors.groupbox_other_current,
+
+secondary_groupbox = widget.GroupBox(
+    active=COLOR.groupbox_active,
+    inactive=COLOR.groupbox_inactive,
+    this_screen_border=COLOR.groupbox_this,
+    other_screen_border=COLOR.groupbox_other,
+    this_current_screen_border=COLOR.groupbox_this_current,
+    other_current_screen_border=COLOR.groupbox_other_current,
     highlight_method='block',
     disable_drag=True,
     hide_unused=True,
@@ -473,23 +293,25 @@ groupbox_secondary = widget.GroupBox(
     ],
     **widget_defaults)
 
+
 main_top_widgets = [
     
     widget.Spacer(10),
 
     widget.WindowCount(
-         background=colors.window_count.bg, 
-         foreground=colors.window_count.fg, 
+         background=COLOR.window_count.bg, 
+         foreground=COLOR.window_count.fg, 
          show_zero=True),
 
     widget.CurrentLayoutIcon(
-        background=colors.current_layout.bg,
-        foreground=colors.current_layout.fg,
+        background=COLOR.current_layout.bg,
+        foreground=COLOR.current_layout.fg,
         scale=0.8,
         **widget_defaults),
 
     widget.Spacer(5),
-    groupbox_main,
+
+    main_groupbox,
 
     widget.Spacer(20),
     
@@ -499,109 +321,95 @@ main_top_widgets = [
         scroll_chars=None,
         objname="org.mpris.MediaPlayer2.spotify",
         scroll_interval=0,
-        background=colors.spotify.bg,
-        foreground=colors.spotify.fg,
+        background=COLOR.spotify.bg,
+        foreground=COLOR.spotify.fg,
         fmt='{}   ',
         paused_text='  {track}',
         mouse_callbacks={
-            "Button3": lazy.function(go_to_group("8"))
+            "Button3": lazy.function(utils.go_to_group("8"))
         },
     ),
 
     widget.Spacer(5),
-   
 
     widget.Clipboard(
-        fmt=bold(UNICODE_CLIPBOARD),
+        fmt="   Copied",
         max_width=2,
-        background=colors.clipboard.bg,
-        foreground=colors.clipboard.fg,
+        background=COLOR.clipboard.bg,
+        foreground=COLOR.clipboard.fg,
         **widget_defaults),
 
     widget.Spacer(),
  
     widget.Clock(
-        format=f"{UNICODE_CLOCK} %H:%M:%S (%d/%m/%y)",
-        background=colors.clock.bg,
-        foreground=colors.clock.fg,
+        format=f"  %H:%M:%S (%d/%m/%y)",
+        background=COLOR.clock.bg,
+        foreground=COLOR.clock.fg,
         mouse_callbacks={
-            "Button1": lazy.spawn(CMD_OPEN_CALENDAR)
+            "Button1": lazy.spawn(scripts.OPEN_CALENDAR)
         }),
 
     widget.Chord(
-        font="Iosevka NF Bold", 
-        background=colors.chord.bg, 
-        foreground=colors.chord.fg, 
-        fmt=bold(" ") + "{}" + bold("   Esc -> Cancel")
+        font="Iosevka NF ", 
+        background=COLOR.chord.bg, 
+        foreground=COLOR.chord.fg, 
+        fmt=(" ") + "{}" + "   Esc -> Cancel"
     ),
-
+   
     widget.Spacer(),
 
-
-   
-    widget.Spacer(10),
-
-
-    widget.Spacer(20),
-
-    # Internet
-    widget.TextBox(
-        bold(UNICODE_NET),
-        background=colors.wifi.bg,
-        foreground=colors.wifi.fg,
-        **icons_defaults),
     widget.Wlan(
-        format='{percent:2.0%}',
-        background=colors.wifi.bg,
-        foreground=colors.wifi.fg,
+        format='   {percent:2.0%}',
+        background=COLOR.wifi.bg,
+        foreground=COLOR.wifi.fg,
         mouse_callbacks={
-            "Button1": lazy.spawn(CMD_WIFI_MENU)
+            "Button1": lazy.spawn(scripts.OPEN_WIFI)
         },
         **widget_defaults),
 
-    widget.Spacer(15),
+    widget.Spacer(5),
 
-    widget.TextBox(
-        bold(UNICODE_AUDIO), 
-        background=colors.audio.bg, 
-        foreground=colors.audio.fg,
-        **icons_defaults),
     widget.Volume(
-        background=colors.audio.bg,
-        foreground=colors.audio.fg, 
+        fmt="    {}",
+        background=COLOR.audio.bg,
+        foreground=COLOR.audio.fg, 
+        mouse_callbacks={
+            "Button3": lazy.spawn(scripts.OPEN_AUDIO_SETTINGS)
+        },
         **widget_defaults),
 
     widget.Spacer(5),
 
     widget.Battery(
-        background=colors.battery.bg,
-        foreground=colors.battery.fg,
-        low_background=colors.battery_low.bg,
-        low_foreground=colors.battery_low.fg,
+        background=COLOR.battery.bg,
+        foreground=COLOR.battery.fg,
+        low_background=COLOR.battery_low.bg,
+        low_foreground=COLOR.battery_low.fg,
         low_percentage=0.40,
         notify_below=40,
-        charge_char=UNICODE_CHARGING,
+        charge_char="  ",
         discharge_char='',
         show_short_text=True,
-        format=UNICODE_BATTERY + '  {percent:2.0%} {char}'),
+        format='    {percent:2.0%} {char}'),
 
-       
     widget.Spacer(5),
 
     widget.Spacer(10),
 
-]  # main_top_widgets END
+]
 
-secondary_widgets = [
+
+secondary_top_widgets = [
     widget.Spacer(10),
     widget.CurrentLayoutIcon(
-        background=colors.current_layout.bg,
-        foreground=colors.current_layout.fg,
+        background=COLOR.current_layout.bg,
+        foreground=COLOR.current_layout.fg,
         scale=0.8,
         **widget_defaults),
-    groupbox_secondary,
+    secondary_groupbox,
     widget.Spacer(),
 ]
+
 
 bottom_widgets = [
     widget.Spacer(10),
@@ -610,50 +418,38 @@ bottom_widgets = [
 
     widget.Spacer(),
 
-    # CPU
-    widget.TextBox(
-        bold(f'{UNICODE_CPU}'),
-        background=colors.cpu_graph.bg,
-        foreground=colors.cpu_graph.fg,
-        **icons_defaults),
     widget.CPU(
-        background=colors.cpu_graph.bg,
-        foreground=colors.cpu_graph.fg,
+        background=COLOR.cpu_graph.bg,
+        foreground=COLOR.cpu_graph.fg,
     ),
     widget.CPUGraph(
         type='line',
-        background=colors.cpu_graph.bg,
-        border_color=colors.cpu_graph.fg,
+        background=COLOR.cpu_graph.bg,
+        border_color=COLOR.cpu_graph.fg,
         border_width=0,
         line_width=2,
         margin_y=3,
-        fill_color=colors.cpu_graph.fg,
-        graph_color=colors.cpu_graph.fg
+        fill_color=COLOR.cpu_graph.fg,
+        graph_color=COLOR.cpu_graph.fg
     ),
 
     widget.Spacer(10),
  
-    # Memory
-    widget.TextBox(
-        bold(f'{UNICODE_RAM} RAM'),
-        background=colors.ram.bg,
-        foreground=colors.ram.fg,
-        **icons_defaults),
     widget.Memory(
-        format='{MemUsed: .3f}{mm} / {MemTotal: .3f}{mm}',
+        format='RAM {MemUsed: .3f}{mm} / {MemTotal: .3f}{mm}',
         measure_mem='G',
-        background=colors.ram.bg,
-        foreground=colors.ram.fg,
+        background=COLOR.ram.bg,
+        foreground=COLOR.ram.fg,
         **widget_defaults),
     widget.MemoryGraph(
         type='line',
-        background=colors.ram.bg,
-        border_color=colors.ram.fg,
+        background=COLOR.ram.bg,
+        border_color=COLOR.ram.fg,
         border_width=0,
         margin_y=3,
         line_width=1,
-        fill_color=colors.ram.fg,
-        graph_color=colors.ram.fg),
+        fill_color=COLOR.ram.fg,
+        graph_color=COLOR.ram.fg),
 
     widget.Spacer(),
 
@@ -662,27 +458,27 @@ bottom_widgets = [
     widget.Spacer(10),
 
     widget.CheckUpdates(
-        display_format=bold(UNICODE_UPDATES + " {updates} updates"),
-        colour_have_updates=colors.check_updates.fg,
-        background=colors.check_updates.bg,
-        no_update_string=UNICODE_NO_UPDATES),
+        display_format="  {updates} updates",
+        colour_have_updates=COLOR.check_updates.fg,
+        background=COLOR.check_updates.bg,
+        no_update_string=""),
 
     widget.Spacer(10),
-    ]
+]
 
 
 ###############################################################################
 # Screen and monitors
 
 bar_style = dict(
-    background=colors.bar.bg,
-    border_color=colors.bar.bg,
+    background=COLOR.bar.bg,
+    border_color=COLOR.bar.bg,
     margin=[5, 10, 0, 10],
     border_width=0)
 
 main_bar = bar.Bar(widgets=main_top_widgets, size=23, **bar_style)
-secondary_bar = bar.Bar(widgets=secondary_widgets, size=23, **bar_style)
-bottom_bar = bar.Bar(widgets=bottom_widgets, size=23, background=colors.bar.bg, border_width=0, margin=[0,10,5,10])
+secondary_bar = bar.Bar(widgets=secondary_top_widgets, size=23, **bar_style)
+bottom_bar = bar.Bar(widgets=bottom_widgets, size=23, background=COLOR.bar.bg, border_width=0, margin=[0,10,5,10])
 
 screens = []
 for monitor in range(MONITORS):
@@ -695,23 +491,33 @@ for monitor in range(MONITORS):
         # Secondary monitors
         screens.append(Screen(top=secondary_bar))
 
+
 ###################################################################################################
 # Hooks ###########################################################################################
+
+@hook.subscribe.startup
+def startup():
+    """ Execute some steps in qtile refresh """
+    main_bar.window.window.set_property("QTILE_BAR", 1, "CARDINAL", 32)
+    secondary_bar.window.window.set_property("QTILE_BAR", 1, "CARDINAL", 32)
+    bottom_bar.window.window.set_property("QTILE_BAR", 1, "CARDINAL", 32)
+    reconfigure_groupbox()
+
 
 @hook.subscribe.screens_reconfigured
 def reconfigure_groupbox():
     """ Adapt visible groups depending on number of screens """
     groups_names = [g.name for g in qtile.groups]
     if len(qtile.screens) > 1:
-        groupbox_main.visible_groups = groups_names[:4]
+        main_groupbox.visible_groups = groups_names[:4]
     else:
-        groupbox_main.visible_groups = groups_names
+        main_groupbox.visible_groups = groups_names
 
 
 @hook.subscribe.startup_once
 def autostart():
     """ Executes a script on qtile startup """
-    subprocess.Popen([SCRIPT_AUTOSTART])
+    subprocess.Popen([scripts.AUTOSTART])
 
 
 @hook.subscribe.client_new
@@ -728,21 +534,9 @@ def modify_window(client):
     for group in groups:  # follow on auto-move
         match = next((m for m in group.matches if m.compare(client)), None)
         if match:
-            # A way to call go_to_group() because its impossible call directly
+            # A way to call utils.go_to_group() because its impossible call directly
             client.qtile.cmd_simulate_keypress([SUPER], group.name)
 
-@hook.subscribe.client_focus
-def set_hint(window):
-    window.window.set_property("IS_FLOATING", str(window.floating), type="STRING", format=8)
-
-# @hook.subscribe.client_name_updated
-# def move_to_a_match_a_group(client):
-#     """ Focus in the group where the new client will be moved by Match when client name changes """
-#     for group in groups:
-#         match = next((m for m in group.matches if m.compare(client)), None)
-#         if match:
-#             # A way to call go_to_group() because its impossible call directly
-#             client.qtile.cmd_simulate_keypress([SUPER, "shift"], group.name)
 
 ###############################################################################
 # MORE
@@ -786,6 +580,7 @@ floating_layout = layout.Floating(
         Match(title="iwgtk"),  # Wireless configuration
         Match(wm_class="thunar"),  # Wireless configuration
         Match(wm_class="calcurse"),  # Wireless configuration
+        Match(wm_class="pavucontrol"),  # Wireless configuration
     ],
     **layout_theme
 )
@@ -809,14 +604,3 @@ wl_input_rules = None
 # We choose LG3D to maximize irony: it is a 3D non-reparenting WM written in
 # java that happens to be on java's whitelist.
 wmname = "Qtile"
-
-@hook.subscribe.startup
-def startup():
-    """ Execute some steps in qtile refresh """
-    main_bar.window.window.set_property("QTILE_BAR", 1, "CARDINAL", 32)
-    secondary_bar.window.window.set_property("QTILE_BAR", 1, "CARDINAL", 32)
-    bottom_bar.window.window.set_property("QTILE_BAR", 1, "CARDINAL", 32)
-    reconfigure_groupbox()
-
-
-

@@ -1,4 +1,2 @@
 app=$1
-  cd ~/.config/$app
-  nvim .
-fi
+cd ~/.config/$app

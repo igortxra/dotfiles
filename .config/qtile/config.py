@@ -186,7 +186,7 @@ keys = [
 
 groups: List[Group] = [
         Group("1", label="1", layout="max", matches=[]),
-        Group("2", label="2", layout="monadtall", matches=[]),
+        Group("2", label="2", layout="MonadWide", matches=[]),
         Group("3", label="3", layout="max", matches=[]), 
         Group("4", label="4", layout="max", matches=[]), 
         Group("7", label="7", layout="max", matches=[]), 

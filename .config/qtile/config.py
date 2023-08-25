@@ -22,6 +22,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+import os
 import asyncio
 import subprocess
 from typing import List
@@ -29,21 +30,93 @@ from typing import List
 from libqtile import bar, hook, layout, qtile, widget
 from libqtile.config import Click, Drag, DropDown, Group, Key, KeyChord, Match, ScratchPad, Screen
 from libqtile.lazy import lazy
+from qtile_extras import widget
+from qtile_extras.widget.decorations import RectDecoration
 
-import utils, scripts, colors
+from colors import Catppuccin
 
-###################################################################################################
-# GLOBALS #########################################################################################
+#####################
+## Utils functions ##
+#####################
 
+def go_to_group(name: str):
+    """ Go to group but keeping it in predefined screen"""
+    def _inner(qtile):
+        if len(qtile.screens) == 1:
+            qtile.groups_map[name].cmd_toscreen()
+            return
+        if name in '7890':
+            qtile.focus_screen(1)
+            qtile.groups_map[name].cmd_toscreen()
+        else:
+            qtile.focus_screen(0)
+            qtile.groups_map[name].cmd_toscreen()
+    return _inner
+
+
+def get_monitors():
+    """ Get number of connected monitors """
+    xr = subprocess.check_output(
+        'xrandr --query | grep " connected"', shell=True).decode().split('\n')
+    monitors = len(xr) - 1 if len(xr) > 2 else len(xr)
+    return monitors
+
+
+#############
+## GLOBALS ##
+#############
+
+# Generics
+HOME = os.path.expanduser('~')
+TERMINAL = "kitty"
+MONITORS = get_monitors()
+
+# Style
+WIDGET_FONT = "Iosevka Nerd Font"
+COLOR = Catppuccin()
+
+# Apps
+APP_NOTES = "obsidian"
+APP_FILE_MANAGER = "thunar"
+APP_SCREENSHOT = "flameshot gui"
+APP_AUDIO_SETTINGS = "pavucontrol"
+GITHUB_NOTIFICATIONS = 'qutebrowser ":open gh"'
+
+# Script Paths
+AUTOSTART = f'{HOME}/.config/qtile/autostart.sh'
+MENU_WIFI = f"{HOME}/.config/rofi/wifi/run.sh &" 
+MENU_POWER = f"{HOME}/.config/rofi/powermenu/run.sh &" 
+MENU_APP = f"{HOME}/.config/rofi/launcher/run.sh &" 
+MENU_BROWSER = f"{HOME}/.config/rofi/qutebrowser/run.sh &"
+MENU_PROJECT = f"{HOME}/.config/rofi/projects/run.sh &"
+MENU_CONFIGS = f"{HOME}/.config/rofi/configs/run.sh &"
+MENU_UTILS = f"{HOME}/.config/rofi/utils/run.sh &" 
+MENU_SCREENS = f"{HOME}/.config/rofi/autorandr/run.sh &" 
+WIDGET_BATTERY = f"{HOME}/.local/bin/statusbar/battery-icon.sh" 
+WIDGET_INTERNET = f"{HOME}/.local/bin/statusbar/net.sh" 
+
+# Brightness
 BACKLIGHT_NAME = 'intel_backlight'
-WIDGET_FONT = "Font Awesome 6 Bold" # Unicodes - https://fontawesome.com/search
-MONITORS = utils.get_monitors()
-COLOR = colors.get_theme("catppuccin")
+BRIGHTNESS_UP = 'brightnessctl set 5%+'
+BRIGHTNESS_DOWN = 'brightnessctl set 5%-'
+
+# Audio
+AUDIO_UP = 'pactl set-sink-volume @DEFAULT_SINK@ +2%'
+AUDIO_DOWN = 'pactl set-sink-volume @DEFAULT_SINK@ -2%'
+AUDIO_MUTE_UNMUTE = 'pactl set-sink-mute @DEFAULT_SINK@ toggle'
+AUDIO_MIC_MUTE = 'pactl set-source-mute @DEFAULT_SOURCE@ toggle'
+
+# Reset
+RESET_SCREEN = "autorandr --change onlynotebook"
+
+# Modifier 
 SUPER = "mod4"
 ALT = "mod1"
 
-###################################################################################################
-# Lazy functions #################################################################################
+####################
+## Lazy functions ##
+####################
+
 @lazy.function
 def move_window_to_next_screen(qtile):
     """ Moves a window to a screen and focuses it, allowing you to move it """
@@ -51,14 +124,17 @@ def move_window_to_next_screen(qtile):
     qtile.cmd_next_screen()
     window.togroup(qtile.current_screen.group.name)
 
-###############################################################################
-# Keys ########################################################################
-# Obs: ALMOST all keys are specified in this section ##########################
+##########
+## Keys ##
+##########
 
 keys = [
 
+    # F Keys
+    Key([SUPER], "F4", lazy.spawn(RESET_SCREEN), desc='Reset screen'),
+
     # Qtile basics
-    Key([SUPER], "Return", lazy.spawn(scripts.TERMINAL), desc="Launch terminal"),
+    Key([SUPER], "Return", lazy.spawn(TERMINAL), desc="Launch terminal"),
     Key([SUPER, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
     Key([SUPER, "control"], "r", lazy.reload_config(), desc="Reload the config"),
 
@@ -67,12 +143,12 @@ keys = [
     Key([SUPER, "shift"], "Tab", lazy.prev_layout(), desc="Previous layout"),
 
     # Laptop keys
-    Key([], "XF86MonBrightnessUp", lazy.spawn(scripts.BRIGHTNESS_UP), desc='Increase brightness'),
-    Key([], "XF86MonBrightnessDown", lazy.spawn(scripts.BRIGHTNESS_DOWN), desc='Decrease brightness'),
-    Key([], "XF86AudioMicMute", lazy.spawn(scripts.AUDIO_MIC_MUTE), desc='Mute microphone'),
-    Key([], "XF86AudioMute", lazy.spawn(scripts.AUDIO_MUTE_UNMUTE), desc='Mute audio'),
-    Key([], "XF86AudioRaiseVolume", lazy.spawn(scripts.AUDIO_UP), desc='Increase audio volume'),
-    Key([], "XF86AudioLowerVolume", lazy.spawn(scripts.AUDIO_DOWN), desc='Decrease audio volume'),
+    Key([], "XF86MonBrightnessUp", lazy.spawn(BRIGHTNESS_UP), desc='Increase brightness'),
+    Key([], "XF86MonBrightnessDown", lazy.spawn(BRIGHTNESS_DOWN), desc='Decrease brightness'),
+    Key([], "XF86AudioMicMute", lazy.spawn(AUDIO_MIC_MUTE), desc='Mute microphone'),
+    Key([], "XF86AudioMute", lazy.spawn(AUDIO_MUTE_UNMUTE), desc='Mute audio'),
+    Key([], "XF86AudioRaiseVolume", lazy.spawn(AUDIO_UP), desc='Increase audio volume'),
+    Key([], "XF86AudioLowerVolume", lazy.spawn(AUDIO_DOWN), desc='Decrease audio volume'),
 
     # Move focus
     Key([SUPER], "h", lazy.layout.left(), desc="Move focus to left"),
@@ -80,8 +156,11 @@ keys = [
     Key([SUPER], "k", lazy.layout.up(), desc="Move focus up"),
     Key([SUPER], "l", lazy.layout.right(), desc="Move focus to right"),
     Key([SUPER], 'm', lazy.next_screen(), desc='Change focused screen'), 
-    Key([SUPER], "w", lazy.window.kill(), desc="Kill focused window"),
-    Key([SUPER], "f", lazy.window.disable_floating(),desc="Disable floating behavior for focused window"),
+    Key([SUPER], "x", lazy.window.kill(), desc="Kill focused window"),
+    Key([SUPER], "f", lazy.window.disable_floating(), desc="Disable floating behavior for focused window"),
+    Key([SUPER], "n", lazy.screen.next_group(skip_empty=True), desc="Go to next group"),
+    Key([SUPER], "p", lazy.screen.prev_group(skip_empty=True), desc="Go to previous group"),
+    Key([SUPER], "t", lazy.screen.toggle_group(), desc="Open Wi-Fi Menu"),
 
     # Move window
     Key([SUPER, "shift"], "m", move_window_to_next_screen(), desc="Move window to next screen group"),
@@ -96,147 +175,115 @@ keys = [
     Key([SUPER, "control"], "j", lazy.layout.grow_down(), desc="Grow window down"),
     Key([SUPER, "control"], "k", lazy.layout.grow_up(), desc="Grow window up"),
     Key([SUPER, "control"], "l", lazy.layout.grow_right(), desc="Grow window right"),
-   
+
     # Layout resizes
-    Key([SUPER], "r", lazy.layout.normalize()),
+    Key([SUPER], "r", lazy.layout.reset()),
     Key([SUPER], "g", lazy.layout.maximize()),
     Key([SUPER], "i", lazy.layout.grow()),
     Key([SUPER, "shift"], "i", lazy.layout.shrink()),
  
     # Menus
-    Key([SUPER], "s", lazy.spawn(scripts.MENU_POWER), desc="Search in browser"),
-    Key([SUPER], "o", lazy.spawn(scripts.MENU_PROJECT), desc="Open projects menu"),
-    Key([SUPER], "p", lazy.spawn(scripts.MENU_POWER), desc="Launch power menu"),
-    Key([SUPER], "c", lazy.spawn(scripts.MENU_CALC), desc="Launch calculator"),
-    Key([SUPER], "space", lazy.spawn(scripts.MENU_APP), desc="Launch app menu"),
-    Key([SUPER, "shift"], "Equal", lazy.spawn(scripts.MENU_EMOJI), desc="Launch emoji list"),
+    Key([SUPER], "space", lazy.spawn(MENU_APP), desc="Open App Menu"),
+    Key([SUPER], "c", lazy.spawn(MENU_CONFIGS), desc="Open Configs Menu"),
+    Key([SUPER], "o", lazy.spawn(MENU_PROJECT), desc="Open Projects Menu"),
+    Key([SUPER, "shift"], "p", lazy.spawn(MENU_POWER), desc="Open Power Menu"),
+    Key([SUPER], "s", lazy.spawn(MENU_BROWSER), desc="Open Qutebrowser Menu"),
+    Key([SUPER], "u", lazy.spawn(MENU_UTILS), desc="Open Utils Menu"),
+    Key([SUPER], "w", lazy.spawn(MENU_WIFI),desc="Open Wi-Fi Menu"),
+    Key([SUPER], "t", lazy.screen.toggle_group(), desc="Open Wi-Fi Menu"),
+    Key([SUPER], "v", lazy.spawn("copyq show"), desc="Open Wi-Fi Menu"),
+    Key([SUPER], "a", lazy.spawn(MENU_SCREENS), desc="Open Screen Profile Menu"),
+    Key([SUPER, "control"], "s", lazy.spawn("copyq show"), desc="Open Wi-Fi Menu"),
     
     # Launch
-    Key([], "Print", lazy.spawn(scripts.OPEN_SCREENSHOT), desc='Launch screenshot'),
-
-    # Settings
-    Key([SUPER, 'control'], 'p',lazy.spawn(scripts.RELOAD_PICOM), desc='Reload picom'),
-
-    KeyChord([SUPER], "b", 
-        [
-            Key([], "k", lazy.hide_show_bar(position="top"), desc="Toggle top bar"),
-            Key([], "j", lazy.hide_show_bar(position="bottom"), desc="Toggle bottom bar")
-        ],
-        name="Toggle Bar:    j -> Bottom Bar   k -> Top Bar"
-    ),
-
-    Key([SUPER, 'control'], 'w',
-        lazy.spawn(scripts.RESTORE_WALLPAPER),
-        lazy.spawn(utils.send_notification("Screens", "Wallpaper fixed", 4000)),
-        desc='Update wallpaper (Used when screen layout change and the wallpaper brake)'),
+    Key([], "Print", lazy.spawn(APP_SCREENSHOT), desc='Launch screenshot'),
 
     # Settings Menu
     KeyChord([SUPER], "Equal", [
-        Key([], "k",  lazy.spawn(scripts.REMAP_CAPS), desc="Remap caps to act as super"),
-        Key([], "w", lazy.spawn(scripts.OPEN_WIFI), desc="Open WIFI Menu"),
-
         # Audio submenu
         KeyChord([], "a", [
-                Key([], "k", lazy.spawn(scripts.AUDIO_UP), desc="Increase audio volume"),
-                Key([], "j", lazy.spawn(scripts.AUDIO_DOWN), desc="Decrease audio volume"),
-                Key([], "m", lazy.spawn(scripts.AUDIO_MUTE_UNMUTE), desc="Toggle mute")
+                Key([], "k", lazy.spawn(AUDIO_UP), desc="Increase audio volume"),
+                Key([], "j", lazy.spawn(AUDIO_DOWN), desc="Decrease audio volume"),
+                Key([], "m", lazy.spawn(AUDIO_MUTE_UNMUTE), desc="Toggle mute")
             ], 
             name='Audio Volume:    j -> Decrease   k -> Increase   m -> Mute',
             mode=True),
 
         # Brightness submenu
         KeyChord([], "b", [
-                Key([], "k", lazy.spawn(scripts.BRIGHTNESS_UP), desc="Increase brightness"),
-                Key([], "j", lazy.spawn(scripts.BRIGHTNESS_DOWN), desc="Descrease brightness")
+                Key([], "k", lazy.spawn(BRIGHTNESS_UP), desc="Increase brightness"),
+                Key([], "j", lazy.spawn(BRIGHTNESS_DOWN), desc="Descrease brightness")
             ], 
             name='Brightness:   j -> Decrease   k -> Increase',
             mode=True),
 
-        # Settings / Screen layout
-        KeyChord([], "s", [
-            Key([], '0',
-                lazy.spawn(scripts.MONITOR_ONLYNOTEBOOK),
-                lazy.spawn(
-                    utils.send_notification("Screens", "Using only notebook screen", 4000)),
-                desc='Use only notebook screen'),
-
-            Key([], '1',
-                lazy.spawn(scripts.MONITOR_ONLYEXTERNAL),
-                lazy.spawn(
-                    utils.send_notification("Screens", "Using only external screen", 4000)),
-                desc='Use only external screen'),
-
-            Key([], '2',
-                lazy.spawn(scripts.MONITOR_DUAL),
-                lazy.spawn(utils.send_notification("Screens", "Using both screens", 4000)),
-                desc='Use both screens, notebook and external'),
-            ],
-            name="Screens:   0 -> Only Notebook   1 -> Only External   2 -> Both",
-            mode=False)
         ],
-        name="Configuration:    a -> Audio   b -> Brightness   s -> Screens   w -> Wifi   k -> Remap Caps",
-        mode=True
+        name="Configuration:    a -> Audio   b -> Brightness",
+        mode=False
     ),
-
 ]
 
-###############################################################################
-# Groups - Workspaces
-# Obs.: Group Keys MUST be in the same lenght as groups
+#########################
+## Groups - Workspaces ##
+#########################
 
 groups: List[Group] = [
-        Group("1", label="1", layout="max", matches=[]),
-        Group("2", label="2", layout="MonadWide", matches=[]),
-        Group("3", label="3", layout="max", matches=[]), 
-        Group("4", label="4", layout="max", matches=[]), 
-        Group("7", label="7", layout="max", matches=[]), 
-        Group("8", label="8", layout="max", matches=[]), 
-        Group("9", label="9", layout="max", matches=[]), 
-        Group("0", label="0", layout="max", matches=[Match(wm_class="Discord")]), 
+        Group("1", label="  ₁", layout="monadtall", matches=[Match(wm_class="firefox"),Match(wm_class="qutebrowser")]),
+        Group("2", label="  ₂", layout="monadtall", matches=[]),
+        Group("3", label="  ₃", layout="monadtall", matches=[]), 
+        Group("4", label="  ₄", layout="monadtall", matches=[]), 
+        Group("5", label="  ₅", layout="monadtall", matches=[]), 
+        Group("6", label="  ₆", layout="monadtall", matches=[]), 
+        Group("7", label="  ₇", layout="max", matches=[Match(wm_class="Postman"), Match(wm_class="beekeeper-studio")]), 
+        Group("8", label="  ₈", layout="max", matches=[]), # Spotify match are manually defined in hooks
+        Group("9", label=" ₉", layout="max", matches=[Match(wm_class="discord")]), 
+        Group("0", label="  ₀", layout="max", matches=[Match(wm_class="notion-app")]), 
 ]
 
 for group in groups:
     keys.append(
         Key([SUPER], group.name,
-            lazy.function(utils.go_to_group(group.name)),
+            lazy.function(go_to_group(group.name)),
             desc="Go to specified group"))
     keys.append(
         Key([SUPER, "shift"], group.name,
             lazy.window.togroup(group.name),
-            lazy.function(utils.go_to_group(group.name)),
+            lazy.function(go_to_group(group.name)),
             desc="Move window to specified group"))
 
-###############################################################################
-# ScratchPads
+#################
+## ScratchPads ##
+#################
 
 groups.append(
     ScratchPad('scratchpad', [
-        DropDown('notes', scripts.OPEN_NOTES, width=0.8, height=0.9, x=0.08, y=0.05, on_focus_lost_hide=False),
-        DropDown('file_manager', scripts.OPEN_FILE_MANAGER, width=0.8, height=0.9, x=0.08, y=0.05, on_focus_lost_hide=False),
+        DropDown('notes', APP_NOTES, width=0.8, height=0.9, x=0.08, y=0.05, on_focus_lost_hide=False),
+        DropDown('file_manager', APP_FILE_MANAGER, width=0.8, height=0.9, x=0.08, y=0.05, on_focus_lost_hide=False),
     ]))
 
 keys.extend([
-    Key([SUPER], "n", lazy.group["scratchpad"].dropdown_toggle('notes')),
+    Key([SUPER, "shift"], "n", lazy.group["scratchpad"].dropdown_toggle('notes')),
     Key([SUPER], "e", lazy.group["scratchpad"].dropdown_toggle('file_manager'))
 ])
 
 
-###############################################################################
-# Layouts
+#############
+## Layouts ##
+#############
 
 # Default params for layouts
 layout_theme = dict(
-    border_width=2,
     border_focus=COLOR.window_focused_border,
     border_normal=COLOR.window_border,
-    margin=10,
-    padding=2)
+    margin=20,
+    padding=2
+)
 
 layouts = [
-    layout.Max(**layout_theme),
-    layout.MonadTall(**layout_theme),
-    layout.MonadWide(**layout_theme),
-    layout.Zoomy(**layout_theme),
+    layout.Max(**layout_theme, border_width=0),
+    layout.MonadTall(**layout_theme, border_width=1, single_border_width=0),
+    layout.MonadWide(**layout_theme, border_width=1, single_border_width=0, ratio=0.75),
+    # layout.Zoomy(**layout_theme),
     # layout.Tile(**layout_theme),
     # layout.Columns(**layout_theme),
     # layout.Stack(**layout_theme),
@@ -245,75 +292,90 @@ layouts = [
     # layout.Floating(**layout_style),
 ]
 
-###############################################################################
-# Widgets
+#############
+## Widgets ##
+#############
+
+decorations=[RectDecoration(group=True, use_widget_background=True, clip=True, radius=5, filled=True, padding_y=0, padding_x=0)]
+decorations_github=[RectDecoration(group=True, use_widget_background=True, clip=True, radius=14, filled=True)]
 
 widget_defaults = dict(
     font=WIDGET_FONT,
-    fontsize=11,
-    padding=10)
+    fontsize=14,
+    padding=8)
 
 
 icons_defaults = dict(
     font=WIDGET_FONT,
-    fontsize=12,
-    padding=0)
+    fontsize=14,
+    padding=10)
  
 
 main_groupbox = widget.GroupBox(
     active=COLOR.groupbox_active,
+    background=COLOR.groupbox_background,
     inactive=COLOR.groupbox_inactive,
     this_screen_border=COLOR.groupbox_this,
     other_screen_border=COLOR.groupbox_other,
     this_current_screen_border=COLOR.groupbox_this_current,
     other_current_screen_border=COLOR.groupbox_other_current,
-    highlight_method='block',
+    highlight_method='line',
+    highlight_color=[COLOR.groupbox_this, COLOR.groupbox_this],
     disable_drag=True,
     hide_unused=True,
-    borderwidth=0,
-    **widget_defaults)
+    borderwidth=1,
+    decorations=decorations,
+    padding=12)
 
 
 secondary_groupbox = widget.GroupBox(
     active=COLOR.groupbox_active,
+    background=COLOR.groupbox_background,
     inactive=COLOR.groupbox_inactive,
     this_screen_border=COLOR.groupbox_this,
     other_screen_border=COLOR.groupbox_other,
     this_current_screen_border=COLOR.groupbox_this_current,
     other_current_screen_border=COLOR.groupbox_other_current,
-    highlight_method='block',
+    highlight_method='line',
+    highlight_color=[COLOR.groupbox_this, COLOR.groupbox_this],
     disable_drag=True,
     hide_unused=True,
-    borderwidth=3,
+    borderwidth=1,
+    decorations=decorations,
+    padding=12,
     visible_groups=[
-        groups[4].name,
-        groups[5].name,
         groups[6].name,
         groups[7].name,
-    ],
-    **widget_defaults)
+        groups[8].name,
+        groups[9].name,
+    ])
 
 
 main_top_widgets = [
     
-    widget.Spacer(10),
+    widget.Spacer(15),
 
-    widget.WindowCount(
-         background=COLOR.window_count.bg, 
-         foreground=COLOR.window_count.fg, 
-         show_zero=True),
+    widget.TextBox(" ", fontsize=20, foreground="#08F"),
+
+    widget.Spacer(5),
 
     widget.CurrentLayoutIcon(
         background=COLOR.current_layout.bg,
         foreground=COLOR.current_layout.fg,
-        scale=0.8,
-        **widget_defaults),
+        decorations=decorations,
+        scale=0.8),
+
+    widget.WindowCount(
+         background=COLOR.window_count.bg, 
+         foreground=COLOR.window_count.fg, 
+         show_zero=True,
+         decorations=decorations),
 
     widget.Spacer(5),
 
     main_groupbox,
 
-    widget.Spacer(20),
+    widget.Spacer(10),
     
     widget.Mpris2(
         name="spotify",
@@ -324,31 +386,25 @@ main_top_widgets = [
         background=COLOR.spotify.bg,
         foreground=COLOR.spotify.fg,
         fmt='{}   ',
-        paused_text='  {track}',
+        paused_text='   {track}',
         mouse_callbacks={
-            "Button3": lazy.function(utils.go_to_group("8"))
+            "Button3": lazy.function(go_to_group("8"))
         },
+        decorations=decorations
     ),
 
     widget.Spacer(5),
 
     widget.Clipboard(
-        fmt="   Copied",
+        fmt="󰅎  Copied",
         max_width=2,
         background=COLOR.clipboard.bg,
         foreground=COLOR.clipboard.fg,
+        decorations=decorations,
         **widget_defaults),
 
     widget.Spacer(),
  
-    widget.Clock(
-        format=f"  %H:%M:%S (%d/%m/%y)",
-        background=COLOR.clock.bg,
-        foreground=COLOR.clock.fg,
-        mouse_callbacks={
-            "Button1": lazy.spawn(scripts.OPEN_CALENDAR)
-        }),
-
     widget.Chord(
         font="Iosevka NF ", 
         background=COLOR.chord.bg, 
@@ -358,150 +414,179 @@ main_top_widgets = [
    
     widget.Spacer(),
 
-    widget.Wlan(
-        format='   {percent:2.0%}',
-        background=COLOR.wifi.bg,
-        foreground=COLOR.wifi.fg,
-        mouse_callbacks={
-            "Button1": lazy.spawn(scripts.OPEN_WIFI)
-        },
-        **widget_defaults),
+#     widget.CPU(
+#        background=COLOR.cpu.bg,
+#        foreground=COLOR.cpu.fg,
+#        decorations=decorations
+#    ),
+#
+#    widget.Spacer(5),
+# 
+#    widget.Memory(
+#        format='RAM {MemUsed: .3f}{mm} / {MemTotal: .3f}{mm}',
+#        measure_mem='G',
+#        background=COLOR.ram.bg,
+#        foreground=COLOR.ram.fg,
+#        decorations=decorations,
+#        **widget_defaults),
+#
+#   widget.Spacer(5),
+
+    widget.CheckUpdates(
+        display_format="  {updates}",
+        colour_have_updates=COLOR.check_updates.fg,
+        background=COLOR.check_updates.bg,
+        no_update_string="",
+        decorations=decorations),
 
     widget.Spacer(5),
 
+    # Internet Widget
+    widget.GenPollText(
+        func=lambda: subprocess.check_output(WIDGET_INTERNET).decode(),
+        update_interval=1, 
+        background=COLOR.Green,
+        foreground=COLOR.Crust,
+        decorations=decorations,
+        max_chars=20,
+        **widget_defaults
+    ),
+
+    widget.Spacer(5),
+    
     widget.Volume(
-        fmt="    {}",
+        fmt="  {}",
         background=COLOR.audio.bg,
         foreground=COLOR.audio.fg, 
         mouse_callbacks={
-            "Button3": lazy.spawn(scripts.OPEN_AUDIO_SETTINGS)
+            "Button3": lazy.spawn(APP_AUDIO_SETTINGS)
         },
+        decorations=decorations,
         **widget_defaults),
 
     widget.Spacer(5),
-
+    
+    # Battery Widget
+    widget.GenPollText(
+        func=lambda: subprocess.check_output(WIDGET_BATTERY).decode(),
+        update_interval=1, 
+        background=COLOR.battery_icon.bg,
+        foreground=COLOR.battery_icon.fg,
+        decorations=decorations,
+        **icons_defaults
+    ),
+    
     widget.Battery(
         background=COLOR.battery.bg,
         foreground=COLOR.battery.fg,
         low_background=COLOR.battery_low.bg,
         low_foreground=COLOR.battery_low.fg,
         low_percentage=0.40,
-        notify_below=40,
-        charge_char="  ",
-        discharge_char='',
-        show_short_text=True,
-        format='    {percent:2.0%} {char}'),
+        notify_below=20,
+        charge_char="  ",
+        full_char="  ",
+        discharge_char="",
+        unknown_char="? ",
+        show_short_text=False,
+        decorations=decorations,
+        format='{char}',
+        padding=0
+    ),
 
     widget.Spacer(5),
 
+    widget.Clock(
+        format=f"󰥔  %H:%M:%S | %d/%m/%y",
+        background=COLOR.clock.bg,
+        foreground=COLOR.clock.fg,
+        decorations=decorations,
+        mouse_callbacks={},
+        **widget_defaults
+    ),
+
+    widget.Systray(),
+
     widget.Spacer(10),
+
+    widget.GithubNotifications(
+        active_colour=COLOR.github_active,
+        inactive_colour=COLOR.github_inactive,
+        error_colour=COLOR.github_error,
+        background=COLOR.github_background,
+        token_file=f"{HOME}/.github-token",
+        icon_size=23,
+        decorations=decorations_github,
+        mouse_callbacks={
+            "Button1": lazy.spawn(GITHUB_NOTIFICATIONS)
+        },
+        padding=2),
+
+    widget.Spacer(25),
 
 ]
 
 
 secondary_top_widgets = [
     widget.Spacer(10),
+    
     widget.CurrentLayoutIcon(
         background=COLOR.current_layout.bg,
         foreground=COLOR.current_layout.fg,
-        scale=0.8,
-        **widget_defaults),
+        decorations=decorations,
+        scale=0.8),
+
+    widget.WindowCount(
+         background=COLOR.window_count.bg, 
+         foreground=COLOR.window_count.fg, 
+         show_zero=True,
+         decorations=decorations),
+
+    widget.Spacer(5),
+
     secondary_groupbox,
-    widget.Spacer(),
+
+    widget.Spacer()
 ]
 
-
-bottom_widgets = [
-    widget.Spacer(10),
-
-    widget.WindowName(),
-
-    widget.Spacer(),
-
-    widget.CPU(
-        background=COLOR.cpu_graph.bg,
-        foreground=COLOR.cpu_graph.fg,
-    ),
-    widget.CPUGraph(
-        type='line',
-        background=COLOR.cpu_graph.bg,
-        border_color=COLOR.cpu_graph.fg,
-        border_width=0,
-        line_width=2,
-        margin_y=3,
-        fill_color=COLOR.cpu_graph.fg,
-        graph_color=COLOR.cpu_graph.fg
-    ),
-
-    widget.Spacer(10),
- 
-    widget.Memory(
-        format='RAM {MemUsed: .3f}{mm} / {MemTotal: .3f}{mm}',
-        measure_mem='G',
-        background=COLOR.ram.bg,
-        foreground=COLOR.ram.fg,
-        **widget_defaults),
-    widget.MemoryGraph(
-        type='line',
-        background=COLOR.ram.bg,
-        border_color=COLOR.ram.fg,
-        border_width=0,
-        margin_y=3,
-        line_width=1,
-        fill_color=COLOR.ram.fg,
-        graph_color=COLOR.ram.fg),
-
-    widget.Spacer(),
-
-    widget.Systray(),
-
-    widget.Spacer(10),
-
-    widget.CheckUpdates(
-        display_format="  {updates} updates",
-        colour_have_updates=COLOR.check_updates.fg,
-        background=COLOR.check_updates.bg,
-        no_update_string=""),
-
-    widget.Spacer(10),
-]
-
-
-###############################################################################
-# Screen and monitors
+#########################
+## Screen and monitors ##
+#########################
 
 bar_style = dict(
     background=COLOR.bar.bg,
     border_color=COLOR.bar.bg,
-    margin=[5, 10, 0, 10],
+    margin=[8, 0, 0, 0],
     border_width=0)
 
-main_bar = bar.Bar(widgets=main_top_widgets, size=23, **bar_style)
-secondary_bar = bar.Bar(widgets=secondary_top_widgets, size=23, **bar_style)
-bottom_bar = bar.Bar(widgets=bottom_widgets, size=23, background=COLOR.bar.bg, border_width=0, margin=[0,10,5,10])
+main_bar = bar.Bar(widgets=main_top_widgets, size=25, **bar_style)
+secondary_bar = bar.Bar(widgets=secondary_top_widgets, size=25, **bar_style)
 
 screens = []
 for monitor in range(MONITORS):
 
     if monitor == 0:
         # Primary monitor
-        screens.append(Screen(top=main_bar, bottom=bottom_bar))
+        screens.append(Screen(top=main_bar))
 
     else:
         # Secondary monitors
         screens.append(Screen(top=secondary_bar))
 
 
-###################################################################################################
-# Hooks ###########################################################################################
+###########
+## Hooks ##
+###########
 
 @hook.subscribe.startup
 def startup():
     """ Execute some steps in qtile refresh """
+    # Reload groupbox
+    reconfigure_groupbox()
+
+    # Configuration that makes possible match bars in picom
     main_bar.window.window.set_property("QTILE_BAR", 1, "CARDINAL", 32)
     secondary_bar.window.window.set_property("QTILE_BAR", 1, "CARDINAL", 32)
     bottom_bar.window.window.set_property("QTILE_BAR", 1, "CARDINAL", 32)
-    reconfigure_groupbox()
 
 
 @hook.subscribe.screens_reconfigured
@@ -509,7 +594,7 @@ def reconfigure_groupbox():
     """ Adapt visible groups depending on number of screens """
     groups_names = [g.name for g in qtile.groups]
     if len(qtile.screens) > 1:
-        main_groupbox.visible_groups = groups_names[:4]
+        main_groupbox.visible_groups = groups_names[:5]
     else:
         main_groupbox.visible_groups = groups_names
 
@@ -517,7 +602,7 @@ def reconfigure_groupbox():
 @hook.subscribe.startup_once
 def autostart():
     """ Executes a script on qtile startup """
-    subprocess.Popen([scripts.AUTOSTART])
+    subprocess.Popen([AUTOSTART])
 
 
 @hook.subscribe.client_new
@@ -534,12 +619,11 @@ def modify_window(client):
     for group in groups:  # follow on auto-move
         match = next((m for m in group.matches if m.compare(client)), None)
         if match:
-            # A way to call utils.go_to_group() because its impossible call directly
             client.qtile.cmd_simulate_keypress([SUPER], group.name)
 
-
-###############################################################################
-# MORE
+##########
+## MORE ##
+##########
 
 # Drag floating layouts.
 mouse = [
@@ -555,10 +639,10 @@ mouse = [
           lazy.window.bring_to_front()),
 
     Click([SUPER], "Button4", 
-          lazy.screen.prev_group()),
+          lazy.screen.prev_group(skip_empty=True)),
 
     Click([SUPER], "Button5", 
-          lazy.screen.next_group()),
+          lazy.screen.next_group(skip_empty=True)),
 ]
 
 dgroups_key_binder = None
@@ -581,6 +665,7 @@ floating_layout = layout.Floating(
         Match(wm_class="thunar"),  # Wireless configuration
         Match(wm_class="calcurse"),  # Wireless configuration
         Match(wm_class="pavucontrol"),  # Wireless configuration
+        Match(wm_class="copyq"),  # Wireless configuration
     ],
     **layout_theme
 )
@@ -589,7 +674,7 @@ focus_on_window_activation = "smart"
 reconfigure_screens = True
 
 # If things like steam games want to auto-minimize themselves when losing
-# focus, should we respect this or not?
+# focus, should we respect this or not
 auto_minimize = True
 
 # When using the Wayland backend, this can be used to configure input devices.

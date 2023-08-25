@@ -14,7 +14,7 @@ autorandr --change
 nitrogen --restore
 
 # Send welcome notification
-notify-send "Welcome, IgorTxra"
+notify-send "Welcome"
 
 # udiskie
 udiskie &

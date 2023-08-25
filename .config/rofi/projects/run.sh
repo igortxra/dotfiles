@@ -1,18 +1,11 @@
 #!/bin/zsh
 
+root_dir="$HOME/github/"
+
 # Rofi CMD
 rofi_cmd() {
-	rofi -dmenu \
-    -p "Projects" \
-		-theme "$HOME/.config/rofi/config.rasi" \
-    -location 0 \
-		-theme-str 'window {width: 600px; height: 500px; padding: 0;}' \
-    -theme-str 'listview {border: 0px; scrollbar: 0;}' \
-    -yoffset -50 \
-    -kb
+	rofi -dmenu -p $root_dir -theme "$HOME/.config/rofi/projects/config.rasi"
 }
-
-root_dir="/home/igortxra/github/"
 
 projects_dir=$(exa $root_dir --no-icons)
 

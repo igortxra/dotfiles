@@ -20,4 +20,5 @@
 [protocol "file"]
 	allow = always
 [core]
+	autocrlf = input
 	editor = nvim

@@ -13,14 +13,32 @@ chsh -s /bin/zsh $(whoami)
 # Powerlevel10k
 yay -S --noconfirm --quiet --needed zsh-theme-powerlevel10k-git
 # Autosuggestions
-#git clone https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosuggestions 
+git clone https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosuggestions 
 
 echo "########## Configuring Display Manager (Ly) ##########"
 yay -S Ly --noconfirm --quiet --needed 
 sudo systemctl enable ly.service
 
+echo "########## Configuring Terminal Emulator (Kitty) ##########"
+yay -S kitty
+
 echo "########## Configuring Window Manager (Qtile) ##########"
-yay -S --noconfirm --quiet --needed xorg-xrandr wireless_tools alsa-utils flameshot python-pip python-iwlib python-psutil python-dbus-next python-requests python-xcffib python-cairocffi qtile-git qtile-extras-git 
+yay -S --noconfirm --quiet --needed python-pip 
+pip install xcffib==1.4 --break-system-packages
+pip install cairocffi==1.6 --break-system-packages
+yay -S --noconfirm --quiet --needed python-setuptools-git-versioning
+yay -S --noconfirm --quiet --needed qtile-git 
+yay -S --noconfirm --quiet --needed qtile-extras-git 
+
+yay -S --noconfirm --quiet --needed xorg-xrandr 
+yay -S --noconfirm --quiet --needed wireless_tools 
+yay -S --noconfirm --quiet --needed inetutils-git
+yay -S --noconfirm --quiet --needed alsa-utils
+yay -S --noconfirm --quiet --needed flameshot 
+yay -S --noconfirm --quiet --needed python-iwlib 
+yay -S --noconfirm --quiet --needed python-psutil 
+yay -S --noconfirm --quiet --needed python-dbus-next 
+yay -S --noconfirm --quiet --needed python-requests 
 
 echo "########## Configuring App Launcher (Rofi) ##########"
 yay -S --noconfirm --quiet --needed rofi
@@ -53,21 +71,18 @@ cd picom && meson --buildtype=release . build && ninja -C build && sudo ninja -C
 rm -rf picom
 
 echo "########## Install Thunar ##########"
-yay -S --quiet --needed --noconfig thunar
+yay -S --quiet --needed --noconfirm thunar
 
 echo "########## Install arandr and autorandr ##########"
 echo "########## Install arandr and autorandr ##########"
 yay -S arandr autorandr
 
 echo "########## Install Developer Tools ##########"
-yay -S --quiet --needed --noconfig asdf-vm
-yay -S postman-bin
+yay -S --quiet --needed --noconfirm asdf-vm
+yay -S --quiet --needed --noconfirm postman-bin
 
 echo "########## Install Notes (Obsidian) ##########"
-yay -S obsidian
+yay -S --quiet --needed --noconfirm obsidian
 
 echo "########## Install Clipboard Util (copyq) ##########"
-yay -S copq
-
-# yay -S inetutils-git
-# yay -S ttf-jetbrains-mono
+yay -S copyq

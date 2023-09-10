@@ -48,17 +48,9 @@ rm -rf ./rofi
 echo "########## Configuring Notification Daemon (Dunst) ##########"
 yay -S --noconfirm --quiet --needed dunst
 
-
 echo "########## Configuring Browser (Qutebrowser) ##########"
 yay -S --quiet --needed --noconfirm qutebrowser 
 git clone https://github.com/catppuccin/qutebrowser.git ~/.config/qutebrowser/catppuccin
-
-echo "########## Installing AstroNvim ##########"
-yay -S --quiet --needed --noconfirm neovim npm fzf
-git clone --depth 1 https://github.com/AstroNvim/AstroNvim ~/.config/nvim
-
-echo "########## Installing Spotify ##########"
-yay -S --quiet --needed --noconfirm spotify
 
 echo "########## Install Picom Jonaburg ##########"
 yay -S --quiet --needed --noconfirm meson uthash python-setuptools
@@ -66,25 +58,21 @@ git clone https://github.com/jonaburg/picom
 cd picom && meson --buildtype=release . build && ninja -C build && sudo ninja -C build install && cd ..
 rm -rf ./picom ./build
 
-echo "########## Install Thunar ##########"
+echo "########## Install File Manager (Thunar) ##########"
 yay -S --quiet --needed --noconfirm thunar
 
-echo "########## Install arandr and autorandr ##########"
+echo "########## Install Screen Utils (arandr and autorandr) ##########"
 yay -S --quiet --needed --noconfirm arandr autorandr
 
-echo "########## Install Developer Tools ##########"
-yay -S --quiet --needed --noconfirm asdf-vm
-yay -S --quiet --needed --noconfirm postman-bin
-
-echo "########## Install Notes (Obsidian) ##########"
-yay -S --quiet --needed --noconfirm obsidian
-
-echo "########## Install Clipboard Util (copyq) ##########"
+echo "########## Install Clipboard Utils (copyq and xclip) ##########"
 yay -S --quiet --needed --noconfirm copyq
 yay -S --quiet --needed --noconfirm xclip
 
-echo "########## Install Nerd Fonts ##########"
+echo "########## Install Nerd Fonts (Iosevka Nerd) ##########"
 yay -S --quiet --needed --noconfirm ttf-iosevka-nerd
+
+echo "########## Inetutils ##########"
+yay -S --noconfirm --quiet --needed inetutils-git
 
 echo "########## Make use of dotfiles ##########"
 echo ".dotfiles" >> .gitignore
@@ -93,17 +81,33 @@ alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
 dotfiles config --local status.showUntrackedFiles no
 dotfiles checkout
 
-echo "########## Inetutils ##########"
-yay -S --noconfirm --quiet --needed inetutils-git
-
-# Baixar default wallpaper
-# Criar diretóriios Downloads
-# Criar github token Documentação
-# Configuração de screen profiles
-# Download de quickmarks
-# Adição de temas lxappearance
-
 echo "########## Configuring Wallpaper (Nitrogen) ##########"
 yay -S --noconfirm --quiet --needed nitrogen
 nitrogen --set-auto ~/Wallpapers/default.png
+
+echo "########## Creating user dirs ############"
+yay -S --quiet --needed --noconfirm xdg-user-dirs
+xdg-user-dirs-update --force
+
+echo "########## Installing themes (Dracula and Catppuccin) ##########"
+yay -S --quiet --needed --noconfirm lxappearance
+yay -S --quiet --needed --noconfirm dracula-cursos-git
+yay -S --quiet --needed --noconfirm dracula-icons-git
+yay -S --quiet --needed --noconfirm catppuccin-gtk-theme-mocha
+
+# Opcionais
+
+echo "########## Install Developer Tools ##########"
+yay -S --quiet --needed --noconfirm asdf-vm
+yay -S --quiet --needed --noconfirm postman-bin
+
+echo "########## Installing AstroNvim ##########"
+yay -S --quiet --needed --noconfirm neovim npm fzf
+git clone --depth 1 https://github.com/AstroNvim/AstroNvim ~/.config/nvim
+
+echo "########## Installing Spotify ##########"
+yay -S --quiet --needed --noconfirm spotify
+
+echo "########## Installing Notes (Obsidian) ##########"
+yay -S --quiet --needed --noconfirm obsidian
 

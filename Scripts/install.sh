@@ -32,7 +32,6 @@ yay -S --noconfirm --quiet --needed qtile-extras-git
 
 yay -S --noconfirm --quiet --needed xorg-xrandr 
 yay -S --noconfirm --quiet --needed wireless_tools 
-yay -S --noconfirm --quiet --needed inetutils-git
 yay -S --noconfirm --quiet --needed alsa-utils
 yay -S --noconfirm --quiet --needed flameshot 
 yay -S --noconfirm --quiet --needed python-iwlib 
@@ -43,15 +42,12 @@ yay -S --noconfirm --quiet --needed python-requests
 echo "########## Configuring App Launcher (Rofi) ##########"
 yay -S --noconfirm --quiet --needed rofi
 git clone --depth=1 https://github.com/adi1090x/rofi.git
-cd rofi && chmod +x setup.sh && source ./setup.sh && cd
-rm -rf rofi
+cd rofi && chmod +x setup.sh && source ./setup.sh && cd ..
+rm -rf ./rofi
 
 echo "########## Configuring Notification Daemon (Dunst) ##########"
 yay -S --noconfirm --quiet --needed dunst
 
-echo "########## Configuring Wallpaper (Nitrogen) ##########"
-yay -S --noconfirm --quiet --needed nitrogen
-nitrogen --set-auto ~/wallpapers/default.png
 
 echo "########## Configuring Browser (Qutebrowser) ##########"
 yay -S --quiet --needed --noconfirm qutebrowser 
@@ -67,15 +63,14 @@ yay -S --quiet --needed --noconfirm spotify
 echo "########## Install Picom Jonaburg ##########"
 yay -S --quiet --needed --noconfirm meson uthash python-setuptools
 git clone https://github.com/jonaburg/picom
-cd picom && meson --buildtype=release . build && ninja -C build && sudo ninja -C build install && cd
-rm -rf picom
+cd picom && meson --buildtype=release . build && ninja -C build && sudo ninja -C build install && cd ..
+rm -rf ./picom ./build
 
 echo "########## Install Thunar ##########"
 yay -S --quiet --needed --noconfirm thunar
 
 echo "########## Install arandr and autorandr ##########"
-echo "########## Install arandr and autorandr ##########"
-yay -S arandr autorandr
+yay -S --quiet --needed --noconfirm arandr autorandr
 
 echo "########## Install Developer Tools ##########"
 yay -S --quiet --needed --noconfirm asdf-vm
@@ -85,4 +80,30 @@ echo "########## Install Notes (Obsidian) ##########"
 yay -S --quiet --needed --noconfirm obsidian
 
 echo "########## Install Clipboard Util (copyq) ##########"
-yay -S copyq
+yay -S --quiet --needed --noconfirm copyq
+yay -S --quiet --needed --noconfirm xclip
+
+echo "########## Install Nerd Fonts ##########"
+yay -S --quiet --needed --noconfirm ttf-iosevka-nerd
+
+echo "########## Make use of dotfiles ##########"
+echo ".dotfiles" >> .gitignore
+git clone --bare https://github.com/$USER/dotfiles.git $HOME/.dotfiles
+alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
+dotfiles config --local status.showUntrackedFiles no
+dotfiles checkout
+
+echo "########## Inetutils ##########"
+yay -S --noconfirm --quiet --needed inetutils-git
+
+# Baixar default wallpaper
+# Criar diretóriios Downloads
+# Criar github token Documentação
+# Configuração de screen profiles
+# Download de quickmarks
+# Adição de temas lxappearance
+
+echo "########## Configuring Wallpaper (Nitrogen) ##########"
+yay -S --noconfirm --quiet --needed nitrogen
+nitrogen --set-auto ~/Wallpapers/default.png
+

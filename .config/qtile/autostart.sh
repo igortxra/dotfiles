@@ -21,3 +21,6 @@ udiskie &
 
 # Fancy visuals (E.g: enable opacity)
 picom &
+
+# Clipboard utils
+copyq &

@@ -92,6 +92,7 @@ MENU_PROJECT = f"{HOME}/.config/rofi/projects/run.sh &"
 MENU_CONFIGS = f"{HOME}/.config/rofi/configs/run.sh &"
 MENU_UTILS = f"{HOME}/.config/rofi/utils/run.sh &" 
 MENU_SCREENS = f"{HOME}/.config/rofi/autorandr/run.sh &" 
+MENU_CLIPBOARD = "copyq show"
 WIDGET_BATTERY = f"{HOME}/.local/bin/statusbar/battery-icon.sh" 
 WIDGET_INTERNET = f"{HOME}/.local/bin/statusbar/net.sh" 
 
@@ -191,7 +192,7 @@ keys = [
     Key([SUPER], "u", lazy.spawn(MENU_UTILS), desc="Open Utils Menu"),
     Key([SUPER], "w", lazy.spawn(MENU_WIFI),desc="Open Wi-Fi Menu"),
     Key([SUPER], "t", lazy.screen.toggle_group(), desc="Open Wi-Fi Menu"),
-    Key([SUPER], "v", lazy.spawn("copyq show"), desc="Open Wi-Fi Menu"),
+    Key([SUPER], "v", lazy.spawn(MENU_CLIPBOARD), desc="Open Clipboard Menu"),
     Key([SUPER], "a", lazy.spawn(MENU_SCREENS), desc="Open Screen Profile Menu"),
     Key([SUPER, "control"], "s", lazy.spawn("copyq show"), desc="Open Wi-Fi Menu"),
     
@@ -232,12 +233,12 @@ groups: List[Group] = [
         Group("2", label="  ₂", layout="monadtall", matches=[]),
         Group("3", label="  ₃", layout="monadtall", matches=[]), 
         Group("4", label="  ₄", layout="monadtall", matches=[]), 
-        Group("5", label="  ₅", layout="monadtall", matches=[]), 
-        Group("6", label="  ₆", layout="monadtall", matches=[]), 
+        Group("5", label="  ₅", layout="monadtall", matches=[]), 
+        Group("6", label="  ₆", layout="monadtall", matches=[]), 
         Group("7", label="  ₇", layout="max", matches=[Match(wm_class="Postman"), Match(wm_class="beekeeper-studio")]), 
         Group("8", label="  ₈", layout="max", matches=[]), # Spotify match are manually defined in hooks
         Group("9", label=" ₉", layout="max", matches=[Match(wm_class="discord")]), 
-        Group("0", label="  ₀", layout="max", matches=[Match(wm_class="notion-app")]), 
+        Group("0", label="  ₀", layout="max", matches=[Match(wm_class="notion-app"), Match(wm_class="Logseq")]), 
 ]
 
 for group in groups:
@@ -594,7 +595,7 @@ def reconfigure_groupbox():
     """ Adapt visible groups depending on number of screens """
     groups_names = [g.name for g in qtile.groups]
     if len(qtile.screens) > 1:
-        main_groupbox.visible_groups = groups_names[:5]
+        main_groupbox.visible_groups = groups_names[:6]
     else:
         main_groupbox.visible_groups = groups_names
 

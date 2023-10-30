@@ -237,8 +237,8 @@ groups: List[Group] = [
         Group("6", label="  ₆", layout="monadtall", matches=[]), 
         Group("7", label="  ₇", layout="max", matches=[Match(wm_class="Postman"), Match(wm_class="beekeeper-studio")]), 
         Group("8", label="  ₈", layout="max", matches=[]), # Spotify match are manually defined in hooks
-        Group("9", label=" ₉", layout="max", matches=[Match(wm_class="discord")]), 
-        Group("0", label="  ₀", layout="max", matches=[Match(wm_class="notion-app"), Match(wm_class="Logseq")]), 
+        Group("9", label="󰭹  ₉", layout="max", matches=[Match(wm_class="discord")]), 
+        Group("0", label="  ₀", layout="max", matches=[Match(wm_class="notion-app"), Match(wm_class="Logseq"), Match(wm_class="obsidian")]),
 ]
 
 for group in groups:

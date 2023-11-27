@@ -7,7 +7,7 @@ rofi_cmd() {
 	rofi -dmenu -p $root_dir -theme "$HOME/.config/rofi/projects/config.rasi"
 }
 
-projects_dir=$(exa $root_dir --no-icons)
+projects_dir=$(exa $root_dir)
 
 # Pass variables to rofi dmenu
 run_rofi() {

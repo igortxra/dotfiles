@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <actions>
 <action>
+	<icon>neovim</icon>
+	<name>Open in neovim</name>
+	<submenu></submenu>
+	<unique-id>1703940296061167-1</unique-id>
+	<command>kitty --directory %d --execute nvim %f</command>
+	<description>Open a file or dir in nvim</description>
+	<range>*</range>
+	<patterns>*</patterns>
+	<directories/>
+	<text-files/>
+</action>
+<action>
 	<icon>utilities-terminal</icon>
 	<name>Abrir terminal aqui</name>
 	<submenu></submenu>

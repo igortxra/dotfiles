@@ -5,6 +5,7 @@
 # Except the following
 
 # .config
+!.config/Thunar/uca.xml
 !.config/betterlockscreen
 !.config/qutebrowser
 !.config/dunst
@@ -16,7 +17,6 @@
 !.config/user-dirs.locale
 
 # .local
-!.local/bin/menus
 !.local/bin/statusbar
 
 # User dirs

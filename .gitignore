@@ -1,0 +1,32 @@
+# Ignore all
+.dotfiles
+/*
+
+# Except the following
+
+# .config
+!.config/Thunar/uca.xml
+!.config/betterlockscreen
+!.config/qutebrowser
+!.config/dunst
+!.config/kitty
+!.config/picom
+!.config/nitrogen
+!.config/qtile
+!.config/user-dirs.dirs
+!.config/user-dirs.locale
+
+# .local
+!.local/bin/statusbar
+
+# User dirs
+!Scripts/
+!Documents/pkglist.txt
+!Wallpapers/default.png
+
+# $HOME files
+!.gitignore
+!.gitattributes
+!README.md
+
+

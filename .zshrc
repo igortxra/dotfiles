@@ -31,7 +31,7 @@ source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme
 alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 
 # Alias for adapt commands to rewritten in rust commands
-alias ls='exa --icons'
+alias ls='exa'
 alias ps='procs'
 
 # Git alias
@@ -40,7 +40,7 @@ alias g='git'
 # Alias for lazyness
 alias cc='clear'
 alias cromai='cd $HOME/github/cromai'
-alias config='. $HOME/shell_scripts/config.sh'
+alias config='. $HOME/Scripts/config.sh'
 
 # Load autosuggestions
 source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
@@ -52,4 +52,6 @@ source /opt/asdf-vm/asdf.sh
 source /usr/share/fzf/key-bindings.zsh
 source /usr/share/fzf/completion.zsh
 
-
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion

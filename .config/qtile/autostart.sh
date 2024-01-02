@@ -20,7 +20,7 @@ notify-send "Welcome"
 udiskie &
 
 # Fancy visuals (E.g: enable opacity)
-picom &
+picom --backend glx &
 
 # Clipboard utils
 copyq &

@@ -490,7 +490,7 @@ main_top_widgets = [
         unknown_char="? ",
         show_short_text=False,
         decorations=decorations,
-        format='{char}',
+        format=' {char} ',
         padding=0
     ),
 

@@ -1,6 +1,12 @@
 #!/bin/bash
 
 capacity=$(cat /sys/class/power_supply/BAT1/capacity)
+
+if [ -z "$capacity" ]
+then
+    capacity=10000
+fi
+
 quarter=$((capacity / 25))
 
 case $quarter in
@@ -20,7 +26,7 @@ case $quarter in
         icon=" "  # Ícone de bateria completa
         ;;
     *)
-        icon=" "  # Ícone de bateria desconhecida
+        icon=""  # Ícone de bateria desconhecida
         ;;
 esac
 

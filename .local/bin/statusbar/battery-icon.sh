@@ -29,7 +29,7 @@ case $quarter in
         icon=" "  # Ícone de bateria completa
         ;;
     *)
-        icon="A"  # Ícone de bateria desconhecida
+        icon="󱉝 "  # Ícone de bateria desconhecida
         ;;
 esac
 

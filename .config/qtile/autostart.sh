@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# Fancy visuals (E.g: enable opacity)
+picom --backend glx &
+
 # Keyboard numlock activation
 numlockx on &
 
@@ -19,8 +22,8 @@ notify-send "Welcome"
 # udiskie
 udiskie &
 
-# Fancy visuals (E.g: enable opacity)
-picom --backend glx &
-
 # Clipboard utils
 copyq &
+
+# Reload qtile
+killall -s SIGUSR1 qtile

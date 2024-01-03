@@ -74,13 +74,9 @@ rm -rf ~/.config/qutebrowser/catppuccin
 git clone https://github.com/catppuccin/qutebrowser.git ~/.config/qutebrowser/catppuccin
 
 echo "############################################"
-echo "########## Install Picom Jonaburg ##########"
+echo "########## Install Picom ##########"
 echo "############################################"
-yay -S --quiet --needed --noconfirm meson uthash libev libconfig
-rm -rf picom
-git clone https://github.com/jonaburg/picom
-cd picom && meson --buildtype=release . build && ninja -C build && sudo ninja -C build install && cd ..
-rm -rf ./picom ./build
+yay -S --quiet --needed --noconfirm picom
  
 echo "###################################################"
 echo "########## Install File Manager (Thunar) ##########"

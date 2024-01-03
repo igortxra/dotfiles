@@ -490,7 +490,8 @@ main_top_widgets = [
         unknown_char="? ",
         show_short_text=False,
         decorations=decorations,
-        format=' {char} ',
+        format='{percent:2.0%} {char}',
+        update_interval=2,
         padding=0
     ),
 

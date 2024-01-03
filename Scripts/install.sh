@@ -9,7 +9,7 @@ yay -Sy
 echo "#############################################"
 echo "########## Configuring Shell (zsh) ##########"
 echo "#############################################"
-yay -S zsh exa procs fzf  --noconfirm --quiet --needed
+yay -S zsh exa procs fzf --noconfirm --quiet --needed
 
 # Powerlevel10k
 yay -S --noconfirm --quiet --needed zsh-theme-powerlevel10k-git
@@ -28,7 +28,6 @@ echo "###########################################################"
 echo "########## Configuring Terminal Emulator (Kitty) ##########"
 echo "###########################################################"
 yay -S kitty --noconfirm --quiet --needed
-
 
 echo "###########################################################"
 echo "########## Configuring Window Manager (Qtile) #############"
@@ -74,7 +73,7 @@ rm -rf ~/.config/qutebrowser/catppuccin
 git clone https://github.com/catppuccin/qutebrowser.git ~/.config/qutebrowser/catppuccin
 
 echo "############################################"
-echo "########## Install Picom ##########"
+echo "########## Install Picom ###################"
 echo "############################################"
 yay -S --quiet --needed --noconfirm picom
  
@@ -98,11 +97,6 @@ echo "###################################################"
 echo "########## Install Nerd Fonts (Iosevka Nerd) ######"
 echo "###################################################"
 yay -S --quiet --needed --noconfirm ttf-iosevka-nerd
-
-echo "###############################"
-echo "########## Inetutils ##########"
-echo "###############################"
-yay -S --noconfirm --quiet --needed inetutils-git
 
 echo "###################################################"
 echo "########## Configuring Wallpaper (Nitrogen) #######"
@@ -156,5 +150,8 @@ alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
 dotfiles config --local status.showUntrackedFiles no
 dotfiles checkout -f
 
+echo "###################################################"
+echo "########## Changing default shell to ZSH ##########"
+echo "###################################################"
 # Zsh as default shell
 chsh -s /bin/zsh $(whoami)

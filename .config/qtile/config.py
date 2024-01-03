@@ -446,7 +446,7 @@ main_top_widgets = [
     widget.GenPollText(
         func=lambda: subprocess.check_output(WIDGET_INTERNET).decode(),
         update_interval=1, 
-        background=COLOR.Green,
+        background=COLOR.Blue,
         foreground=COLOR.Crust,
         decorations=decorations,
         max_chars=20,

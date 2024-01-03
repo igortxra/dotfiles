@@ -2,10 +2,11 @@
 Dotfiles and instructions to make my OS portable and easy to replicate.
 
 ## Demo video
->_TODO_
+https://youtu.be/2Q0gY1epozw?si=9MbYOQpkRH4ZfSwj
 
 ## Last Screenshot
->_TODO_
+![thumbnail](https://github.com/igortxra/dotfiles/assets/91085060/d7773dd3-aca5-43f6-8603-3e3cdbe257af)
+
 
 # How To Use
 Before do the following steps make sure you forked this repository.
@@ -22,7 +23,7 @@ I am assuming you already know how to use archinstall script
     - Install and reboot 
 - login in the user account you created earlier
 - clone your fork using git: `git clone https://github.com/<your-user>/dotfiles.git`
-- run `bash dotfiles/install.sh`
+- run `. ./dotfiles/Scripts/install.sh`
 - reboot and done
 
 ### Configuring themes

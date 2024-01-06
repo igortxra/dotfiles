@@ -18,12 +18,6 @@ yay -S --noconfirm --quiet --needed zsh-theme-powerlevel10k-git
 rm -rf ~/.zsh/zsh-autosuggestions 
 git clone https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosuggestions 
 
-echo "######################################################"
-echo "########## Configuring Display Manager (Ly) ##########"
-echo "######################################################"
-yay -S Ly --noconfirm --quiet --needed 
-sudo systemctl enable ly.service
-
 echo "###########################################################"
 echo "########## Configuring Terminal Emulator (Kitty) ##########"
 echo "###########################################################"

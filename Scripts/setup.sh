@@ -1,3 +1,8 @@
+# zsh-autosuggestions
+rm -rf ~/.zsh/zsh-autosuggestions
+git clone https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosuggestions
+
+
 # Astro Nvim - https://docs.astronvim.com/
 rm ~/.local/share/nvim
 rm ~/.local/state/nvim

@@ -1,0 +1,2 @@
+- Run setup script
+- Enable pacman parallel downloads and colors

@@ -24,10 +24,20 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+import subprocess
+from os import path
+
 from libqtile import bar, layout, widget
 from libqtile.config import Click, Drag, Group, Key, Match, Screen
 from libqtile.lazy import lazy
-from libqtile.utils import guess_terminal
+from libqtile.hook import subscribe
+
+HOME = path.expanduser("~")
+AUTOSTART = f"{HOME}/Scripts/autostart.sh"
+
+@subscribe.startup_once
+def setup():
+    subprocess.Popen([AUTOSTART])
 
 mod = "mod4"
 terminal = "kitty"

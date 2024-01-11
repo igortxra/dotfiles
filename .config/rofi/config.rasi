@@ -1,0 +1,14 @@
+configuration{
+    modi: "drun";
+    icon-theme: "Oranchelo";
+    show-icons: true;
+    terminal: "kitty";
+    drun-display-format: "{icon} {name}";
+    location: 0;
+    disable-history: false;
+    hide-scrollbar: true;
+    display-drun: "   Apps ";
+    sidebar-mode: true;
+}
+
+@theme "catppuccin-mocha"

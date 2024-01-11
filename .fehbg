@@ -1,2 +1,2 @@
 #!/bin/sh
-feh --no-fehbg --bg-fill '/home/igortxra/Pictures/Wallpapers/rainnight.jpg' '/home/igortxra/Pictures/Wallpapers/wp-arch-linux.jpg' 
+feh --no-fehbg --bg-fill '/home/igortxra/Pictures/Wallpapers/catppuccin-wallpapers/gradients/peach_bkg5.png' 

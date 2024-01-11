@@ -40,9 +40,20 @@ AUTOSTART = f"{HOME}/Scripts/autostart.sh"
 LAUNCHER = f"{HOME}/Scripts/launcher.sh &"
 CLIPBOARD = f"{HOME}/Scripts/clipboard.sh &"
 POWERMENU = f"{HOME}/Scripts/powermenu.sh &"
+PROJECTS = f"{HOME}/Scripts/projects.sh &"
+WIDGET_NETWORK=f"{HOME}/Scripts/network-widget.sh"
 
 # Catppuccin Mocha Colors - https://github.com/catppuccin/catppuccin
 COLOR_CRUST="#11111b"
+COLOR_OVERLAY1="#45475a"
+COLOR_RED="#F38Ba8"
+COLOR_MAUVE="#cba6f7"
+COLOR_PEACH="#fab387"
+COLOR_YELLOW="#f9e2af"
+COLOR_SURFACE_0="#313244"
+COLOR_GREEN="#a6e3a1"
+COLOR_SAPPHIRE="#74c7ec"
+COLOR_ROSEWATER="#f5e0dc"
 
 @subscribe.startup_once
 def setup():
@@ -61,9 +72,10 @@ keys = [
     Key([SUPER], "Return", lazy.spawn(terminal), desc="Launch terminal"),
     Key([SUPER], "space", lazy.spawn(LAUNCHER), desc="Spawn a app launcher"),
     Key([SUPER], "Tab", lazy.next_layout(), desc="Toggle between layouts"),
-    Key([SUPER], "x", lazy.window.kill(), desc="Kill focused window"),
+    Key([SUPER], "o", lazy.spawn(PROJECTS), desc="Spawn power menu"),
+    Key([SUPER], "p", lazy.spawn(POWERMENU), desc="Spawn power menu"),
     Key([SUPER], "v", lazy.spawn(CLIPBOARD), desc="Spawn clipboard manager"),
-    Key([SUPER], "p", lazy.spawn(POWERMENU), desc="Spawn clipboard manager"),
+    Key([SUPER], "x", lazy.window.kill(), desc="Kill focused window"),
     Key([], "F10", lazy.window.toggle_fullscreen(), desc="Toggle fullscreen on the focused window"),
     
     # Switch between windows
@@ -87,7 +99,7 @@ keys = [
 
 ]
 
-groups = [Group(i) for i in "asduio"]
+groups = [Group(i) for i in "123456789"]
 
 for i in groups:
     keys.extend(
@@ -111,8 +123,8 @@ for i in groups:
 
 layouts = [
     layout.Max(margin=20, border_width=0),
-    layout.MonadTall(border_focus="#45465A", margin=20, single_border_width=0, border_width=1),
-    layout.MonadWide(border_focus="#45465A", margin=20, single_border_width=0, border_width=1),
+    layout.MonadTall(border_focus=COLOR_OVERLAY1, margin=20, single_border_width=0, border_width=1),
+    layout.MonadWide(border_focus=COLOR_OVERLAY1, margin=20, single_border_width=0, border_width=1),
 
     # Not Used Layouts.
     # layout.Columns(),
@@ -140,18 +152,78 @@ screens = [
                 widget.CurrentLayoutIcon(scale=0.7),
                 widget.Spacer(14),
                 widget.GroupBox(
-                    this_current_screen_border="#45475a",
-                    highlight_method="block"
+                    this_current_screen_border=COLOR_PEACH,
+                    highlight_method="text",
+                    active=COLOR_OVERLAY1,
+                    hide_unused=True
                 ),
-                widget.Prompt(),
                 widget.Spacer(),
-                widget.Clock(format="%d/%m/%Y - %a %I:%M %p"),
+                widget.Clock(format="%d/%m/%Y - %a %I:%M:%S %p"),
                 widget.Spacer(),
+                widget.Clipboard(
+                   fmt="󰅎  Copied",
+                   max_width=2,
+                   foreground=COLOR_ROSEWATER,
+                ),
+
+                widget.Spacer(5),
+                widget.Sep(),
+                widget.Spacer(5),
+
                 widget.Systray(),
-                widget.QuickExit(default_text=" Exit ", foreground="#F38Ba8", countdown_format="{}"),
+
+                # Internet Widget
+                widget.GenPollText(
+                    func=lambda: subprocess.check_output(WIDGET_NETWORK).decode(),
+                    update_interval=1, 
+                    foreground=COLOR_SAPPHIRE,
+                    max_chars=20,
+                ),
+
+                widget.Spacer(5),
+                widget.Sep(),
+                widget.Spacer(5),
+
+                widget.CheckUpdates(
+                    display_format="  {updates}",
+                    colour_have_updates=COLOR_YELLOW,
+                    colour_no_updates=COLOR_GREEN,
+                    no_update_string=" ",
+                ),
+
+                widget.Spacer(5),
+                widget.Sep(),
+                widget.Spacer(5),
+
+                widget.Volume(
+                    fmt="  {}",
+                    foreground=COLOR_ROSEWATER,
+                    mouse_callbacks={
+                        # "Button3": lazy.spawn(APP_AUDIO_SETTINGS)
+                    },
+                ),
+
+                widget.Spacer(5),
+                widget.Sep(),
+                widget.Spacer(5),
+                widget.Battery(
+                    foreground=COLOR_MAUVE,
+                    low_background=COLOR_RED,
+                    low_foreground=COLOR_RED,
+                    low_percentage=0.40,
+                    notify_below=20,
+                    charge_char="  ",
+                    full_char="  ",
+                    discharge_char="",
+                    unknown_char="? ",
+                    show_short_text=False,
+                    format='󰁹 {percent:2.0%} {char}',
+                    update_interval=2,
+                    padding=0
+                ),
             ],
             23,
-            margin=[0,20,4,20],
+            margin=[-5,0,0,0],
             background=COLOR_CRUST,
             border_width=[4, 20, 4, 20],
             border_color=COLOR_CRUST,

@@ -1,2 +1,2 @@
 #!/bin/sh
-feh --no-fehbg --bg-fill --randomize '/home/igortxra/Pictures/Wallpapers/'
+feh --no-fehbg --bg-fill '/home/igortxra/Pictures/Wallpapers/rainnight.jpg' '/home/igortxra/Pictures/Wallpapers/wp-arch-linux.jpg' 

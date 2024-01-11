@@ -35,6 +35,9 @@ from libqtile.hook import subscribe
 HOME = path.expanduser("~")
 AUTOSTART = f"{HOME}/Scripts/autostart.sh"
 
+# Catppuccin Mocha Colors - https://github.com/catppuccin/catppuccin
+COLOR_CRUST="#11111b"
+
 @subscribe.startup_once
 def setup():
     subprocess.Popen([AUTOSTART])
@@ -100,8 +103,8 @@ for i in groups:
 
 layouts = [
     layout.Max(margin=20, border_width=0),
-    layout.MonadTall(margin=20, single_border_width=0),
-    layout.MonadWide(margin=20, single_border_width=0),
+    layout.MonadTall(border_focus="#45465A", margin=20, single_border_width=0, border_width=1),
+    layout.MonadWide(border_focus="#45465A", margin=20, single_border_width=0, border_width=1),
 
     # Not Used Layouts.
     # layout.Columns(),
@@ -127,21 +130,23 @@ screens = [
         bottom=bar.Bar(
             [
                 widget.CurrentLayoutIcon(scale=0.7),
-                widget.Sep(),
+                widget.Spacer(14),
                 widget.GroupBox(
+                    this_current_screen_border="#45475a",
                     highlight_method="block"
                 ),
                 widget.Prompt(),
                 widget.Spacer(),
                 widget.Clock(format="%d/%m/%Y - %a %I:%M %p"),
                 widget.Spacer(),
-                widget.Sep(),
                 widget.Systray(),
-                widget.QuickExit(default_text=" Exit ", foreground="#F00"),
+                widget.QuickExit(default_text=" Exit ", foreground="#F38Ba8", countdown_format="{}"),
             ],
-            26,
-            margin=[0,0,0,0]
-            # border_width=[2, 0, 2, 0],  # Draw top and bottom borders
+            23,
+            margin=[0,20,4,20],
+            background=COLOR_CRUST,
+            border_width=[4, 20, 4, 20],
+            border_color=COLOR_CRUST,
         ),
         # You can uncomment this variable if you see that on X11 floating resize/moving is laggy
         # By default we handle these events delayed to already improve performance, however your system might still be struggling

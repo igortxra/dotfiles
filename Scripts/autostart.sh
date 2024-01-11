@@ -9,3 +9,5 @@ setxkbmap -option caps:super
 # Load wallpaper
 $HOME/.fehbg &
 
+# Greenclip Daemon (for clipboard manager)
+greenclip daemon &

@@ -32,8 +32,14 @@ from libqtile.config import Click, Drag, Group, Key, Match, Screen
 from libqtile.lazy import lazy
 from libqtile.hook import subscribe
 
+
 HOME = path.expanduser("~")
 AUTOSTART = f"{HOME}/Scripts/autostart.sh"
+
+# Apps and Scripts
+LAUNCHER = f"{HOME}/Scripts/launcher.sh &"
+CLIPBOARD = f"{HOME}/Scripts/clipboard.sh &"
+POWERMENU = f"{HOME}/Scripts/powermenu.sh &"
 
 # Catppuccin Mocha Colors - https://github.com/catppuccin/catppuccin
 COLOR_CRUST="#11111b"
@@ -53,9 +59,11 @@ keys = [
     Key([SUPER, "control"], "r", lazy.reload_config(), desc="Reload the config"),
     Key([SUPER, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
     Key([SUPER], "Return", lazy.spawn(terminal), desc="Launch terminal"),
-    Key([SUPER], "space", lazy.spawncmd(), desc="Spawn a command using a prompt widget"),
+    Key([SUPER], "space", lazy.spawn(LAUNCHER), desc="Spawn a app launcher"),
     Key([SUPER], "Tab", lazy.next_layout(), desc="Toggle between layouts"),
     Key([SUPER], "x", lazy.window.kill(), desc="Kill focused window"),
+    Key([SUPER], "v", lazy.spawn(CLIPBOARD), desc="Spawn clipboard manager"),
+    Key([SUPER], "p", lazy.spawn(POWERMENU), desc="Spawn clipboard manager"),
     Key([], "F10", lazy.window.toggle_fullscreen(), desc="Toggle fullscreen on the focused window"),
     
     # Switch between windows

@@ -1,0 +1,5 @@
+catppuccin-cursors-mocha
+catppuccin-gtk-theme-mocha
+dracula-icons-git
+rofi-greenclip
+yay

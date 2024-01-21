@@ -1,3 +1,3 @@
-- Run setup script
 - Enable pacman parallel downloads and colors
+- Run setup script in ~/Scripts folder
 - Open lxappearance to set themes

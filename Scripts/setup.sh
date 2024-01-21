@@ -1,8 +1,8 @@
 # Setup dotfiles
 echo ".dotfiles" > ~/.gitignore
-git clone --bare https://github.com/$USER/dotfiles.git $HOME/.dotfiles
+git clone --bare https://github.com/$USER/dotfiles-clean.git $HOME/.dotfiles
 alias dotfiles="/usr/bin/git --git-dir=$HOME/.dotfiles --work-tree=$HOME"
-dotfiles config --local status showUntrackedFiles no
+dotfiles config --local status.showUntrackedFiles no
 dotfiles checkout -f
 
 # Install Yay AUR Helper

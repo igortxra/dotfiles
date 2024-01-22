@@ -14,6 +14,7 @@ fzf
 git
 github-cli
 gst-plugin-pipewire
+htop
 intel-media-driver
 intel-ucode
 kitty
@@ -34,12 +35,15 @@ pipewire
 pipewire-alsa
 pipewire-jack
 pipewire-pulse
+python-dbus-next
+python-psutil
 qtile
 qutebrowser
 ranger
 ripgrep
 rofi
 sof-firmware
+thunar
 ttf-iosevka-nerd
 vim
 vulkan-intel

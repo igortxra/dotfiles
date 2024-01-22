@@ -163,17 +163,43 @@ screens = [
                     active=COLOR_OVERLAY1,
                     hide_unused=True
                 ),
+
+                
+                widget.Spacer(10),
+                
+
+                widget.TextBox("", fontsize=20, padding=0, foreground=COLOR_GREEN),
+                widget.DF(
+                    partition="/", 
+                    format='  Free: {uf}{m}',
+                    visible_on_warn=False,
+                    background=COLOR_GREEN,
+                    foreground=COLOR_CRUST,
+                ),
+
+                widget.TextBox("", fontsize=20, padding=0, foreground=COLOR_GREEN),
+
+                widget.TextBox("", fontsize=20, padding=0, foreground=COLOR_OVERLAY1),
+                widget.Memory(padding=5, fmt=" {}", format="{MemUsed: .0f} /{MemTotal: .0f} ({mm})", measure_mem="G", background=COLOR_OVERLAY1),
+                widget.TextBox("", fontsize=20, padding=0, foreground=COLOR_OVERLAY1),
+                
+                widget.TextBox("", fontsize=20, padding=0, foreground=COLOR_ROSEWATER),
+                widget.CPU(fmt="󰍛 {}", background=COLOR_ROSEWATER, foreground=COLOR_CRUST),
+                widget.TextBox("", fontsize=20, padding=0, foreground=COLOR_ROSEWATER),
+
                 widget.Spacer(),
 
 
                 widget.Spacer(),
                 widget.Clipboard(
-                   fmt="󰅎  Copied",
+                   fmt=" 󰅎  Copied ",
                    max_width=2,
-                   foreground=COLOR_ROSEWATER,
+                   foreground=COLOR_CRUST,
+                   background=COLOR_SAPPHIRE,
+                   timeout=1,
                 ),
 
-                widget.Spacer(20),
+                widget.Spacer(),
 
                 widget.Systray(padding=10),
                 

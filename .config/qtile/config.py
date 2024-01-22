@@ -37,11 +37,12 @@ HOME = path.expanduser("~")
 AUTOSTART = f"{HOME}/Scripts/autostart.sh"
 
 # Apps and Scripts
-LAUNCHER = f"{HOME}/Scripts/launcher.sh &"
-CLIPBOARD = f"{HOME}/Scripts/clipboard.sh &"
-POWERMENU = f"{HOME}/Scripts/powermenu.sh &"
-PROJECTS = f"{HOME}/Scripts/projects.sh &"
-WIDGET_NETWORK=f"{HOME}/Scripts/network-widget.sh"
+APPS = f"{HOME}/Scripts/menus/apps.sh &"
+CLIPBOARD = f"{HOME}/Scripts/menus/clipboard.sh &"
+POWERMENU = f"{HOME}/Scripts/menus/power.sh &"
+PROJECTS = f"{HOME}/Scripts/menus/projects.sh &"
+UTILS=f"{HOME}/Scripts/menus/utils.sh &"
+WIDGET_NETWORK=f"{HOME}/Scripts/widgets/network.sh"
 
 # Catppuccin Mocha Colors - https://github.com/catppuccin/catppuccin
 COLOR_CRUST="#11111b"
@@ -70,11 +71,12 @@ keys = [
     Key([SUPER, "control"], "r", lazy.reload_config(), desc="Reload the config"),
     Key([SUPER, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
     Key([SUPER], "Return", lazy.spawn(terminal), desc="Launch terminal"),
-    Key([SUPER], "space", lazy.spawn(LAUNCHER), desc="Spawn a app launcher"),
+    Key([SUPER], "space", lazy.spawn(APPS), desc="Spawn a app launcher"),
     Key([SUPER], "Tab", lazy.next_layout(), desc="Toggle between layouts"),
     Key([SUPER], "o", lazy.spawn(PROJECTS), desc="Spawn power menu"),
     Key([SUPER], "p", lazy.spawn(POWERMENU), desc="Spawn power menu"),
     Key([SUPER], "v", lazy.spawn(CLIPBOARD), desc="Spawn clipboard manager"),
+    Key([SUPER], "u", lazy.spawn(UTILS), desc="Spawn utils menu"),
     Key([SUPER], "x", lazy.window.kill(), desc="Kill focused window"),
     Key([], "F10", lazy.window.toggle_fullscreen(), desc="Toggle fullscreen on the focused window"),
     

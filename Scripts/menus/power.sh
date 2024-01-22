@@ -1,16 +1,16 @@
 #!/bin/sh
 
 # Options
-shutdown='Shutdown '
-reboot='Reboot '
-lock='Lock '
-suspend='Suspend '
-logout='Logout '
+shutdown='   Shutdown '
+reboot='   Reboot '
+lock='   Lock '
+suspend='   Suspend '
+logout='   Logout '
 
 # Rofi CMD
 rofi_cmd() {
 	rofi \
-	    -dmenu -p "Power Options"
+	    -dmenu -p "Power Options" 
 }
 
 # Pass variables to rofi dmenu

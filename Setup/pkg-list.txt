@@ -1,10 +1,15 @@
 alsa-utils
+archey3
 base
 base-devel
 bottom
 btrfs-progs
+discord
+dmenu
+dunst
 efibootmgr
 feh
+flameshot
 fzf
 git
 github-cli

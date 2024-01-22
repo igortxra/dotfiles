@@ -42,6 +42,7 @@ CLIPBOARD = f"{HOME}/Scripts/menus/clipboard.sh &"
 POWERMENU = f"{HOME}/Scripts/menus/power.sh &"
 PROJECTS = f"{HOME}/Scripts/menus/projects.sh &"
 UTILS=f"{HOME}/Scripts/menus/utils.sh &"
+CONFIG=f"{HOME}/Scripts/menus/config.sh &"
 WIDGET_NETWORK=f"{HOME}/Scripts/widgets/network.sh"
 
 # Catppuccin Mocha Colors - https://github.com/catppuccin/catppuccin
@@ -73,6 +74,7 @@ keys = [
     Key([SUPER], "Return", lazy.spawn(terminal), desc="Launch terminal"),
     Key([SUPER], "space", lazy.spawn(APPS), desc="Spawn a app launcher"),
     Key([SUPER], "Tab", lazy.next_layout(), desc="Toggle between layouts"),
+    Key([SUPER], "c", lazy.spawn(CONFIG), desc="Spawn config menu"),
     Key([SUPER], "o", lazy.spawn(PROJECTS), desc="Spawn power menu"),
     Key([SUPER], "p", lazy.spawn(POWERMENU), desc="Spawn power menu"),
     Key([SUPER], "v", lazy.spawn(CLIPBOARD), desc="Spawn clipboard manager"),

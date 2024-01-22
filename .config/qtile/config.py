@@ -58,6 +58,9 @@ COLOR_SURFACE_0="#313244"
 COLOR_GREEN="#a6e3a1"
 COLOR_SAPPHIRE="#74c7ec"
 COLOR_ROSEWATER="#f5e0dc"
+COLOR_FLAMINGO="#f0c6c6"
+COLOR_PINK="#f5bde6"
+COLOR_BLUE="#8aadf4"
 
 @subscribe.startup_once
 def setup():
@@ -168,24 +171,24 @@ screens = [
                 widget.Spacer(10),
                 
 
-                widget.TextBox("", fontsize=20, padding=0, foreground=COLOR_GREEN),
+                widget.TextBox("", fontsize=20, padding=0, foreground=COLOR_FLAMINGO),
                 widget.DF(
                     partition="/", 
                     format='  Free: {uf}{m}',
                     visible_on_warn=False,
-                    background=COLOR_GREEN,
+                    background=COLOR_FLAMINGO,
                     foreground=COLOR_CRUST,
                 ),
 
-                widget.TextBox("", fontsize=20, padding=0, foreground=COLOR_GREEN),
+                widget.TextBox("", fontsize=20, padding=0, foreground=COLOR_FLAMINGO),
 
-                widget.TextBox("", fontsize=20, padding=0, foreground=COLOR_OVERLAY1),
-                widget.Memory(padding=5, fmt=" {}", format="{MemUsed: .0f} /{MemTotal: .0f} ({mm})", measure_mem="G", background=COLOR_OVERLAY1),
-                widget.TextBox("", fontsize=20, padding=0, foreground=COLOR_OVERLAY1),
+                widget.TextBox("", fontsize=20, padding=0, foreground=COLOR_MAUVE),
+                widget.Memory(padding=5, fmt=" {}", format="{MemUsed: .0f} /{MemTotal: .0f} ({mm})", measure_mem="G", background=COLOR_MAUVE, foreground=COLOR_CRUST),
+                widget.TextBox("", fontsize=20, padding=0, foreground=COLOR_MAUVE),
                 
-                widget.TextBox("", fontsize=20, padding=0, foreground=COLOR_ROSEWATER),
-                widget.CPU(fmt="󰍛 {}", background=COLOR_ROSEWATER, foreground=COLOR_CRUST),
-                widget.TextBox("", fontsize=20, padding=0, foreground=COLOR_ROSEWATER),
+                widget.TextBox("", fontsize=20, padding=0, foreground=COLOR_PINK),
+                widget.CPU(fmt="󰍛 {}", background=COLOR_PINK, foreground=COLOR_CRUST),
+                widget.TextBox("", fontsize=20, padding=0, foreground=COLOR_PINK),
 
                 widget.Spacer(),
 
@@ -195,7 +198,7 @@ screens = [
                    fmt=" 󰅎  Copied ",
                    max_width=2,
                    foreground=COLOR_CRUST,
-                   background=COLOR_SAPPHIRE,
+                   background=COLOR_BLUE,
                    timeout=1,
                 ),
 

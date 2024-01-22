@@ -44,6 +44,7 @@ PROJECTS = f"{HOME}/Scripts/menus/projects.sh &"
 UTILS=f"{HOME}/Scripts/menus/utils.sh &"
 CONFIG=f"{HOME}/Scripts/menus/config.sh &"
 WIDGET_NETWORK=f"{HOME}/Scripts/widgets/network.sh"
+SHOW_UPGRADABLE_PACKAGES=f"{HOME}/Scripts/utils/show-upgradable-packages.sh &"
 
 # Catppuccin Mocha Colors - https://github.com/catppuccin/catppuccin
 COLOR_CRUST="#11111b"
@@ -182,6 +183,9 @@ screens = [
                     colour_have_updates=COLOR_YELLOW,
                     colour_no_updates=COLOR_GREEN,
                     no_update_string=" ",
+                    mouse_callbacks={
+                        "Button1": lazy.spawn(SHOW_UPGRADABLE_PACKAGES)
+                    }
                 ),
                 
                 widget.Spacer(20),

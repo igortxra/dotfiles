@@ -10,4 +10,5 @@ configuration{
     font: "Iosevka Nerd 14";
 }
 
+
 @theme "catppuccin-mocha"

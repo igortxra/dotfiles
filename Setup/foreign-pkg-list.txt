@@ -1,3 +1,4 @@
+batify
 catppuccin-cursors-mocha
 catppuccin-gtk-theme-mocha
 dracula-icons-git

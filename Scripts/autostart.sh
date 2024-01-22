@@ -14,3 +14,6 @@ greenclip daemon &
 
 # Notification Daemon
 dunst &
+
+# Compositor
+picom &

@@ -129,8 +129,8 @@ for i in groups:
 
 layouts = [
     layout.Max(margin=20, border_width=0),
-    layout.MonadTall(border_focus=COLOR_ROSEWATER, margin=20, single_border_width=0, border_width=2),
-    layout.MonadWide(border_focus=COLOR_PEACH, margin=20, single_border_width=0, border_width=2),
+    layout.MonadTall(border_focus=COLOR_ROSEWATER, margin=20, single_border_width=0, border_width=1),
+    layout.MonadWide(border_focus=COLOR_ROSEWATER, margin=20, single_border_width=0, border_width=1),
 
     # Not Used Layouts.
     # layout.Columns(),
@@ -286,7 +286,7 @@ mouse = [
 dgroups_key_binder = None
 dgroups_app_rules = []  # type: list
 follow_mouse_focus = True
-bring_front_click = False
+bring_front_click = True
 floats_kept_above = True
 cursor_warp = False
 floating_layout = layout.Floating(
@@ -299,7 +299,8 @@ floating_layout = layout.Floating(
         Match(wm_class="ssh-askpass"),  # ssh-askpass
         Match(title="branchdialog"),  # gitk
         Match(title="pinentry"),  # GPG key password entry
-    ]
+    ],
+    border_width=0
 )
 auto_fullscreen = True
 focus_on_window_activation = "smart"

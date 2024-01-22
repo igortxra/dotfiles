@@ -10,7 +10,7 @@ if [[ "$connection_type" == "802-3-ethernet" ]]; then
 elif [[ "$connection_type" == "802-11-wireless" ]]; then
     connection_icon=" "
 else
-  exit
+    connection_icon="󰲛"
 fi
 
 echo "$connection_icon $connection_name" | tr -d '\n'

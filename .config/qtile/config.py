@@ -158,7 +158,8 @@ screens = [
                     hide_unused=True
                 ),
                 widget.Spacer(),
-                widget.Clock(format="%d/%m/%Y - %a %I:%M:%S %p"),
+
+
                 widget.Spacer(),
                 widget.Clipboard(
                    fmt="󰅎  Copied",
@@ -166,23 +167,11 @@ screens = [
                    foreground=COLOR_ROSEWATER,
                 ),
 
-                widget.Spacer(5),
-                widget.Sep(),
-                widget.Spacer(5),
+                widget.Spacer(20),
 
-                widget.Systray(),
-
-                # Internet Widget
-                widget.GenPollText(
-                    func=lambda: subprocess.check_output(WIDGET_NETWORK).decode(),
-                    update_interval=1, 
-                    foreground=COLOR_SAPPHIRE,
-                    max_chars=20,
-                ),
-
-                widget.Spacer(5),
-                widget.Sep(),
-                widget.Spacer(5),
+                widget.Systray(padding=10),
+                
+                widget.Spacer(30),
 
                 widget.CheckUpdates(
                     display_format="  {updates}",
@@ -190,28 +179,45 @@ screens = [
                     colour_no_updates=COLOR_GREEN,
                     no_update_string=" ",
                 ),
+                
+                widget.Spacer(20),
 
-                widget.Spacer(5),
-                widget.Sep(),
-                widget.Spacer(5),
+                widget.TextBox("", fontsize=20, padding=0, foreground=COLOR_GREEN),
+                # Internet Widget
+                widget.GenPollText(
+                    func=lambda: subprocess.check_output(WIDGET_NETWORK).decode(),
+                    update_interval=1, 
+                    foreground=COLOR_CRUST,
+                    background=COLOR_GREEN,
+                    max_chars=20,
+                    padding=5
+                ),
+                widget.TextBox("", fontsize=20, padding=0, foreground=COLOR_GREEN),
 
+                widget.TextBox("", fontsize=20, padding=0, foreground=COLOR_PEACH),
+                widget.Clock(format="%d/%m/%Y - %a %I:%M:%S %p", background=COLOR_PEACH, foreground=COLOR_CRUST),
+                widget.TextBox("", fontsize=20, padding=0, foreground=COLOR_PEACH),
+
+                widget.TextBox("", fontsize=20, padding=0, foreground=COLOR_ROSEWATER),
                 widget.Volume(
                     fmt="  {}",
-                    foreground=COLOR_ROSEWATER,
+                    foreground=COLOR_CRUST,
+                    background=COLOR_ROSEWATER,
                     mouse_callbacks={
                         # "Button3": lazy.spawn(APP_AUDIO_SETTINGS)
                     },
+                    padding=5
                 ),
+                widget.TextBox("", fontsize=20, padding=0, foreground=COLOR_ROSEWATER),
 
-                widget.Spacer(5),
-                widget.Sep(),
-                widget.Spacer(5),
+                widget.TextBox("", fontsize=20, padding=0, foreground=COLOR_OVERLAY1),
                 widget.Battery(
-                    foreground=COLOR_MAUVE,
-                    low_background=COLOR_RED,
+                    foreground=COLOR_CRUST,
+                    background=COLOR_OVERLAY1,
+                    low_background=COLOR_OVERLAY1,
                     low_foreground=COLOR_RED,
                     low_percentage=0.40,
-                    notify_below=20,
+                    notify_below=25,
                     charge_char="  ",
                     full_char="  ",
                     discharge_char="",
@@ -219,7 +225,7 @@ screens = [
                     show_short_text=False,
                     format='󰁹 {percent:2.0%} {char}',
                     update_interval=2,
-                    padding=0
+                    padding=5
                 ),
             ],
             23,

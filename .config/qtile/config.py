@@ -47,6 +47,7 @@ WIDGET_NETWORK=f"{HOME}/Scripts/widgets/network.sh"
 SHOW_UPGRADABLE_PACKAGES=f"{HOME}/Scripts/utils/show-upgradable-packages.sh &"
 
 # Catppuccin Mocha Colors - https://github.com/catppuccin/catppuccin
+COLOR_WHITE="#fff"
 COLOR_CRUST="#11111b"
 COLOR_OVERLAY1="#45475a"
 COLOR_RED="#F38Ba8"
@@ -128,8 +129,8 @@ for i in groups:
 
 layouts = [
     layout.Max(margin=20, border_width=0),
-    layout.MonadTall(border_focus=COLOR_OVERLAY1, margin=20, single_border_width=0, border_width=1),
-    layout.MonadWide(border_focus=COLOR_OVERLAY1, margin=20, single_border_width=0, border_width=1),
+    layout.MonadTall(border_focus=COLOR_ROSEWATER, margin=20, single_border_width=0, border_width=2),
+    layout.MonadWide(border_focus=COLOR_PEACH, margin=20, single_border_width=0, border_width=2),
 
     # Not Used Layouts.
     # layout.Columns(),

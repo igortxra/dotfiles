@@ -44,6 +44,7 @@ ranger
 ripgrep
 rofi
 sof-firmware
+spotify-launcher
 thunar
 ttf-iosevka-nerd
 vim

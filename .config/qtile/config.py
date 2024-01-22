@@ -45,6 +45,8 @@ UTILS=f"{HOME}/Scripts/menus/utils.sh &"
 CONFIG=f"{HOME}/Scripts/menus/config.sh &"
 WIDGET_NETWORK=f"{HOME}/Scripts/widgets/network.sh"
 SHOW_UPGRADABLE_PACKAGES=f"{HOME}/Scripts/utils/show-upgradable-packages.sh &"
+SCREENSHOT="flameshot gui"
+SCREENSHOT_FULLSCREEN="flameshot full"
 
 # Catppuccin Mocha Colors - https://github.com/catppuccin/catppuccin
 COLOR_WHITE="#fff"
@@ -86,6 +88,8 @@ keys = [
     Key([SUPER], "u", lazy.spawn(UTILS), desc="Spawn utils menu"),
     Key([SUPER], "x", lazy.window.kill(), desc="Kill focused window"),
     Key([], "F10", lazy.window.toggle_fullscreen(), desc="Toggle fullscreen on the focused window"),
+    Key([], "Print", lazy.spawn(SCREENSHOT), desc='Launch screenshot'),
+    Key(["shift"], "Print", lazy.spawn(SCREENSHOT_FULLSCREEN), desc='Launch screenshot fullscreen'),
     
     # Switch between windows
     Key([SUPER], "h", lazy.layout.left(), desc="Move focus to left"),
@@ -170,35 +174,61 @@ screens = [
                 
                 widget.Spacer(10),
                 
+                widget.Sep(),
+                
+                widget.Spacer(10),
+                
+                widget.WidgetBox(
+                    widgets=[
+                        widget.TextBox("", fontsize=20, padding=0, foreground=COLOR_FLAMINGO),
+                        widget.DF(
+                            partition="/", 
+                            format='  Free: {uf}{m}',
+                            visible_on_warn=False,
+                            background=COLOR_FLAMINGO,
+                            foreground=COLOR_CRUST,
+                        ),
 
-                widget.TextBox("", fontsize=20, padding=0, foreground=COLOR_FLAMINGO),
-                widget.DF(
-                    partition="/", 
-                    format='  Free: {uf}{m}',
-                    visible_on_warn=False,
-                    background=COLOR_FLAMINGO,
-                    foreground=COLOR_CRUST,
+                        widget.TextBox("", fontsize=20, padding=0, foreground=COLOR_FLAMINGO),
+
+                        widget.TextBox("", fontsize=20, padding=0, foreground=COLOR_MAUVE),
+                        widget.Memory(padding=5, fmt=" {}", format="{MemUsed: .0f} /{MemTotal: .0f} ({mm})", measure_mem="G", background=COLOR_MAUVE, foreground=COLOR_CRUST),
+                        widget.TextBox("", fontsize=20, padding=0, foreground=COLOR_MAUVE),
+                        
+                        widget.TextBox("", fontsize=20, padding=0, foreground=COLOR_PINK),
+                        widget.CPU(fmt="󰍛 {}", background=COLOR_PINK, foreground=COLOR_CRUST),
+                        widget.TextBox("", fontsize=20, padding=0, foreground=COLOR_PINK),
+                    ],
+
+                    close_button_location="left",
+                    text_open=" ",
+                    text_closed=" ",
                 ),
 
-                widget.TextBox("", fontsize=20, padding=0, foreground=COLOR_FLAMINGO),
+                widget.Spacer(10),
 
-                widget.TextBox("", fontsize=20, padding=0, foreground=COLOR_MAUVE),
-                widget.Memory(padding=5, fmt=" {}", format="{MemUsed: .0f} /{MemTotal: .0f} ({mm})", measure_mem="G", background=COLOR_MAUVE, foreground=COLOR_CRUST),
-                widget.TextBox("", fontsize=20, padding=0, foreground=COLOR_MAUVE),
+                widget.TextBox("", fontsize=20, padding=0, foreground=COLOR_PEACH),
+                widget.Mpris2(
+                    name="spotify",
+                    display_metadata=['xesam:title', 'xesam:artist'],
+                    scroll_chars=None,
+                    objname="org.mpris.MediaPlayer2.spotify",
+                    scroll_interval=0,
+                    background=COLOR_PEACH,
+                    foreground=COLOR_CRUST,
+                    fmt='{}   ',
+                    paused_text='   {track}',
+                    mouse_callbacks={
+                        # "Button3": lazy.function(go_to_group("8"))
+                    },
+                ),
+                widget.TextBox("", fontsize=20, padding=0, foreground=COLOR_PEACH),
                 
-                widget.TextBox("", fontsize=20, padding=0, foreground=COLOR_PINK),
-                widget.CPU(fmt="󰍛 {}", background=COLOR_PINK, foreground=COLOR_CRUST),
-                widget.TextBox("", fontsize=20, padding=0, foreground=COLOR_PINK),
-
-                widget.Spacer(),
-
-
-                widget.Spacer(),
                 widget.Clipboard(
                    fmt=" 󰅎  Copied ",
                    max_width=2,
-                   foreground=COLOR_CRUST,
-                   background=COLOR_BLUE,
+                   foreground=COLOR_GREEN,
+                   background=COLOR_CRUST,
                    timeout=1,
                 ),
 
@@ -232,9 +262,10 @@ screens = [
                 ),
                 widget.TextBox("", fontsize=20, padding=0, foreground=COLOR_GREEN),
 
-                widget.TextBox("", fontsize=20, padding=0, foreground=COLOR_PEACH),
-                widget.Clock(format="%d/%m/%Y - %a %I:%M:%S %p", background=COLOR_PEACH, foreground=COLOR_CRUST),
-                widget.TextBox("", fontsize=20, padding=0, foreground=COLOR_PEACH),
+
+                widget.TextBox("", fontsize=20, padding=0, foreground=COLOR_FLAMINGO),
+                widget.Clock(format="%d/%m/%Y - %a %I:%M:%S %p", background=COLOR_FLAMINGO, foreground=COLOR_CRUST),
+                widget.TextBox("", fontsize=20, padding=0, foreground=COLOR_FLAMINGO),
 
                 widget.TextBox("", fontsize=20, padding=0, foreground=COLOR_ROSEWATER),
                 widget.Volume(
@@ -248,12 +279,12 @@ screens = [
                 ),
                 widget.TextBox("", fontsize=20, padding=0, foreground=COLOR_ROSEWATER),
 
-                widget.TextBox("", fontsize=20, padding=0, foreground=COLOR_OVERLAY1),
+                widget.TextBox("", fontsize=20, padding=0, foreground=COLOR_MAUVE),
                 widget.Battery(
                     foreground=COLOR_CRUST,
-                    background=COLOR_OVERLAY1,
-                    low_background=COLOR_OVERLAY1,
-                    low_foreground=COLOR_RED,
+                    background=COLOR_MAUVE,
+                    low_background=COLOR_MAUVE,
+                    low_foreground=COLOR_CRUST,
                     low_percentage=0.40,
                     notify_below=25,
                     charge_char="  ",

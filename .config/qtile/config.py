@@ -283,7 +283,7 @@ screens = [
                 widget.Battery(
                     foreground=COLOR_CRUST,
                     background=COLOR_MAUVE,
-                    low_background=COLOR_MAUVE,Key([], "Print", lazy.spawn(APP_SCREENSHOT), desc='Launch screenshot'),
+                    low_background=COLOR_MAUVE,
                     low_foreground=COLOR_CRUST,
                     low_percentage=0.40,
                     notify_below=25,

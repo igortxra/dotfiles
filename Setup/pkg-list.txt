@@ -1,5 +1,7 @@
 alsa-utils
+arandr
 archey3
+autorandr
 base
 base-devel
 bottom

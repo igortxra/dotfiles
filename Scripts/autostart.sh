@@ -17,3 +17,6 @@ dunst &
 
 # Compositor
 picom &
+
+# Auto detect screen profile
+autorandr --change &

@@ -525,3 +525,6 @@ c.colors.tabs.selected.even.bg = '#1e1e2e'
 # color).
 # Type: QtColor
 c.colors.webpage.bg = '#1e1e2e'
+
+
+c.url.searchengines = {'DEFAULT': 'https://start.duckduckgo.com/?q={}', 'aw': 'https://wiki.archlinux.org/?search={}', 'goog': 'https://www.google.com/search?q={}', 're': 'https://www.reddit.com/search?q={}', 'gh': 'https://github.com/search?q={}', 'ghr': 'https://github.com/{unquoted}', 'wiki': 'https://en.wikipedia.org/wiki/{}', 'yt': 'https://www.youtube.com/results?search_query={}', 'qtile': 'http://docs.qtile.org/en/stable/search.html?q={}'}

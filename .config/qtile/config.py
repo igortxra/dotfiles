@@ -150,7 +150,7 @@ for i in groups:
 layouts = [
     layout.Max(margin=20, border_width=0),
     layout.MonadTall(border_focus=COLOR_ROSEWATER, margin=20, single_border_width=0, border_width=1),
-    layout.MonadWide(border_focus=COLOR_ROSEWATER, margin=20, single_border_width=0, border_width=1),
+    layout.MonadWide(border_focus=COLOR_ROSEWATER, margin=20, single_border_width=0, border_width=1, ratio=0.75),
 
     # Not Used Layouts.
     # layout.Columns(),

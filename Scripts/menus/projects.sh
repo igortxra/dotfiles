@@ -2,20 +2,11 @@
 
 projects_root_dir="$HOME/Github/"
 
-# Rofi CMD
-rofi_cmd() {
-	rofi -dmenu -p $projects_root_dir
-}
+project_paths=$(find $projects_root_dir -mindepth 2 -maxdepth 2 -type d)
 
-projects_dir=$(exa $projects_root_dir)
+opts=$(realpath --relative-to=$projects_root_dir $(echo $project_paths))
 
-# Pass variables to rofi dmenu
-run_rofi() {
-	echo -e $projects_dir | rofi_cmd
-}
-
-# # Actions
-chosen=$(run_rofi)
+chosen=$(echo -e $opts | rofi -dmenu -p "Github Projects")
 if [[ $chosen = "" ]]; then
   exit 1;
 fi

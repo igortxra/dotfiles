@@ -95,7 +95,7 @@
     frame_width = 1
 
     # Defines color of the frame around the notification window.
-    frame_color = "#11111b"
+    # frame_color = "#11111b"
 
     # Size of gap to display between notifications - requires a compositor.
     # If value is greater than 0, separator_height will be ignored and a border
@@ -223,7 +223,7 @@
 
     # Should a notification popped up from history be sticky or timeout
     # as if it would normally do.
-    sticky_history = yes
+    sticky_history = no
 
     # Maximum amount of notifications kept in history
     history_length = 20

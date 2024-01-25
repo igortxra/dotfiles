@@ -9,7 +9,17 @@ else
   if [ -z $profile ]; then
     exit
   fi
+  
+  # Load screen profile
   autorandr --load $profile
+  
+  # Restore wallpaper
+  . $HOME/.fehbg
+  
+  # Reload qtile
+  qtile cmd-obj -o cmd -f restart
+
+  # Send notification
   dunstify -a System "Screens" "Changing to profile: $profile"
 fi
 

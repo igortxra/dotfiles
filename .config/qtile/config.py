@@ -172,13 +172,13 @@ widget_defaults = dict(
 extension_defaults = widget_defaults.copy()
 
 main_groupbox = widget.GroupBox(
-    active=COLOR_PEACH,
+    active=COLOR_ROSEWATER,
     background=COLOR_CRUST,
     inactive=COLOR_OVERLAY1,
-    this_screen_border=COLOR_CRUST,
-    other_screen_border=COLOR_CRUST,
+    this_screen_border=COLOR_PEACH,
+    other_screen_border=COLOR_OVERLAY1,
     this_current_screen_border=COLOR_PEACH,
-    other_current_screen_border=COLOR_CRUST,
+    other_current_screen_border=COLOR_OVERLAY1,
     highlight_method='line',
     highlight_color=[COLOR_CRUST],
     disable_drag=True,
@@ -186,201 +186,239 @@ main_groupbox = widget.GroupBox(
     borderwidth=1,
     padding=12)
 secondary_groupbox = widget.GroupBox(
-    active=COLOR_PEACH,
+    active=COLOR_ROSEWATER,
     background=COLOR_CRUST,
     inactive=COLOR_OVERLAY1,
-    this_screen_border=COLOR_CRUST,
-    other_screen_border=COLOR_CRUST,
+    this_screen_border=COLOR_PEACH,
+    other_screen_border=COLOR_OVERLAY1,
     this_current_screen_border=COLOR_PEACH,
-    other_current_screen_border=COLOR_CRUST,
+    other_current_screen_border=COLOR_OVERLAY1,
     highlight_method='line',
     highlight_color=[COLOR_CRUST],
     disable_drag=True,
     hide_unused=True,
+    toggle=True,
+    borderwidth=1,
+    padding=12)
+third_groupbox = widget.GroupBox(
+    active=COLOR_ROSEWATER,
+    background=COLOR_CRUST,
+    inactive=COLOR_OVERLAY1,
+    this_screen_border=COLOR_PEACH,
+    other_screen_border=COLOR_OVERLAY1,
+    this_current_screen_border=COLOR_PEACH,
+    other_current_screen_border=COLOR_OVERLAY1,
+    highlight_method='line',
+    highlight_color=[COLOR_CRUST],
+    disable_drag=True,
+    hide_unused=True,
+    toggle=True,
     borderwidth=1,
     padding=12)
 
-main_bar=bar.Bar(
-    [
-        widget.CurrentLayoutIcon(scale=0.7),
-        widget.Spacer(14),
+# Order by screen match
+bars = [
+    bar.Bar(
+        [
+            widget.CurrentLayoutIcon(scale=0.7),
+            widget.Spacer(14),
 
-        main_groupbox,
+            main_groupbox,
 
-        # widget.GroupBox(
-        #     this_current_screen_border=COLOR_PEACH,
-        #     highlight_method="text",
-        #     active=COLOR_OVERLAY1,
-        #     hide_unused=True
-        # ),
-        
-        widget.Spacer(10),
-        
-        widget.Sep(),
-        
-        widget.Spacer(10),
-        
-        widget.WidgetBox(
-            widgets=[
-                widget.TextBox("", fontsize=20, padding=0, foreground=COLOR_FLAMINGO),
-                widget.DF(
-                    partition="/", 
-                    format='  Free: {uf}{m}',
-                    visible_on_warn=False,
-                    background=COLOR_FLAMINGO,
-                    foreground=COLOR_CRUST,
-                ),
+            # widget.GroupBox(
+            #     this_current_screen_border=COLOR_PEACH,
+            #     highlight_method="text",
+            #     active=COLOR_OVERLAY1,
+            #     hide_unused=True
+            # ),
+            
+            widget.Spacer(10),
+            
+            widget.Sep(),
+            
+            widget.Spacer(10),
+            
+            widget.WidgetBox(
+                widgets=[
+                    widget.TextBox("", fontsize=20, padding=0, foreground=COLOR_FLAMINGO),
+                    widget.DF(
+                        partition="/", 
+                        format='  Free: {uf}{m}',
+                        visible_on_warn=False,
+                        background=COLOR_FLAMINGO,
+                        foreground=COLOR_CRUST,
+                    ),
 
-                widget.TextBox("", fontsize=20, padding=0, foreground=COLOR_FLAMINGO),
+                    widget.TextBox("", fontsize=20, padding=0, foreground=COLOR_FLAMINGO),
 
-                widget.TextBox("", fontsize=20, padding=0, foreground=COLOR_MAUVE),
-                widget.Memory(padding=5, fmt=" {}", format="{MemUsed: .0f} /{MemTotal: .0f} ({mm})", measure_mem="G", background=COLOR_MAUVE, foreground=COLOR_CRUST),
-                widget.TextBox("", fontsize=20, padding=0, foreground=COLOR_MAUVE),
-                
-                widget.TextBox("", fontsize=20, padding=0, foreground=COLOR_PINK),
-                widget.CPU(fmt="󰍛 {}", background=COLOR_PINK, foreground=COLOR_CRUST),
-                widget.TextBox("", fontsize=20, padding=0, foreground=COLOR_PINK),
-            ],
+                    widget.TextBox("", fontsize=20, padding=0, foreground=COLOR_MAUVE),
+                    widget.Memory(padding=5, fmt=" {}", format="{MemUsed: .0f} /{MemTotal: .0f} ({mm})", measure_mem="G", background=COLOR_MAUVE, foreground=COLOR_CRUST),
+                    widget.TextBox("", fontsize=20, padding=0, foreground=COLOR_MAUVE),
+                    
+                    widget.TextBox("", fontsize=20, padding=0, foreground=COLOR_PINK),
+                    widget.CPU(fmt="󰍛 {}", background=COLOR_PINK, foreground=COLOR_CRUST),
+                    widget.TextBox("", fontsize=20, padding=0, foreground=COLOR_PINK),
+                ],
 
-            close_button_location="left",
-            text_open=" ",
-            text_closed=" ",
-        ),
+                close_button_location="left",
+                text_open=" ",
+                text_closed=" ",
+            ),
 
-        widget.Spacer(10),
+            widget.Spacer(10),
 
-        widget.TextBox("", fontsize=20, padding=0, foreground=COLOR_PEACH),
-        widget.Mpris2(
-            name="spotify",
-            display_metadata=['xesam:title', 'xesam:artist'],
-            scroll_chars=None,
-            objname="org.mpris.MediaPlayer2.spotify",
-            scroll_interval=0,
-            background=COLOR_PEACH,
-            foreground=COLOR_CRUST,
-            fmt='{}   ',
-            paused_text='   {track}',
-            mouse_callbacks={
-                # "Button3": lazy.function(go_to_group("8"))
-            },
-        ),
-        widget.TextBox("", fontsize=20, padding=0, foreground=COLOR_PEACH),
-        
-        widget.Clipboard(
-           fmt=" 󰅎  Copied ",
-           max_width=2,
-           foreground=COLOR_GREEN,
-           background=COLOR_CRUST,
-           timeout=1,
-        ),
+            widget.TextBox("", fontsize=20, padding=0, foreground=COLOR_PEACH),
+            widget.Mpris2(
+                name="spotify",
+                display_metadata=['xesam:title', 'xesam:artist'],
+                scroll_chars=None,
+                objname="org.mpris.MediaPlayer2.spotify",
+                scroll_interval=0,
+                background=COLOR_PEACH,
+                foreground=COLOR_CRUST,
+                fmt='{}   ',
+                paused_text='   {track}',
+                mouse_callbacks={
+                    # "Button3": lazy.function(go_to_group("8"))
+                },
+            ),
+            widget.TextBox("", fontsize=20, padding=0, foreground=COLOR_PEACH),
+            
+            widget.Clipboard(
+               fmt=" 󰅎  Copied ",
+               max_width=2,
+               foreground=COLOR_GREEN,
+               background=COLOR_CRUST,
+               timeout=1,
+            ),
 
-        widget.Spacer(),
+            widget.Spacer(),
 
-        widget.CurrentScreen(
-            active_text="󰣇 ",
-            active_color=COLOR_PEACH,
-            inactive_text="󰣇 ",
-            inactive_color=COLOR_OVERLAY1,
-            fontsize=20,
-        ),
+            widget.CurrentScreen(
+                active_text="󰣇 ",
+                active_color=COLOR_PEACH,
+                inactive_text="󰣇 ",
+                inactive_color=COLOR_OVERLAY1,
+                fontsize=20,
+            ),
 
-        widget.Spacer(),
-        widget.Systray(padding=10),
-        
-        widget.Spacer(30),
+            widget.Spacer(),
+            widget.Systray(padding=10),
+            
+            widget.Spacer(30),
 
-        widget.CheckUpdates(
-            display_format="  {updates}",
-            colour_have_updates=COLOR_YELLOW,
-            colour_no_updates=COLOR_GREEN,
-            no_update_string=" ",
-            mouse_callbacks={
-                "Button1": lazy.spawn(SHOW_UPGRADABLE_PACKAGES)
-            }
-        ),
-        
-        widget.Spacer(20),
+            widget.CheckUpdates(
+                display_format="  {updates}",
+                colour_have_updates=COLOR_YELLOW,
+                colour_no_updates=COLOR_GREEN,
+                no_update_string=" ",
+                mouse_callbacks={
+                    "Button1": lazy.spawn(SHOW_UPGRADABLE_PACKAGES)
+                }
+            ),
+            
+            widget.Spacer(20),
 
-        widget.TextBox("", fontsize=20, padding=0, foreground=COLOR_GREEN),
-        # Internet Widget
-        widget.GenPollText(
-            func=lambda: subprocess.check_output(WIDGET_NETWORK).decode(),
-            update_interval=1, 
-            foreground=COLOR_CRUST,
-            background=COLOR_GREEN,
-            max_chars=20,
-            padding=5
-        ),
-        widget.TextBox("", fontsize=20, padding=0, foreground=COLOR_GREEN),
+            widget.TextBox("", fontsize=20, padding=0, foreground=COLOR_GREEN),
+            # Internet Widget
+            widget.GenPollText(
+                func=lambda: subprocess.check_output(WIDGET_NETWORK).decode(),
+                update_interval=1, 
+                foreground=COLOR_CRUST,
+                background=COLOR_GREEN,
+                max_chars=20,
+                padding=5
+            ),
+            widget.TextBox("", fontsize=20, padding=0, foreground=COLOR_GREEN),
 
 
-        widget.TextBox("", fontsize=20, padding=0, foreground=COLOR_FLAMINGO),
-        widget.Clock(format="%d/%m/%Y - %a %I:%M:%S %p", background=COLOR_FLAMINGO, foreground=COLOR_CRUST),
-        widget.TextBox("", fontsize=20, padding=0, foreground=COLOR_FLAMINGO),
+            widget.TextBox("", fontsize=20, padding=0, foreground=COLOR_FLAMINGO),
+            widget.Clock(format="%d/%m/%Y - %a %I:%M:%S %p", background=COLOR_FLAMINGO, foreground=COLOR_CRUST),
+            widget.TextBox("", fontsize=20, padding=0, foreground=COLOR_FLAMINGO),
 
-        widget.TextBox("", fontsize=20, padding=0, foreground=COLOR_ROSEWATER),
-        widget.Volume(
-            fmt="  {}",
-            foreground=COLOR_CRUST,
-            background=COLOR_ROSEWATER,
-            mouse_callbacks={
-                # "Button3": lazy.spawn(APP_AUDIO_SETTINGS)
-            },
-            padding=5
-        ),
-        widget.TextBox("", fontsize=20, padding=0, foreground=COLOR_ROSEWATER),
+            widget.TextBox("", fontsize=20, padding=0, foreground=COLOR_ROSEWATER),
+            widget.Volume(
+                fmt="  {}",
+                foreground=COLOR_CRUST,
+                background=COLOR_ROSEWATER,
+                mouse_callbacks={
+                    # "Button3": lazy.spawn(APP_AUDIO_SETTINGS)
+                },
+                padding=5
+            ),
+            widget.TextBox("", fontsize=20, padding=0, foreground=COLOR_ROSEWATER),
 
-        widget.TextBox("", fontsize=20, padding=0, foreground=COLOR_MAUVE),
-        widget.Battery(
-            foreground=COLOR_CRUST,
-            background=COLOR_MAUVE,
-            low_background=COLOR_MAUVE,
-            low_foreground=COLOR_CRUST,
-            low_percentage=0.40,
-            notify_below=25,
-            charge_char="  ",
-            full_char="  ",
-            discharge_char="",
-            unknown_char="? ",
-            show_short_text=False,
-            format='󰁹 {percent:2.0%} {char}',
-            update_interval=2,
-            padding=5
-        )
-    ],
-    23,
-    margin=[-5,0,0,0],
-    background=COLOR_CRUST,
-    border_width=[4, 20, 4, 20],
-    border_color=COLOR_CRUST,
-)
-secondary_bar=bar.Bar(
-    [
-        widget.CurrentLayoutIcon(scale=0.7),
-        widget.Spacer(14),
-        secondary_groupbox,
-        widget.Spacer(),
-        widget.CurrentScreen(
-            active_text="󰣇 ",
-            active_color=COLOR_PEACH,
-            inactive_text="󰣇 ",
-            inactive_color=COLOR_OVERLAY1,
-            fontsize=20,
-        ),
-        widget.Spacer(),
-    ], 
-    23,
-    margin=[-5,0,0,0],
-    background=COLOR_CRUST,
-    border_width=[4, 20, 4, 20],
-    border_color=COLOR_CRUST,
-)
-
-screens = [
-    Screen(bottom=main_bar)
+            widget.TextBox("", fontsize=20, padding=0, foreground=COLOR_MAUVE),
+            widget.Battery(
+                foreground=COLOR_CRUST,
+                background=COLOR_MAUVE,
+                low_background=COLOR_MAUVE,
+                low_foreground=COLOR_CRUST,
+                low_percentage=0.40,
+                notify_below=25,
+                charge_char="  ",
+                full_char="  ",
+                discharge_char="",
+                unknown_char="? ",
+                show_short_text=False,
+                format='󰁹 {percent:2.0%} {char}',
+                update_interval=2,
+                padding=5
+            )
+        ],
+        23,
+        margin=[-5,0,0,0],
+        background=COLOR_CRUST,
+        border_width=[4, 20, 4, 20],
+        border_color=COLOR_CRUST,
+    ),
+    bar.Bar(
+        [
+            widget.CurrentLayoutIcon(scale=0.7),
+            widget.Spacer(14),
+            secondary_groupbox,
+            widget.Spacer(),
+            widget.CurrentScreen(
+                active_text="󰣇 ",
+                active_color=COLOR_PEACH,
+                inactive_text="󰣇 ",
+                inactive_color=COLOR_OVERLAY1,
+                fontsize=20,
+            ),
+            widget.Spacer(),
+        ], 
+        23,
+        margin=[-5,0,0,0],
+        background=COLOR_CRUST,
+        border_width=[4, 20, 4, 20],
+        border_color=COLOR_CRUST,
+    ),
+    bar.Bar(
+        [
+            widget.CurrentLayoutIcon(scale=0.7),
+            widget.Spacer(14),
+            third_groupbox,
+            widget.Spacer(),
+            widget.CurrentScreen(
+                active_text="󰣇 ",
+                active_color=COLOR_PEACH,
+                inactive_text="󰣇 ",
+                inactive_color=COLOR_OVERLAY1,
+                fontsize=20,
+            ),
+            widget.Spacer(),
+        ], 
+        23,
+        margin=[-5,0,0,0],
+        background=COLOR_CRUST,
+        border_width=[4, 20, 4, 20],
+        border_color=COLOR_CRUST,
+    )
 ]
 
-if SCREEN_COUNT > 1: screens.append(Screen(bottom=secondary_bar))
+screens = []
+for i in range(SCREEN_COUNT):
+    screens.append(Screen(bottom=bars[i]))
 
 
 # Drag floating layouts.

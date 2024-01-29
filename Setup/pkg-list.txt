@@ -10,8 +10,10 @@ btrfs-progs
 discord
 dmenu
 docker
+docker-compose
 dunst
 efibootmgr
+eza
 feh
 flameshot
 fuse2
@@ -21,6 +23,7 @@ github-cli
 gst-plugin-pipewire
 htop
 intel-media-driver
+intel-media-sdk
 intel-ucode
 kitty
 kubectl
@@ -40,6 +43,7 @@ noto-fonts-cjk
 noto-fonts-emoji
 npm
 numlockx
+obs-studio
 picom
 pipewire
 pipewire-alsa
@@ -60,6 +64,7 @@ unzip
 vim
 virtualbox
 virtualbox-host-modules-arch
+vlc
 vulkan-intel
 wireplumber
 xclip
@@ -70,3 +75,16 @@ xorg-xinit
 zram-generator
 zsh
 zsh-theme-powerlevel10k
+ansible-completion-git # AUR
+asdf-vm # AUR
+batify # AUR
+catppuccin-cursors-mocha # AUR
+catppuccin-gtk-theme-mocha # AUR
+dracula-icons-git # AUR
+google-chrome # AUR
+java-openjdk-bin # AUR
+kind # AUR
+postman-bin # AUR
+rofi-greenclip # AUR
+ttf-symbola # AUR
+yay # AUR

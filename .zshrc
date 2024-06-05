@@ -23,8 +23,11 @@ compinit
 # Load aliases
 source $HOME/.aliases
 
+# LOAD ASDF
+. "$HOME/.asdf/asdf.sh"
+
 # Load powerlevel10k theme
-source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme
+source ~/powerlevel10k/powerlevel10k.zsh-theme
 
 # Load zsh-autosuggestions
 source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh

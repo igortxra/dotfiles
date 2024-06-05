@@ -55,6 +55,7 @@ SHOW_UPGRADABLE_PACKAGES=f"{HOME}/Scripts/utils/show-upgradable-packages.sh &"
 SCREENSHOT="flameshot gui"
 SCREENSHOT_FULLSCREEN="flameshot full"
 SCREENS=f"{HOME}/Scripts/menus/screens.sh &"
+FILE_MANAGER="thunar"
 
 # Catppuccin Mocha Colors - https://github.com/catppuccin/catppuccin
 COLOR_WHITE="#fff"
@@ -97,6 +98,7 @@ keys = [
     Key([SUPER], "s", lazy.spawn(SCREENS), desc="Spawn power menu"),
     Key([SUPER], "v", lazy.spawn(CLIPBOARD), desc="Spawn clipboard manager"),
     Key([SUPER], "u", lazy.spawn(UTILS), desc="Spawn utils menu"),
+    Key([SUPER], "e", lazy.spawn(FILE_MANAGER), desc="Spawn file manager"),
     Key([SUPER], "x", lazy.window.kill(), desc="Kill focused window"),
     Key([SUPER], 'm', lazy.next_screen(), desc='Change focused screen'), 
 
@@ -156,7 +158,7 @@ layouts = [
     # layout.Columns(),
     # layout.Stack(num_stacks=2),
     # layout.Bsp(),
-    # layout.Matrix(),
+    layout.Matrix(),
     # layout.RatioTile(),
     # layout.Tile(),
     # layout.TreeTab(),
@@ -442,6 +444,7 @@ floating_layout = layout.Floating(
         Match(wm_class="makebranch"),  # gitk
         Match(wm_class="maketag"),  # gitk
         Match(wm_class="ssh-askpass"),  # ssh-askpass
+        Match(wm_class="thunar"),  # ssh-askpass
         Match(title="branchdialog"),  # gitk
         Match(title="pinentry"),  # GPG key password entry
     ],

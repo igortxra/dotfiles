@@ -13,6 +13,11 @@
 # Change the argument to True to still load settings configured via autoconfig.yml
 config.load_autoconfig(False)
 
+# Keymaps
+config.bind('[b', 'tab-prev')
+config.bind(']b', 'tab-next')
+config.bind('<Space>c', 'tab-close')
+
 # Which cookies to accept. With QtWebEngine, this setting also controls
 # other features with tracking capabilities similar to those of cookies;
 # including IndexedDB, DOM storage, filesystem API, service workers, and
@@ -528,3 +533,5 @@ c.colors.webpage.bg = '#1e1e2e'
 
 
 c.url.searchengines = {'DEFAULT': 'https://start.duckduckgo.com/?q={}', 'aw': 'https://wiki.archlinux.org/?search={}', 'goog': 'https://www.google.com/search?q={}', 're': 'https://www.reddit.com/search?q={}', 'gh': 'https://github.com/search?q={}', 'ghr': 'https://github.com/{unquoted}', 'wiki': 'https://en.wikipedia.org/wiki/{}', 'yt': 'https://www.youtube.com/results?search_query={}', 'qtile': 'http://docs.qtile.org/en/stable/search.html?q={}'}
+
+

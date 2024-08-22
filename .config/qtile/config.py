@@ -74,7 +74,7 @@ COLOR_PINK="#f5bde6"
 COLOR_BLUE="#8aadf4"
 
 
-COLOR_BAR_BG=COLOR_CRUST+"55"
+COLOR_BAR_BG="001100"+"88"
 
 @subscribe.startup_once
 def setup():
@@ -177,9 +177,9 @@ widget_defaults = dict(
 extension_defaults = widget_defaults.copy()
 
 main_groupbox = widget.GroupBox(
-    active=COLOR_WHITE,
+    active=COLOR_GREEN,
     background=None,
-    inactive=COLOR_OVERLAY1,
+    inactive=COLOR_GREEN,
     this_screen_border=COLOR_WHITE,
     other_screen_border=COLOR_OVERLAY1,
     this_current_screen_border=COLOR_WHITE,
@@ -191,30 +191,15 @@ main_groupbox = widget.GroupBox(
     borderwidth=1,
     padding=12)
 secondary_groupbox = widget.GroupBox(
-    active=COLOR_ROSEWATER,
+    active=COLOR_GREEN,
     background=None,
     inactive=COLOR_OVERLAY1,
-    this_screen_border=COLOR_PEACH,
+    this_screen_border=COLOR_WHITE,
     other_screen_border=COLOR_OVERLAY1,
-    this_current_screen_border=COLOR_PEACH,
+    this_current_screen_border=COLOR_WHITE,
     other_current_screen_border=COLOR_OVERLAY1,
     highlight_method='line',
-    highlight_color=[COLOR_CRUST],
-    disable_drag=True,
-    hide_unused=True,
-    toggle=True,
-    borderwidth=1,
-    padding=12)
-third_groupbox = widget.GroupBox(
-    active=COLOR_ROSEWATER,
-    background=None,
-    inactive=COLOR_OVERLAY1,
-    this_screen_border=COLOR_PEACH,
-    other_screen_border=COLOR_OVERLAY1,
-    this_current_screen_border=COLOR_PEACH,
-    other_current_screen_border=COLOR_OVERLAY1,
-    highlight_method='line',
-    highlight_color=[COLOR_CRUST],
+    highlight_color=[COLOR_BAR_BG],
     disable_drag=True,
     hide_unused=True,
     toggle=True,
@@ -353,7 +338,7 @@ bars = [
                     
                     widget.Spacer(20),
 
-                    widget.Clock(format="%d/%m/%Y - %a %I:%M:%S %p", background=None, foreground=COLOR_BLUE),
+                    widget.Clock(format="%d/%m/%Y - %a %I:%M:%S %p", background=None, foreground=COLOR_GREEN),
 
                     widget.Spacer(10),
                     widget.Sep(),
@@ -399,30 +384,9 @@ bars = [
         ], 
         23,
         margin=[-5,0,0,0],
-        background=COLOR_CRUST,
+        background=COLOR_BAR_BG,
         border_width=[4, 20, 4, 20],
-        border_color=COLOR_CRUST,
-    ),
-    bar.Bar(
-        [
-            widget.CurrentLayoutIcon(scale=0.7),
-            widget.Spacer(14),
-            third_groupbox,
-            widget.Spacer(),
-            widget.CurrentScreen(
-                active_text="󰣇 ",
-                active_color=COLOR_PEACH,
-                inactive_text="󰣇 ",
-                inactive_color=COLOR_OVERLAY1,
-                fontsize=20,
-            ),
-            widget.Spacer(),
-        ], 
-        23,
-        margin=[-5,0,0,0],
-        background=COLOR_CRUST,
-        border_width=[4, 20, 4, 20],
-        border_color=COLOR_CRUST,
+        border_color=COLOR_BAR_BG,
     )
 ]
 

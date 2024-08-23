@@ -1,3 +1,4 @@
 alias g="git"
 alias dotfiles="git --git-dir=$HOME/.dotfiles --work-tree=$HOME"
 alias dc="docker-compose"
+alias httpyac="docker run --network host -it -v ${PWD}:/data ghcr.io/anweber/httpyac:latest"    

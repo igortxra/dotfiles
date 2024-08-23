@@ -96,7 +96,6 @@ keys = [
     Key([SUPER], "Tab", lazy.next_layout(), desc="Toggle between layouts"),
     
     Key([SUPER], "c", lazy.spawn(CONFIG), desc="Spawn config menu"),
-    Key([SUPER], "o", lazy.spawn(PROJECTS), desc="Spawn power menu"),
     Key([SUPER], "p", lazy.spawn(POWERMENU), desc="Spawn power menu"),
     Key([SUPER], "s", lazy.spawn(SCREENS), desc="Spawn power menu"),
     Key([SUPER], "v", lazy.spawn(CLIPBOARD), desc="Spawn clipboard manager"),

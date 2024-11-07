@@ -12,6 +12,8 @@ SAVEHIST=1000
 setopt autocd extendedglob
 unsetopt beep
 bindkey -v
+bindkey '^R' history-incremental-search-backward
+
 # End of lines configured by zsh-newuser-install
 # The following lines were added by compinstall
 zstyle :compinstall filename '/home/igortxra/.zshrc'

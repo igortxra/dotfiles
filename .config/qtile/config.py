@@ -345,8 +345,8 @@ bars = [
 
                     widget.Battery(
                         foreground=COLOR_WHITE,
-                        background=None,
-                        low_background=COLOR_MAUVE,
+                        background=COLOR_BAR_BG,
+                        low_background=COLOR_BAR_BG,
                         low_foreground=COLOR_RED,
                         low_percentage=0.40,
                         notify_below=25,

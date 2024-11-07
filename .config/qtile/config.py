@@ -74,13 +74,14 @@ COLOR_PINK="#f5bde6"
 COLOR_BLUE="#8aadf4"
 
 
-COLOR_BAR_BG="001100"+"88"
+COLOR_BAR_BG=COLOR_CRUST+"88"
 
 @subscribe.startup_once
 def setup():
     subprocess.Popen([AUTOSTART])
 
 SUPER = "mod4"
+ALT = "mod1"
 terminal = "kitty"
 
 keys = [
@@ -95,11 +96,11 @@ keys = [
     Key([SUPER], "space", lazy.spawn(APPS), desc="Spawn a app launcher"),
     Key([SUPER], "Tab", lazy.next_layout(), desc="Toggle between layouts"),
     
-    Key([SUPER], "c", lazy.spawn(CONFIG), desc="Spawn config menu"),
+    # Key([SUPER], "c", lazy.spawn(CONFIG), desc="Spawn config menu"),
+    # Key([SUPER], "u", lazy.spawn(UTILS), desc="Spawn utils menu"),
     Key([SUPER], "p", lazy.spawn(POWERMENU), desc="Spawn power menu"),
     Key([SUPER], "s", lazy.spawn(SCREENS), desc="Spawn power menu"),
     Key([SUPER], "v", lazy.spawn(CLIPBOARD), desc="Spawn clipboard manager"),
-    Key([SUPER], "u", lazy.spawn(UTILS), desc="Spawn utils menu"),
     Key([SUPER], "e", lazy.spawn(FILE_MANAGER), desc="Spawn file manager"),
     Key([SUPER], "x", lazy.window.kill(), desc="Kill focused window"),
     Key([SUPER], 'm', lazy.next_screen(), desc='Change focused screen'), 
@@ -113,6 +114,12 @@ keys = [
     Key([SUPER], "l", lazy.layout.right(), desc="Move focus to right"),
     Key([SUPER], "j", lazy.layout.down(), desc="Move focus down"),
     Key([SUPER], "k", lazy.layout.up(), desc="Move focus up"),
+    Key([ALT], "Tab", lazy.group.next_window(), desc="Focus next window"),
+    Key([ALT, "shift"], "Tab", lazy.group.next_window(), desc="Focus previous window"),
+    Key([SUPER], "u", lazy.window.bring_to_front(), desc="Bring float window to front"),
+    Key([SUPER], "d", lazy.window.move_to_bottom(), desc="Move window down float window"),
+    Key([SUPER], "c", lazy.window.center(), desc="center float window"),
+    
     
     # Move windows between left/right columns or move up/down in current stack.
     Key([SUPER, "shift"], "h", lazy.layout.shuffle_left(), desc="Move window to the left"),
@@ -361,7 +368,7 @@ bars = [
                     ),
         ],
         23,
-        margin=[-5,0,0,0],
+        margin=[-5,20,10,20],
         background=COLOR_BAR_BG,
         border_width=[4, 20, 4, 20],
         border_color=COLOR_BAR_BG,
@@ -382,7 +389,7 @@ bars = [
             widget.Spacer(),
         ], 
         23,
-        margin=[-5,0,0,0],
+        margin=[-5,20,10,20],
         background=COLOR_BAR_BG,
         border_width=[4, 20, 4, 20],
         border_color=COLOR_BAR_BG,

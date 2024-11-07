@@ -27,11 +27,12 @@ source $HOME/.aliases
 . "$HOME/.asdf/asdf.sh"
 
 # Load powerlevel10k theme
-source ~/powerlevel10k/powerlevel10k.zsh-theme
+source ~/.config/zsh/powerlevel10k/powerlevel10k.zsh-theme
 
 # Load zsh-autosuggestions
-source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+source ~/.config/zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+

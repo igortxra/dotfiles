@@ -1,2 +1,2 @@
 #!/bin/sh
-feh --no-fehbg --bg-fill '/home/igorcromai/Wallpapers/dracula/first-collection/dracula_qtile.png' 
+feh --no-fehbg --bg-fill "$HOME/Wallpapers/dracula/first-collection/dracula_qtile.png"

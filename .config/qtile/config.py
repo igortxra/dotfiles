@@ -51,6 +51,7 @@ PROJECTS = f"{HOME}/Scripts/menus/projects.sh &"
 UTILS=f"{HOME}/Scripts/menus/utils.sh &"
 CONFIG=f"{HOME}/Scripts/menus/config.sh &"
 WIDGET_NETWORK=f"{HOME}/Scripts/widgets/network.sh"
+WIDGET_CALENDAR = f"{HOME}/Scripts/widgets/calendar.sh"
 SHOW_UPGRADABLE_PACKAGES=f"{HOME}/Scripts/utils/show-upgradable-packages.sh &"
 SCREENSHOT="flameshot gui"
 SCREENSHOT_FULLSCREEN="flameshot full"
@@ -221,13 +222,6 @@ bars = [
 
             main_groupbox,
 
-            # widget.GroupBox(
-            #     this_current_screen_border=COLOR_PEACH,
-            #     highlight_method="text",
-            #     active=COLOR_OVERLAY1,
-            #     hide_unused=True
-            # ),
-            
             widget.Spacer(10),
             
             widget.Sep(),
@@ -344,7 +338,16 @@ bars = [
                     
                     widget.Spacer(20),
 
-                    widget.Clock(format="%d/%m/%Y - %a %I:%M:%S %p", background=None, foreground=COLOR_GREEN),
+                    widget.Clock(
+                      format="%Y-%m-%d - %a %I:%M:%S %p", 
+                      background=None, 
+                      foreground=COLOR_GREEN,
+                      mouse_callbacks={
+                          "Button1": lazy.spawn(WIDGET_CALENDAR + " curr"),
+                          "Button4": lazy.spawn(WIDGET_CALENDAR + " prev"),
+                          "Button5": lazy.spawn(WIDGET_CALENDAR + " next"),
+                      },
+                    ),
 
                     widget.Spacer(10),
                     widget.Sep(),
@@ -378,14 +381,6 @@ bars = [
             widget.CurrentLayoutIcon(scale=0.7),
             widget.Spacer(14),
             secondary_groupbox,
-            widget.Spacer(),
-            widget.CurrentScreen(
-                active_text="󰣇 ",
-                active_color=COLOR_PEACH,
-                inactive_text="󰣇 ",
-                inactive_color=COLOR_OVERLAY1,
-                fontsize=20,
-            ),
             widget.Spacer(),
         ], 
         23,
@@ -447,4 +442,4 @@ wl_input_rules = None
 #
 # We choose LG3D to maximize irony: it is a 3D non-reparenting WM written in
 # java that happens to be on java's whitelist.
-wmname = "LG3D"
+wmname = "Qtile"

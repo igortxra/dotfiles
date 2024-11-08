@@ -109,7 +109,7 @@ keys = [
     Key([], "F10", lazy.window.toggle_fullscreen(), desc="Toggle fullscreen on the focused window"),
     Key([], "Print", lazy.spawn(SCREENSHOT), desc='Launch screenshot'),
     Key(["shift"], "Print", lazy.spawn(SCREENSHOT_FULLSCREEN), desc='Launch screenshot fullscreen'),
-    
+
     # Switch between windows
     Key([SUPER], "h", lazy.layout.left(), desc="Move focus to left"),
     Key([SUPER], "l", lazy.layout.right(), desc="Move focus to right"),
@@ -118,7 +118,7 @@ keys = [
     Key([ALT], "Tab", lazy.group.next_window(), desc="Focus next window"),
     Key([ALT, "shift"], "Tab", lazy.group.next_window(), desc="Focus previous window"),
     Key([SUPER], "u", lazy.window.bring_to_front(), desc="Bring float window to front"),
-    Key([SUPER], "d", lazy.window.move_to_bottom(), desc="Move window down float window"),
+    Key([SUPER, "shift"], "u", lazy.window.move_to_bottom(), desc="Move window down float window"),
     Key([SUPER], "c", lazy.window.center(), desc="center float window"),
     
     
@@ -127,12 +127,12 @@ keys = [
     Key([SUPER, "shift"], "l", lazy.layout.shuffle_right(), desc="Move window to the right"),
     Key([SUPER, "shift"], "j", lazy.layout.shuffle_down(), desc="Move window down"),
     Key([SUPER, "shift"], "k", lazy.layout.shuffle_up(), desc="Move window up"),
-    
+    Key([SUPER], "f", lazy.window.toggle_floating(), desc="Float window mode (toggle)"),
+
     # Resize windows
-    Key([SUPER, "control"], "k", lazy.layout.grow(), desc="Grow window"),
-    Key([SUPER, "control"], "j", lazy.layout.shrink(), desc="Shrink window"),
+    Key([SUPER], "i", lazy.layout.grow(), desc="Increase window size"),
+    Key([SUPER], "d", lazy.layout.shrink(), desc="Decrease window size"),
     Key([SUPER], "r", lazy.layout.reset(), desc="Reset Windows Size"),
-    Key([SUPER], "f", lazy.window.toggle_floating(), desc="Toggle floating on the focused window"),
     Key([SUPER], "g", lazy.layout.maximize(), desc="Maximize Window"),
 
 ]
@@ -149,11 +149,11 @@ for i in groups:
                 lazy.group[i.name].toscreen(),
                 desc="Switch to group {}".format(i.name),
             ),
-            # Super + shift + letter of group = switch to & move focused window to group
+            # Super + shift + letter of group = move focused window to group
             Key(
                 [SUPER, "shift"],
                 i.name,
-                lazy.window.togroup(i.name, switch_group=True),
+                lazy.window.togroup(i.name, switch_group=False),
                 desc="Switch to & move focused window to group {}".format(i.name),
             ),
         ]
@@ -168,7 +168,7 @@ layouts = [
     # layout.Columns(),
     # layout.Stack(num_stacks=2),
     # layout.Bsp(),
-    layout.Matrix(),
+    layout.Matrix(border_focus=COLOR_ROSEWATER, margin=10, single_border_width=0, border_width=1),
     # layout.RatioTile(),
     # layout.Tile(),
     # layout.TreeTab(),
@@ -417,9 +417,11 @@ floating_layout = layout.Floating(
         Match(wm_class="makebranch"),  # gitk
         Match(wm_class="maketag"),  # gitk
         Match(wm_class="ssh-askpass"),  # ssh-askpass
-        Match(wm_class="thunar"),  # ssh-askpass
+        Match(wm_class="thunar"),  # File explorer
         Match(title="branchdialog"),  # gitk
         Match(title="pinentry"),  # GPG key password entry
+        Match(wm_class="galculator"),  # Galcularot
+        Match(wm_class="com.vixalien.sticky"),  # Sticky Notes
     ],
     border_width=0
 )

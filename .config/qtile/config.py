@@ -129,9 +129,17 @@ keys = [
     Key([SUPER, "shift"], "l", lazy.layout.shuffle_right(), desc="Move window to the right"),
     Key([SUPER, "shift"], "j", lazy.layout.shuffle_down(), desc="Move window down"),
     Key([SUPER, "shift"], "k", lazy.layout.shuffle_up(), desc="Move window up"),
-    Key([SUPER], "f", lazy.window.toggle_floating(), desc="Float window mode (toggle)"), # Resize windows Key([SUPER], "i", lazy.layout.grow(), desc="Increase window size"), Key([SUPER], "d", lazy.layout.shrink(), desc="Decrease window size"),
+    Key([SUPER], "f", lazy.window.toggle_floating(), desc="Float window mode (toggle)"),
+
+    # Resize windows
+    Key([SUPER], "i", lazy.layout.grow(), desc="Increase window size"),
+    Key([SUPER], "d", lazy.layout.shrink(), desc="Decrease window size"),
     Key([SUPER], "r", lazy.layout.reset(), desc="Reset Windows Size"),
     Key([SUPER], "g", lazy.layout.maximize(), desc="Maximize Window"),
+    Key([SUPER], "r", lazy.layout.reset(), desc="Reset Windows Size"),
+    Key([SUPER], "g", lazy.layout.maximize(), desc="Maximize Window"),
+    
+    # Scratchpads
     Key([SUPER], 'c', lazy.group['ScratchPadChatGPT'].dropdown_toggle('chatgpt')),
     Key([SUPER], 'a', lazy.group['ScratchPadWIKI'].dropdown_toggle('archwiki')),
 ]

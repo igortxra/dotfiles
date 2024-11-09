@@ -28,6 +28,10 @@ config.bind('[b', 'tab-prev')
 config.bind(']b', 'tab-next')
 config.bind('<Space>c', 'tab-close')
 
+
+c.input.insert_mode.auto_load = True
+
+
 # Which cookies to accept. With QtWebEngine, this setting also controls
 # other features with tracking capabilities similar to those of cookies;
 # including IndexedDB, DOM storage, filesystem API, service workers, and

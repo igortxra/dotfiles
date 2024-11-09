@@ -28,7 +28,7 @@ import subprocess
 from os import path
 
 from libqtile import bar, layout, widget
-from libqtile.config import Click, Drag, Group, Key, Match, Screen
+from libqtile.config import Click, Drag, Group, Key, Match, Screen, ScratchPad, DropDown
 from libqtile.lazy import lazy
 from libqtile.hook import subscribe
 
@@ -57,6 +57,8 @@ SCREENSHOT="flameshot gui"
 SCREENSHOT_FULLSCREEN="flameshot full"
 SCREENS=f"{HOME}/Scripts/menus/screens.sh &"
 FILE_MANAGER="thunar"
+ARCH_WIKI="qutebrowser https://archwiki.org --target window"
+CHAT_GPT="qutebrowser https://chatgpt.com --target window"
 
 # Catppuccin Mocha Colors - https://github.com/catppuccin/catppuccin
 COLOR_WHITE="#fff"
@@ -127,18 +129,14 @@ keys = [
     Key([SUPER, "shift"], "l", lazy.layout.shuffle_right(), desc="Move window to the right"),
     Key([SUPER, "shift"], "j", lazy.layout.shuffle_down(), desc="Move window down"),
     Key([SUPER, "shift"], "k", lazy.layout.shuffle_up(), desc="Move window up"),
-    Key([SUPER], "f", lazy.window.toggle_floating(), desc="Float window mode (toggle)"),
-
-    # Resize windows
-    Key([SUPER], "i", lazy.layout.grow(), desc="Increase window size"),
-    Key([SUPER], "d", lazy.layout.shrink(), desc="Decrease window size"),
+    Key([SUPER], "f", lazy.window.toggle_floating(), desc="Float window mode (toggle)"), # Resize windows Key([SUPER], "i", lazy.layout.grow(), desc="Increase window size"), Key([SUPER], "d", lazy.layout.shrink(), desc="Decrease window size"),
     Key([SUPER], "r", lazy.layout.reset(), desc="Reset Windows Size"),
     Key([SUPER], "g", lazy.layout.maximize(), desc="Maximize Window"),
-
+    Key([SUPER], 'c', lazy.group['ScratchPadChatGPT'].dropdown_toggle('chatgpt')),
+    Key([SUPER], 'a', lazy.group['ScratchPadWIKI'].dropdown_toggle('archwiki')),
 ]
 
 groups = [Group(i) for i in "123456789"]
-
 for i in groups:
     keys.extend(
         [
@@ -158,6 +156,25 @@ for i in groups:
             ),
         ]
     )
+
+# ScratchPads
+groups.extend([
+
+    ScratchPad(
+        "ScratchPadChatGPT", 
+        [
+            DropDown("chatgpt", CHAT_GPT, on_focus_lost_hide=False, x=0.1, y=0.1, height=0.8),
+        ]
+    ),
+
+    ScratchPad(
+        "ScratchPadWIKI", 
+        [
+            DropDown("archwiki", ARCH_WIKI, on_focus_lost_hide=False, x=0.1, y=0.1, height=0.8)
+        ]
+    )
+
+])
 
 layouts = [
     layout.Max(margin=20, border_width=0),

@@ -26,11 +26,14 @@
 
 import subprocess
 from os import path
+from typing import List
 
 from libqtile import bar, layout, widget
 from libqtile.config import Click, Drag, Group, Key, Match, Screen, ScratchPad, DropDown
-from libqtile.lazy import lazy
+from libqtile.lazy import LazyCall, lazy
 from libqtile.hook import subscribe
+from libqtile.utils import send_notification
+
 
 def get_screens_quantity():
     """ Get number of connected monitors """
@@ -59,10 +62,12 @@ SCREENS=f"{HOME}/Scripts/menus/screens.sh &"
 FILE_MANAGER="thunar"
 ARCH_WIKI="qutebrowser https://archwiki.org --target window"
 CHAT_GPT="qutebrowser https://chatgpt.com --target window"
+NETWORK_SETTINGS="nm-connection-editor"
+AUDIO_SETTINGS="pwvucontrol"
 
 # Catppuccin Mocha Colors - https://github.com/catppuccin/catppuccin
 COLOR_WHITE="#fff"
-COLOR_CRUST="#11111b"
+COLOR_CRUST="#111113"
 COLOR_OVERLAY1="#45475a"
 COLOR_RED="#F38Ba8"
 COLOR_MAUVE="#cba6f7"
@@ -78,7 +83,7 @@ COLOR_BLUE="#8aadf4"
 COLOR_1="#342652"
 
 
-COLOR_BAR_BG=COLOR_CRUST+"88"
+COLOR_BAR_BG=COLOR_CRUST+"00"
 
 @subscribe.startup_once
 def setup():
@@ -145,26 +150,47 @@ keys = [
     Key([SUPER], 'a', lazy.group['ScratchPadWIKI'].dropdown_toggle('archwiki')),
 ]
 
-groups = [Group(i) for i in "123456789"]
-for i in groups:
-    keys.extend(
-        [
-            # Super + letter of group = switch to group
-            Key(
-                [SUPER],
-                i.name,
-                lazy.group[i.name].toscreen(),
-                desc="Switch to group {}".format(i.name),
-            ),
-            # Super + shift + letter of group = move focused window to group
-            Key(
-                [SUPER, "shift"],
-                i.name,
-                lazy.window.togroup(i.name, switch_group=False),
-                desc="Switch to & move focused window to group {}".format(i.name),
-            ),
-        ]
-    )
+
+
+groups = [
+    Group(name="1"),
+    Group(name="2"),
+    Group(name="3"),
+    Group(name="4"),
+    Group(name="5"),
+    Group(name="6"),
+    Group(name="7"),
+    Group(name="8"),
+    Group(name="9", label=" ", matches=[Match(wm_class="discord")], spawn="discord", layout="max")
+]
+
+
+
+for group in groups:
+    commands: List[LazyCall] = [lazy.group[group.name].toscreen()]
+    if group.spawn is not None:
+        commands.append(lazy.spawn(group.spawn))
+
+
+    keys.append(
+        # Super + letter of group = switch to group
+        Key(
+            [SUPER],
+            group.name,
+            *commands,
+            desc="Switch to group {}".format(group.name),
+        ))
+
+    if group.spawn is None:
+        keys.append(
+                # Super + shift + letter of group = move focused window to group
+                Key(
+                    [SUPER, "shift"],
+                    group.name,
+                    lazy.window.togroup(group.name, switch_group=False),
+                    desc="Switch to & move focused window to group {}".format(group.name),
+                ),
+        )
 
 # ScratchPads
 groups.extend([
@@ -307,7 +333,10 @@ bars = [
                         foreground=COLOR_GREEN,
                         background=None,
                         max_chars=20,
-                        padding=5
+                        padding=5,
+                        mouse_callbacks={
+                            "Button3": lazy.spawn(NETWORK_SETTINGS)
+                        },
                     ),
 
                     widget.Spacer(10),
@@ -319,10 +348,19 @@ bars = [
                         foreground=COLOR_ROSEWATER,
                         background=None,
                         mouse_callbacks={
-                            # "Button3": lazy.spawn(APP_AUDIO_SETTINGS)
+                            "Button3": lazy.spawn(AUDIO_SETTINGS)
                         },
                         padding=5
                     ),
+
+                    widget.Spacer(10),
+                    widget.Sep(),
+                    widget.Spacer(10),
+                    
+                    widget.Wallpaper(
+                        label="󰸉  Change Wallpaper",
+                        directory=f"{HOME}/Wallpapers"
+                    )
                         ],
 
                         close_button_location="left",
@@ -418,8 +456,8 @@ bars = [
 ]
 
 screens = []
-for i in range(SCREEN_COUNT):
-    screens.append(Screen(bottom=bars[i]))
+for group in range(SCREEN_COUNT):
+    screens.append(Screen(bottom=bars[group]))
 
 
 # Drag floating layouts.
@@ -446,13 +484,16 @@ floating_layout = layout.Floating(
         Match(wm_class="thunar"),  # File explorer
         Match(title="branchdialog"),  # gitk
         Match(title="pinentry"),  # GPG key password entry
-        Match(wm_class="galculator"),  # Galcularot
+        Match(wm_class="galculator"),  # Galculator
         Match(wm_class="com.vixalien.sticky"),  # Sticky Notes
+        Match(wm_class="nm-connection-editor"), # Network Manager Connection Editor
+        Match(wm_class="pwvucontrol"), # Audio Settings
+
     ],
     border_width=0
 )
 auto_fullscreen = True
-focus_on_window_activation = "smart"
+focus_on_window_activation = "focus"
 reconfigure_screens = True
 
 # If things like steam games want to auto-minimize themselves when losing

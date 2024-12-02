@@ -17,6 +17,3 @@ picom &
 
 # Auto detect screen profile
 autorandr --change &
-
-# Load wallpaper
-$HOME/.fehbg &

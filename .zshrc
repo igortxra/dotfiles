@@ -67,6 +67,7 @@ source $HOME/.aliases
 
 # Shell Integrations
 eval "$(fzf --zsh)"
+eval "$(zoxide init zsh)"
 
 # Path additions
 path+=("$HOME/.local/bin")

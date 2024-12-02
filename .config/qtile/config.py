@@ -75,6 +75,7 @@ COLOR_ROSEWATER="#f5e0dc"
 COLOR_FLAMINGO="#f0c6c6"
 COLOR_PINK="#f5bde6"
 COLOR_BLUE="#8aadf4"
+COLOR_1="#342652"
 
 
 COLOR_BAR_BG=COLOR_CRUST+"88"
@@ -209,9 +210,9 @@ widget_defaults = dict(
 extension_defaults = widget_defaults.copy()
 
 main_groupbox = widget.GroupBox(
-    active=COLOR_GREEN,
+    active=COLOR_MAUVE,
     background=None,
-    inactive=COLOR_GREEN,
+    inactive=COLOR_MAUVE,
     this_screen_border=COLOR_WHITE,
     other_screen_border=COLOR_OVERLAY1,
     this_current_screen_border=COLOR_WHITE,
@@ -223,9 +224,9 @@ main_groupbox = widget.GroupBox(
     borderwidth=1,
     padding=12)
 secondary_groupbox = widget.GroupBox(
-    active=COLOR_GREEN,
+    active=COLOR_MAUVE,
     background=None,
-    inactive=COLOR_OVERLAY1,
+    inactive=COLOR_MAUVE,
     this_screen_border=COLOR_WHITE,
     other_screen_border=COLOR_OVERLAY1,
     this_current_screen_border=COLOR_WHITE,
@@ -366,7 +367,7 @@ bars = [
                     widget.Clock(
                       format="%Y-%m-%d - %a %I:%M:%S %p", 
                       background=None, 
-                      foreground=COLOR_GREEN,
+                      foreground=COLOR_MAUVE,
                       mouse_callbacks={
                           "Button1": lazy.spawn(WIDGET_CALENDAR + " curr"),
                           "Button4": lazy.spawn(WIDGET_CALENDAR + " prev"),

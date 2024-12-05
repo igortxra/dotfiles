@@ -73,16 +73,16 @@
     # Draw a line of "separator_height" pixel height between two
     # notifications.
     # Set to 0 to disable.
-    separator_height = 2
+    separator_height = 10
 
     # Padding between text and separator.
-    padding = 12
+    padding = 15
 
     # Horizontal padding.
     horizontal_padding = 10
 
     # Padding between text and icon.
-    text_icon_padding = 0
+    text_icon_padding = 20
 
     # Defines width in pixels of frame around the notification window.
     # Set to 0 to disable.
@@ -111,7 +111,7 @@
 
     ### Text ###
 
-    font = Iosevka Nerd Font 10
+    font = Liberation Mono 10
 
     # The spacing between lines.  If the height is smaller than the
     # font height, it will get raised to the font height.
@@ -152,7 +152,7 @@
     #   %%  Literal %
     # Markup is allowed
     # format = "%s %p\n%b"
-    format = "  <b>%s</b>\n%b\n<i>%a</i>"
+    format = "<b>%s</b>\n%b\n<i>%a</i>"
 
     # Alignment of message text.
     # Possible values are "left", "center" and "right".
@@ -178,7 +178,7 @@
     stack_duplicates = true
 
     # Hide the count of stacked notifications with the same content
-    hide_duplicate_count = false
+    hide_duplicate_count = true
 
     # Display indicators for URLs (U) and actions (A).
     show_indicators = yes
@@ -197,7 +197,7 @@
     max_icon_size = 64
 
     # Paths to default icons.
-    icon_path = /usr/share/icons/default/
+    # icon_path = /usr/share/icons/Tela-circle-black/32/status/
 
     ### History ###
 
@@ -211,7 +211,7 @@
     ### Misc/Advanced ###
 
     # dmenu path.
-    dmenu = /usr/bin/dmenu -p dunst:
+    dmenu = /usr/bin/rofi -dmenu -p dunst:
 
     # Browser for opening urls in context menu.
     browser = /usr/bin/xdg-open
@@ -275,11 +275,11 @@
     # * context_all: Open context menu for all notifications.
     # These values can be strung together for each mouse event, and
     # will be executed in sequence.
-    mouse_left_click = close_current
-    mouse_middle_click = do_action, close_current
-    mouse_right_click = close_all
+    mouse_left_click = do_action, close_current
+    mouse_middle_click = open_url, close_current
+    mouse_right_click = context, close_current
 
-# Experimental features that may or may not work correctly. Do not expect them
+# Experimental features that may or may not work correctly. Do not expect them/home/docs/checkouts/readthedocs.org/user_builds/qtile/checkouts/v0.22.0/test/data/ss_temp
 # to have a consistent behaviour across releases.
 [experimental]
     # Calculate the dpi to use on a per-monitor basis.

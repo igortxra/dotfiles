@@ -98,23 +98,25 @@ keys = [
     # A list of available commands that can be bound to keys can be found
     # at https://docs.qtile.org/en/latest/manual/config/lazy.html
 
+    # Basics
     Key([SUPER, "control"], "r", lazy.reload_config(), desc="Reload the config"),
     Key([SUPER, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
-
+    Key([SUPER], "x", lazy.window.kill(), desc="Kill focused window"),
     Key([SUPER], "Return", lazy.spawn(terminal), desc="Launch terminal"),
-    Key([SUPER], "space", lazy.spawn(APPS), desc="Spawn a app launcher"),
     Key([SUPER], "Tab", lazy.next_layout(), desc="Toggle between layouts"),
-    
-    # Key([SUPER], "c", lazy.spawn(CONFIG), desc="Spawn config menu"),
-    # Key([SUPER], "u", lazy.spawn(UTILS), desc="Spawn utils menu"),
+    Key([SUPER], "b", lazy.hide_show_bar(), desc="Toggle bar"),
+    Key([SUPER], 'm', lazy.next_screen(), desc='Change focused screen'), 
+ 
+    # Spawners/Menus
+    Key([SUPER], "space", lazy.spawn(APPS), desc="Spawn a app launcher"),
     Key([SUPER], "p", lazy.spawn(POWERMENU), desc="Spawn power menu"),
     Key([SUPER], "s", lazy.spawn(SCREENS), desc="Spawn power menu"),
     Key([SUPER], "v", lazy.spawn(CLIPBOARD), desc="Spawn clipboard manager"),
     Key([SUPER], "e", lazy.spawn(FILE_MANAGER), desc="Spawn file manager"),
-    Key([SUPER], "x", lazy.window.kill(), desc="Kill focused window"),
-    Key([SUPER], 'm', lazy.next_screen(), desc='Change focused screen'), 
+    # Key([SUPER], "c", lazy.spawn(CONFIG), desc="Spawn config menu"),
+    # Key([SUPER], "u", lazy.spawn(UTILS), desc="Spawn utils menu"),
 
-    Key([], "F10", lazy.window.toggle_fullscreen(), desc="Toggle fullscreen on the focused window"),
+    # Screenshots
     Key([], "Print", lazy.spawn(SCREENSHOT), desc='Launch screenshot'),
     Key(["shift"], "Print", lazy.spawn(SCREENSHOT_FULLSCREEN), desc='Launch screenshot fullscreen'),
 
@@ -125,29 +127,40 @@ keys = [
     Key([SUPER], "k", lazy.layout.up(), desc="Move focus up"),
     Key([ALT], "Tab", lazy.group.next_window(), desc="Focus next window"),
     Key([ALT, "shift"], "Tab", lazy.group.next_window(), desc="Focus previous window"),
-    Key([SUPER], "u", lazy.window.bring_to_front(), desc="Bring float window to front"),
-    Key([SUPER, "shift"], "u", lazy.window.move_to_bottom(), desc="Move window down float window"),
-    Key([SUPER], "c", lazy.window.center(), desc="center float window"),
-    
     
     # Move windows between left/right columns or move up/down in current stack.
     Key([SUPER, "shift"], "h", lazy.layout.shuffle_left(), desc="Move window to the left"),
     Key([SUPER, "shift"], "l", lazy.layout.shuffle_right(), desc="Move window to the right"),
     Key([SUPER, "shift"], "j", lazy.layout.shuffle_down(), desc="Move window down"),
     Key([SUPER, "shift"], "k", lazy.layout.shuffle_up(), desc="Move window up"),
+
+    # Floating Windows
     Key([SUPER], "f", lazy.window.toggle_floating(), desc="Float window mode (toggle)"),
+    Key([SUPER], "c", lazy.window.center(), desc="center float window"),
+    Key([SUPER], "u", lazy.window.bring_to_front(), desc="Bring float window to front"),
+    Key([SUPER, "shift"], "u", lazy.window.move_to_bottom(), desc="Move window down float window"),
 
     # Resize windows
+    Key([], "F10", lazy.window.toggle_fullscreen(), desc="Toggle fullscreen on the focused window"),
     Key([SUPER], "i", lazy.layout.grow(), desc="Increase window size"),
     Key([SUPER], "d", lazy.layout.shrink(), desc="Decrease window size"),
     Key([SUPER], "r", lazy.layout.reset(), desc="Reset Windows Size"),
     Key([SUPER], "g", lazy.layout.maximize(), desc="Maximize Window"),
     Key([SUPER], "r", lazy.layout.reset(), desc="Reset Windows Size"),
-    Key([SUPER], "g", lazy.layout.maximize(), desc="Maximize Window"),
     
     # Scratchpads
-    Key([SUPER], 'c', lazy.group['ScratchPadChatGPT'].dropdown_toggle('chatgpt')),
-    Key([SUPER], 'a', lazy.group['ScratchPadWIKI'].dropdown_toggle('archwiki')),
+    # Key([SUPER], 'c', lazy.group['ScratchPadChatGPT'].dropdown_toggle('chatgpt')),
+    # Key([SUPER], 'a', lazy.group['ScratchPadWIKI'].dropdown_toggle('archwiki')),
+
+    # Notifications
+    Key([SUPER], "n", lazy.spawn("dunstctl context && dunstctl close"), desc="Open notification context"),
+    Key([SUPER, "shift"], "n", lazy.spawn("dunstctl close"), desc="Open notification context"),
+
+    # Spotify Control
+    Key([SUPER], "period", lazy.spawn("playerctl --player=spotify next"), desc='Next music track'),
+    Key([SUPER], "comma", lazy.spawn("playerctl --player=spotify previous"), desc='Previous music track'),
+    Key([SUPER], "semicolon", lazy.spawn("playerctl --player=spotify play-pause"), desc='Toggle play/pause music track'),
+
 ]
 
 
@@ -160,8 +173,8 @@ groups = [
     Group(name="5"),
     Group(name="6"),
     Group(name="7"),
-    Group(name="8"),
-    Group(name="9", label=" ", matches=[Match(wm_class="discord")], spawn="discord", layout="max")
+    Group(name="8", label="󰓇", matches=[Match(wm_class="spotify")], spawn="spotify-launcher", layout="max"),
+    Group(name="9", label="", matches=[Match(wm_class="discord")], spawn="discord", layout="max")
 ]
 
 
@@ -344,13 +357,13 @@ bars = [
                     widget.Spacer(10),
 
                     widget.Volume(
-                        fmt="  {}",
+                        fmt="󱄠  {}",
                         foreground=COLOR_ROSEWATER,
                         background=None,
                         mouse_callbacks={
                             "Button3": lazy.spawn(AUDIO_SETTINGS)
                         },
-                        padding=5
+                        padding=5,
                     ),
 
                     widget.Spacer(10),
@@ -417,22 +430,27 @@ bars = [
                     widget.Sep(),
                     widget.Spacer(10),
 
+                    widget.BatteryIcon(
+                        theme_path="/usr/share/icons/Tela-circle-black/22/panel/",
+                        update_interval=2,
+                    ),
                     widget.Battery(
                         foreground=COLOR_WHITE,
                         background=COLOR_BAR_BG,
                         low_background=COLOR_BAR_BG,
                         low_foreground=COLOR_RED,
                         low_percentage=0.40,
-                        notify_below=25,
-                        charge_char="  ",
-                        full_char="  ",
+                        notify_below=30,
+                        charge_char="",
+                        full_char="",
                         discharge_char="",
-                        unknown_char="? ",
+                        unknown_char="",
                         show_short_text=False,
-                        format='󰁹 {percent:2.0%} {char}',
+                        format='{percent:2.0%}',
                         update_interval=2,
-                        padding=5
+                        padding=1
                     ),
+
         ],
         23,
         margin=[-5,20,10,20],

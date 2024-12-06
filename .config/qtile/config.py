@@ -29,69 +29,96 @@ from os import path
 from typing import List
 
 from libqtile import bar, layout, widget
-from libqtile.config import Click, Drag, Group, Key, Match, Screen, ScratchPad, DropDown
+from libqtile.config import Click, Drag, Group, Key, Match, Screen
 from libqtile.lazy import LazyCall, lazy
 from libqtile.hook import subscribe
-from libqtile.utils import send_notification
 
-
-def get_screens_quantity():
+# AUXILIARY FUNCTIONS
+def get_number_of_screens():
     """ Get number of connected monitors """
     xr = subprocess.check_output(
         'xrandr --query | grep " connected"', shell=True).decode().split('\n')
     monitors = len(xr) - 1 if len(xr) > 2 else len(xr)
     return monitors
 
-SCREEN_COUNT = get_screens_quantity()
-HOME = path.expanduser("~")
-AUTOSTART = f"{HOME}/Scripts/autostart.sh"
+SCREEN_COUNT = get_number_of_screens()
+# -----------------------------------------------------------------------------------------
 
-# Apps and Scripts
-APPS = f"{HOME}/Scripts/menus/apps.sh &"
-CLIPBOARD = f"{HOME}/Scripts/menus/clipboard.sh &"
-POWERMENU = f"{HOME}/Scripts/menus/power.sh &"
-PROJECTS = f"{HOME}/Scripts/menus/projects.sh &"
-UTILS=f"{HOME}/Scripts/menus/utils.sh &"
-CONFIG=f"{HOME}/Scripts/menus/config.sh &"
-WIDGET_NETWORK=f"{HOME}/Scripts/widgets/network.sh"
-WIDGET_CALENDAR = f"{HOME}/Scripts/widgets/calendar.sh"
-SHOW_UPGRADABLE_PACKAGES=f"{HOME}/Scripts/utils/show-upgradable-packages.sh &"
-SCREENSHOT="flameshot gui"
-SCREENSHOT_FULLSCREEN="flameshot full"
-SCREENS=f"{HOME}/Scripts/menus/screens.sh &"
-FILE_MANAGER="thunar"
-ARCH_WIKI="qutebrowser https://archwiki.org --target window"
-CHAT_GPT="qutebrowser https://chatgpt.com --target window"
-NETWORK_SETTINGS="nm-connection-editor"
-AUDIO_SETTINGS="pwvucontrol"
+# BASIC APPLICATIONS
+TERMINAL = "kitty"
+FILE_MANAGER = "thunar"
+FONT = "Iosevka Nerd Font"
+# -----------------------------------------------------------------------------------------
 
+# PATHS
+PATH_HOME = path.expanduser("~")
+PATH_SCRIPTS = f"{PATH_HOME}/.local/bin/"
+# -----------------------------------------------------------------------------------------
+
+# INIT SCRIPT
+AUTOSTART = f"{PATH_SCRIPTS}/autostart.sh"
+# -----------------------------------------------------------------------------------------
+
+# MENUS
+MENU_APP = f"{PATH_SCRIPTS}/menus/apps.sh &"
+MENU_CLIPBOARD = f"{PATH_SCRIPTS}/menus/clipboard.sh &"
+MENU_POWER = f"{PATH_SCRIPTS}/menus/power.sh &"
+MENU_UTILS=f"{PATH_SCRIPTS}/menus/utils.sh &"
+MENU_SCREENSHOT="flameshot gui"
+MENU_SCREENS=f"{PATH_SCRIPTS}/menus/screens.sh &"
+MENU_AUDIO="pwvucontrol"
+MENU_NETWORK="nm-connection-editor"
+# -----------------------------------------------------------------------------------------
+
+# WIDGETS
+WIDGET_NETWORK=f"{PATH_SCRIPTS}/widgets/network.sh"
+WIDGET_CALENDAR = f"{PATH_SCRIPTS}/widgets/calendar.sh"
+# -----------------------------------------------------------------------------------------
+
+# DO ACTIONS
+SHOW_UPGRADABLE_PACKAGES=f"{PATH_SCRIPTS}/utils/show-upgradable-packages.sh &"
+TAKE_SCREENSHOT_FULLSCREEN="flameshot full"
+OPEN_NOTIFICATION="dunstctl context && dunstctl close"
+CLOSE_NOTIFICATION="dunstctl close"
+MUSIC_NEXT="playerctl --player=spotify next"
+MUSIC_PREVIOUS="playerctl --player=spotify previous"
+MUSIC_PLAY_PAUSE="playerctl --player=spotify play-pause"
+# -----------------------------------------------------------------------------------------
+
+# COLORS
 # Catppuccin Mocha Colors - https://github.com/catppuccin/catppuccin
-COLOR_WHITE="#fff"
-COLOR_CRUST="#111113"
-COLOR_OVERLAY1="#45475a"
-COLOR_RED="#F38Ba8"
-COLOR_MAUVE="#cba6f7"
-COLOR_PEACH="#fab387"
-COLOR_YELLOW="#f9e2af"
-COLOR_SURFACE_0="#313244"
-COLOR_GREEN="#a6e3a1"
-COLOR_SAPPHIRE="#74c7ec"
-COLOR_ROSEWATER="#f5e0dc"
-COLOR_FLAMINGO="#f0c6c6"
-COLOR_PINK="#f5bde6"
-COLOR_BLUE="#8aadf4"
-COLOR_1="#342652"
 
+COLOR_FG_1 = "#ffffff"
+COLOR_FG_2 = "#f5e0dc"
 
-COLOR_BAR_BG=COLOR_CRUST+"00"
+COLOR_BG_1 = "#111113"
+COLOR_BG_2 = "#45475a"
 
+COLOR_RED = "#F38Ba8"
+COLOR_PURPLE = "#cba6f7"
+COLOR_ORANGE = "#fab387"
+COLOR_YELLOW = "#f9e2af"
+COLOR_GREEN = "#a6e3a1"
+COLOR_FLAMINGO = "#f0c6c6"
+COLOR_PINK = "#f5bde6"
+
+COLOR_BAR_BG = COLOR_BG_1 + "00"
+
+# COLOR_SURFACE_0="#313244"
+# COLOR_SAPPHIRE="#74c7ec"
+# COLOR_BLUE="#8aadf4"
+
+# -----------------------------------------------------------------------------------------
+
+# AUTOSTART
 @subscribe.startup_once
 def setup():
     subprocess.Popen([AUTOSTART])
+# -----------------------------------------------------------------------------------------
 
+# KEYBINDINGS
 SUPER = "mod4"
 ALT = "mod1"
-terminal = "kitty"
 
 keys = [
 
@@ -102,23 +129,22 @@ keys = [
     Key([SUPER, "control"], "r", lazy.reload_config(), desc="Reload the config"),
     Key([SUPER, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
     Key([SUPER], "x", lazy.window.kill(), desc="Kill focused window"),
-    Key([SUPER], "Return", lazy.spawn(terminal), desc="Launch terminal"),
+    Key([SUPER], "Return", lazy.spawn(TERMINAL), desc="Launch terminal"),
     Key([SUPER], "Tab", lazy.next_layout(), desc="Toggle between layouts"),
     Key([SUPER], "b", lazy.hide_show_bar(), desc="Toggle bar"),
     Key([SUPER], 'm', lazy.next_screen(), desc='Change focused screen'), 
  
     # Spawners/Menus
-    Key([SUPER], "space", lazy.spawn(APPS), desc="Spawn a app launcher"),
-    Key([SUPER], "p", lazy.spawn(POWERMENU), desc="Spawn power menu"),
-    Key([SUPER], "s", lazy.spawn(SCREENS), desc="Spawn power menu"),
-    Key([SUPER], "v", lazy.spawn(CLIPBOARD), desc="Spawn clipboard manager"),
     Key([SUPER], "e", lazy.spawn(FILE_MANAGER), desc="Spawn file manager"),
-    # Key([SUPER], "c", lazy.spawn(CONFIG), desc="Spawn config menu"),
-    # Key([SUPER], "u", lazy.spawn(UTILS), desc="Spawn utils menu"),
+    Key([SUPER], "space", lazy.spawn(MENU_APP), desc="Spawn a app launcher"),
+    Key([SUPER], "p", lazy.spawn(MENU_POWER), desc="Spawn power menu"),
+    Key([SUPER], "s", lazy.spawn(MENU_SCREENS), desc="Spawn screens menu"),
+    Key([SUPER], "v", lazy.spawn(MENU_CLIPBOARD), desc="Spawn clipboard menu"),
+    Key([SUPER], "equal", lazy.spawn(MENU_UTILS), desc="Spawn utils menu"),
 
     # Screenshots
-    Key([], "Print", lazy.spawn(SCREENSHOT), desc='Launch screenshot'),
-    Key(["shift"], "Print", lazy.spawn(SCREENSHOT_FULLSCREEN), desc='Launch screenshot fullscreen'),
+    Key([], "Print", lazy.spawn(MENU_SCREENSHOT), desc='Launch screenshot menu'),
+    Key(["shift"], "Print", lazy.spawn(TAKE_SCREENSHOT_FULLSCREEN), desc='Launch screenshot fullscreen'),
 
     # Switch between windows
     Key([SUPER], "h", lazy.layout.left(), desc="Move focus to left"),
@@ -135,10 +161,10 @@ keys = [
     Key([SUPER, "shift"], "k", lazy.layout.shuffle_up(), desc="Move window up"),
 
     # Floating Windows
-    Key([SUPER], "f", lazy.window.toggle_floating(), desc="Float window mode (toggle)"),
-    Key([SUPER], "c", lazy.window.center(), desc="center float window"),
+    Key([SUPER], "f", lazy.window.toggle_floating(), desc="Toggle window floating"),
+    Key([SUPER], "c", lazy.window.center(), desc="Center float window"),
     Key([SUPER], "u", lazy.window.bring_to_front(), desc="Bring float window to front"),
-    Key([SUPER, "shift"], "u", lazy.window.move_to_bottom(), desc="Move window down float window"),
+    Key([SUPER, "shift"], "u", lazy.window.move_to_bottom(), desc="Move float window to bottom"),
 
     # Resize windows
     Key([], "F10", lazy.window.toggle_fullscreen(), desc="Toggle fullscreen on the focused window"),
@@ -148,128 +174,111 @@ keys = [
     Key([SUPER], "g", lazy.layout.maximize(), desc="Maximize Window"),
     Key([SUPER], "r", lazy.layout.reset(), desc="Reset Windows Size"),
     
-    # Scratchpads
-    # Key([SUPER], 'c', lazy.group['ScratchPadChatGPT'].dropdown_toggle('chatgpt')),
-    # Key([SUPER], 'a', lazy.group['ScratchPadWIKI'].dropdown_toggle('archwiki')),
-
     # Notifications
-    Key([SUPER], "n", lazy.spawn("dunstctl context && dunstctl close"), desc="Open notification context"),
-    Key([SUPER, "shift"], "n", lazy.spawn("dunstctl close"), desc="Open notification context"),
+    Key([SUPER], "n", lazy.spawn(OPEN_NOTIFICATION), desc="Open notification context"),
+    Key([SUPER, "shift"], "n", lazy.spawn(CLOSE_NOTIFICATION), desc="Close notification context"),
 
-    # Spotify Control
-    Key([SUPER], "period", lazy.spawn("playerctl --player=spotify next"), desc='Next music track'),
-    Key([SUPER], "comma", lazy.spawn("playerctl --player=spotify previous"), desc='Previous music track'),
-    Key([SUPER], "semicolon", lazy.spawn("playerctl --player=spotify play-pause"), desc='Toggle play/pause music track'),
-
+    # Music Control 
+    Key([SUPER], "period", lazy.spawn(MUSIC_NEXT), desc='Next music track'),
+    Key([SUPER], "comma", lazy.spawn(MUSIC_PREVIOUS), desc='Previous music track'),
+    Key([SUPER], "semicolon", lazy.spawn(MUSIC_PLAY_PAUSE), desc='Toggle play/pause music track'),
 ]
+# -----------------------------------------------------------------------------------------
 
-
-
+# GROUPS
 groups = [
-    Group(name="1"),
-    Group(name="2"),
-    Group(name="3"),
-    Group(name="4"),
-    Group(name="5"),
-    Group(name="6"),
-    Group(name="7"),
+    Group(name="1", layout="monadtall"),
+    Group(name="2", layout="monadwide"),
+    Group(name="3", layout="monadwide"),
+    Group(name="4", layout="monadwide"),
+    Group(name="5", layout="monadtall"),
+    Group(name="6", layout="monadtall"),
+    Group(name="7", layout="monadtall"),
+    # Spotify Group
     Group(name="8", label="󰓇", matches=[Match(wm_class="spotify")], spawn="spotify-launcher", layout="max"),
+    # Discord Group
     Group(name="9", label="", matches=[Match(wm_class="discord")], spawn="discord", layout="max")
 ]
 
 
-
 for group in groups:
+
+    # Configure spawn behavior: Spawn application when focus the group
     commands: List[LazyCall] = [lazy.group[group.name].toscreen()]
     if group.spawn is not None:
         commands.append(lazy.spawn(group.spawn))
 
-
+    # Super + <group name> = switch to group
     keys.append(
-        # Super + letter of group = switch to group
-        Key(
-            [SUPER],
-            group.name,
+        Key([SUPER], group.name,
             *commands,
             desc="Switch to group {}".format(group.name),
         ))
-
+    
+    # Only for non exclusive groups: The ones that dont have a spawn application
     if group.spawn is None:
+        # Super + shift + letter of group = move focused window to group
         keys.append(
-                # Super + shift + letter of group = move focused window to group
-                Key(
-                    [SUPER, "shift"],
-                    group.name,
-                    lazy.window.togroup(group.name, switch_group=False),
-                    desc="Switch to & move focused window to group {}".format(group.name),
-                ),
+            Key(
+                [SUPER, "shift"], group.name,
+                lazy.window.togroup(group.name, switch_group=False),
+                desc=f"Move focused window to group {group.name}"
+            ),
         )
+# -----------------------------------------------------------------------------------------
 
-# ScratchPads
-groups.extend([
 
-    ScratchPad(
-        "ScratchPadChatGPT", 
-        [
-            DropDown("chatgpt", CHAT_GPT, on_focus_lost_hide=False, x=0.1, y=0.1, height=0.8),
-        ]
-    ),
-
-    ScratchPad(
-        "ScratchPadWIKI", 
-        [
-            DropDown("archwiki", ARCH_WIKI, on_focus_lost_hide=False, x=0.1, y=0.1, height=0.8)
-        ]
-    )
-
-])
-
+# LAYOUTS
 layouts = [
     layout.Max(margin=20, border_width=0),
-    layout.MonadTall(border_focus=COLOR_ROSEWATER, margin=20, single_border_width=0, border_width=1),
-    layout.MonadWide(border_focus=COLOR_ROSEWATER, margin=20, single_border_width=0, border_width=1, ratio=0.75),
+    layout.MonadTall(border_focus=COLOR_FG_2, margin=20, single_border_width=0, border_width=1),
+    layout.MonadWide(border_focus=COLOR_FG_2, margin=20, single_border_width=0, border_width=1, ratio=0.75),
+    layout.Matrix(border_focus=COLOR_FG_2, margin=10, single_border_width=0, border_width=1),
 
-    # Not Used Layouts.
+    ## Not Used Layouts.
     # layout.Columns(),
     # layout.Stack(num_stacks=2),
     # layout.Bsp(),
-    layout.Matrix(border_focus=COLOR_ROSEWATER, margin=10, single_border_width=0, border_width=1),
     # layout.RatioTile(),
     # layout.Tile(),
     # layout.TreeTab(),
     # layout.VerticalTile(),
     # layout.Zoomy(),
 ]
+# -----------------------------------------------------------------------------------------
 
 widget_defaults = dict(
-    font="Iosevka Nerd Font",
+    font=FONT,
     fontsize=14,
     padding=3,
 )
-extension_defaults = widget_defaults.copy()
 
-main_groupbox = widget.GroupBox(
-    active=COLOR_MAUVE,
+# GROUPBOX WIDGETS
+# Groupbox for the primary screen
+widget_groupbox_main = widget.GroupBox(
+    active=COLOR_PURPLE,
     background=None,
-    inactive=COLOR_MAUVE,
-    this_screen_border=COLOR_WHITE,
-    other_screen_border=COLOR_OVERLAY1,
-    this_current_screen_border=COLOR_WHITE,
-    other_current_screen_border=COLOR_OVERLAY1,
+    inactive=COLOR_PURPLE,
+    this_screen_border=COLOR_FG_1,
+    other_screen_border=COLOR_BG_2,
+    this_current_screen_border=COLOR_FG_1,
+    other_current_screen_border=COLOR_BG_2,
     highlight_method='line',
     highlight_color=[COLOR_BAR_BG],
     disable_drag=True,
     hide_unused=True,
     borderwidth=1,
     padding=12)
-secondary_groupbox = widget.GroupBox(
-    active=COLOR_MAUVE,
+
+# Groupbox for the secondary screens
+widget_groupbox_secondary = widget.GroupBox(
+    active=COLOR_PURPLE,
     background=None,
-    inactive=COLOR_MAUVE,
-    this_screen_border=COLOR_WHITE,
-    other_screen_border=COLOR_OVERLAY1,
-    this_current_screen_border=COLOR_WHITE,
-    other_current_screen_border=COLOR_OVERLAY1,
+    inactive=COLOR_PURPLE,
+    this_screen_border=COLOR_FG_1,
+    other_screen_border=COLOR_BG_2,
+    this_current_screen_border=COLOR_FG_1,
+    other_current_screen_border=COLOR_BG_2,
     highlight_method='line',
     highlight_color=[COLOR_BAR_BG],
     disable_drag=True,
@@ -277,214 +286,212 @@ secondary_groupbox = widget.GroupBox(
     toggle=True,
     borderwidth=1,
     padding=12)
+# -----------------------------------------------------------------------------------------
 
-# Order by screen match
-bars = [
-    bar.Bar(
-        [
-            widget.CurrentLayoutIcon(scale=0.7),
-            widget.Spacer(14),
+# BARS and WIDGETS
+bar_primary = bar.Bar(
+    widgets=[
+        widget.CurrentLayoutIcon(scale=0.7),
+        
+        widget.Spacer(14),
 
-            main_groupbox,
+        widget_groupbox_main,
 
-            widget.Spacer(10),
-            
-            widget.Sep(),
-            
+        widget.Spacer(10),
+        
+        widget.Sep(),
+        
+        widget.Spacer(10),
 
-            widget.Spacer(10),
+        widget.WidgetBox(
+            widgets=[
 
-            widget.WidgetBox(
-                widgets=[
+                widget.Spacer(10),
+                widget.Sep(),
+                
+                widget.Spacer(10),
+                widget.CheckUpdates(
+                    display_format="  {updates}",
+                    colour_have_updates=COLOR_YELLOW,
+                    colour_no_updates=COLOR_GREEN,
+                    no_update_string=" ",
+                    mouse_callbacks={
+                        "Button1": lazy.spawn(SHOW_UPGRADABLE_PACKAGES)
+                    }
+                ),
 
-                    widget.Spacer(10),
-                    widget.Sep(),
-                    widget.Spacer(10),
+                widget.Spacer(10),
+                widget.Sep(),
+                
+                widget.Spacer(10),
+                widget.DF(
+                    partition="/", 
+                    format='  Free: {uf}{m}',
+                    visible_on_warn=False,
+                    background=None,
+                    foreground=COLOR_FLAMINGO
+                ),
 
+                widget.Spacer(10),
+                widget.Sep(),
+                
+                widget.Spacer(10),
+                widget.Memory(padding=5, fmt=" {}", format="{MemUsed: .0f} /{MemTotal: .0f} ({mm})", measure_mem="G", background=None, foreground=COLOR_PURPLE),
+                
+                widget.Spacer(10),
+                widget.Sep(),
+                
+                widget.Spacer(10),
+                widget.CPU(fmt="󰍛 {}", background=None, foreground=COLOR_PINK),
 
-                    widget.CheckUpdates(
-                        display_format="  {updates}",
-                        colour_have_updates=COLOR_YELLOW,
-                        colour_no_updates=COLOR_GREEN,
-                        no_update_string=" ",
-                        mouse_callbacks={
-                            "Button1": lazy.spawn(SHOW_UPGRADABLE_PACKAGES)
-                        }
-                    ),
+                widget.Spacer(10),
+                widget.Sep(),
+                
+                widget.Spacer(10),
+                widget.GenPollText(
+                    func=lambda: subprocess.check_output(WIDGET_NETWORK).decode(),
+                    update_interval=1, 
+                    foreground=COLOR_GREEN,
+                    background=None,
+                    max_chars=20,
+                    padding=5,
+                    mouse_callbacks={
+                        "Button3": lazy.spawn(MENU_NETWORK)
+                    },
+                ),
 
-                    widget.Spacer(10),
-                    widget.Sep(),
-                    widget.Spacer(10),
+                widget.Spacer(10),
+                widget.Sep(),
+                
+                widget.Spacer(10),
+                widget.Volume(
+                    fmt="󱄠  {}",
+                    foreground=COLOR_FG_2,
+                    background=None,
+                    mouse_callbacks={
+                        "Button3": lazy.spawn(MENU_AUDIO)
+                    },
+                    padding=5,
+                ),
 
-                    widget.DF(
-                        partition="/", 
-                        format='  Free: {uf}{m}',
-                        visible_on_warn=False,
-                        background=None,
-                        foreground=COLOR_FLAMINGO
-                    ),
+                widget.Spacer(10),
+                widget.Sep(),
+                
+                widget.Spacer(10),
+                widget.Wallpaper(
+                    label="󰸉  Change Wallpaper",
+                    directory=f"{PATH_HOME}/Wallpapers"
+                )
+            ],
+            close_button_location="left",
+            text_open=" ",
+            text_closed=" ",
+        ),
 
-                    widget.Spacer(10),
-                    widget.Sep(),
-                    widget.Spacer(10),
+        widget.Spacer(10),
+        widget.Sep(),
+        
+        widget.Mpris2(
+            name="spotify",
+            display_metadata=['xesam:title', 'xesam:artist'],
+            scroll_chars=None,
+            objname="org.mpris.MediaPlayer2.spotify",
+            scroll_interval=0,
+            background=None,
+            foreground=COLOR_ORANGE,
+            fmt='{}   ',
+            paused_text='   {track}',
+            padding=10,
+        ),
+                
+        widget.Spacer(10),
+        widget.Clipboard(
+            fmt=" 󰅎  Copied ",
+            max_width=2,
+            foreground=COLOR_GREEN,
+            background=None,
+            timeout=1,
+        ),
 
-                    widget.Memory(padding=5, fmt=" {}", format="{MemUsed: .0f} /{MemTotal: .0f} ({mm})", measure_mem="G", background=None, foreground=COLOR_MAUVE),
-                    
-                    widget.Spacer(10),
-                    widget.Sep(),
-                    widget.Spacer(10),
-                   
-                    widget.CPU(fmt="󰍛 {}", background=None, foreground=COLOR_PINK),
+        widget.Spacer(),
+        widget.Systray(padding=10),
+        
+        widget.Spacer(20),
+        widget.Clock(
+            format="%Y-%m-%d - %a %I:%M:%S %p", 
+            background=None, 
+            foreground=COLOR_PURPLE,
+            mouse_callbacks={
+                "Button1": lazy.spawn(WIDGET_CALENDAR + " curr"),
+                "Button4": lazy.spawn(WIDGET_CALENDAR + " prev"),
+                "Button5": lazy.spawn(WIDGET_CALENDAR + " next"),
+            },
+        ),
 
-                    widget.Spacer(10),
-                    widget.Sep(),
-                    widget.Spacer(10),
+        widget.Spacer(10),
+        widget.Sep(),
+        
+        widget.Spacer(10),
+        widget.BatteryIcon(
+            theme_path="/usr/share/icons/Tela-circle-black/22/panel/",
+            update_interval=2,
+        ),
+        widget.Battery(
+            foreground=COLOR_FG_1,
+            background=COLOR_BAR_BG,
+            low_background=COLOR_BAR_BG,
+            low_foreground=COLOR_RED,
+            low_percentage=0.40,
+            notify_below=30,
+            charge_char="",
+            full_char="",
+            discharge_char="",
+            unknown_char="",
+            show_short_text=False,
+            format='{percent:2.0%}',
+            update_interval=2,
+            padding=1
+        ),
+    ],
+    size=23,
+    margin=[-5,20,10,20],
+    background=COLOR_BAR_BG,
+    border_width=[4, 20, 4, 20],
+    border_color=COLOR_BAR_BG,
+)
 
-                    widget.GenPollText(
-                        func=lambda: subprocess.check_output(WIDGET_NETWORK).decode(),
-                        update_interval=1, 
-                        foreground=COLOR_GREEN,
-                        background=None,
-                        max_chars=20,
-                        padding=5,
-                        mouse_callbacks={
-                            "Button3": lazy.spawn(NETWORK_SETTINGS)
-                        },
-                    ),
+bar_secondary = bar.Bar(
+    widgets=[
+        widget.CurrentLayoutIcon(scale=0.7),
+        widget.Spacer(14),
+        widget_groupbox_secondary,
+        widget.Spacer(),
+    ], 
+    size=23,
+    margin=[-5,20,10,20],
+    background=COLOR_BAR_BG,
+    border_width=[4, 20, 4, 20],
+    border_color=COLOR_BAR_BG,
+)
 
-                    widget.Spacer(10),
-                    widget.Sep(),
-                    widget.Spacer(10),
+bars = [bar_primary, bar_secondary]
+# -----------------------------------------------------------------------------------------
 
-                    widget.Volume(
-                        fmt="󱄠  {}",
-                        foreground=COLOR_ROSEWATER,
-                        background=None,
-                        mouse_callbacks={
-                            "Button3": lazy.spawn(AUDIO_SETTINGS)
-                        },
-                        padding=5,
-                    ),
-
-                    widget.Spacer(10),
-                    widget.Sep(),
-                    widget.Spacer(10),
-                    
-                    widget.Wallpaper(
-                        label="󰸉  Change Wallpaper",
-                        directory=f"{HOME}/Wallpapers"
-                    )
-                        ],
-
-                        close_button_location="left",
-                        text_open=" ",
-                        text_closed=" ",
-                    ),
-                    widget.Spacer(10),
-                    widget.Sep(),
-                    widget.Mpris2(
-                        name="spotify",
-                        display_metadata=['xesam:title', 'xesam:artist'],
-                        scroll_chars=None,
-                        objname="org.mpris.MediaPlayer2.spotify",
-                        scroll_interval=0,
-                        background=None,
-                        foreground=COLOR_PEACH,
-                        fmt='{}   ',
-                        paused_text='   {track}',
-                        padding=10,
-                        mouse_callbacks={
-                            # "Button3": lazy.function(go_to_group("8"))
-                        },
-                    ),
-                    
-                    widget.Spacer(10),
-
-                    widget.Clipboard(
-                       fmt=" 󰅎  Copied ",
-                       max_width=2,
-                       foreground=COLOR_GREEN,
-                       background=None,
-                       timeout=1,
-                    ),
-
-
-                    widget.Spacer(),
-                    
-                    widget.Systray(padding=10),
-                    
-                    widget.Spacer(20),
-
-                    widget.Clock(
-                      format="%Y-%m-%d - %a %I:%M:%S %p", 
-                      background=None, 
-                      foreground=COLOR_MAUVE,
-                      mouse_callbacks={
-                          "Button1": lazy.spawn(WIDGET_CALENDAR + " curr"),
-                          "Button4": lazy.spawn(WIDGET_CALENDAR + " prev"),
-                          "Button5": lazy.spawn(WIDGET_CALENDAR + " next"),
-                      },
-                    ),
-
-                    widget.Spacer(10),
-                    widget.Sep(),
-                    widget.Spacer(10),
-
-                    widget.BatteryIcon(
-                        theme_path="/usr/share/icons/Tela-circle-black/22/panel/",
-                        update_interval=2,
-                    ),
-                    widget.Battery(
-                        foreground=COLOR_WHITE,
-                        background=COLOR_BAR_BG,
-                        low_background=COLOR_BAR_BG,
-                        low_foreground=COLOR_RED,
-                        low_percentage=0.40,
-                        notify_below=30,
-                        charge_char="",
-                        full_char="",
-                        discharge_char="",
-                        unknown_char="",
-                        show_short_text=False,
-                        format='{percent:2.0%}',
-                        update_interval=2,
-                        padding=1
-                    ),
-
-        ],
-        23,
-        margin=[-5,20,10,20],
-        background=COLOR_BAR_BG,
-        border_width=[4, 20, 4, 20],
-        border_color=COLOR_BAR_BG,
-    ),
-    bar.Bar(
-        [
-            widget.CurrentLayoutIcon(scale=0.7),
-            widget.Spacer(14),
-            secondary_groupbox,
-            widget.Spacer(),
-        ], 
-        23,
-        margin=[-5,20,10,20],
-        background=COLOR_BAR_BG,
-        border_width=[4, 20, 4, 20],
-        border_color=COLOR_BAR_BG,
-    )
-]
-
+# SCREENS
 screens = []
-for group in range(SCREEN_COUNT):
-    screens.append(Screen(bottom=bars[group]))
+for i in range(SCREEN_COUNT):
+    screens.append(Screen(bottom=bars[i]))
+# -----------------------------------------------------------------------------------------
 
-
-# Drag floating layouts.
+# MOUSE
 mouse = [
     Drag([SUPER], "Button1", lazy.window.set_position_floating(), start=lazy.window.get_position()),
     Drag([SUPER], "Button3", lazy.window.set_size_floating(), start=lazy.window.get_size()),
     Click([SUPER], "Button1", lazy.window.bring_to_front()),
 ]
+# -----------------------------------------------------------------------------------------
 
+# MORE
 dgroups_key_binder = None
 dgroups_app_rules = []  # type: list
 follow_mouse_focus = True
@@ -530,3 +537,5 @@ wl_input_rules = None
 # We choose LG3D to maximize irony: it is a 3D non-reparenting WM written in
 # java that happens to be on java's whitelist.
 wmname = "Qtile"
+
+# -----------------------------------------------------------------------------------------

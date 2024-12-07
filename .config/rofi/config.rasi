@@ -1,9 +1,18 @@
-/*Dracula theme based on the Purple official rofi theme*/
-
 configuration {
     show-icons:      true;
     display-drun:    "";
     disable-history: false;
+
+
+    kb-remove-to-eol: "";
+    kb-mode-complete: "";
+    kb-accept-entry: "Return";
+    kb-remove-char-back: "BackSpace";
+    kb-row-up: "Control+k";
+    kb-row-down: "Control+j";
+    kb-row-left: "Control+h";
+    kb-row-right: "Control+l";
+
 }
 
 * {

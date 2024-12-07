@@ -15,7 +15,7 @@ I use `arhcinstall` script + and [`my ansible playbook`](https://github.com/igor
 Access the link to get more info.
 
 ## Qtile Keybindings
-**Obs.:** I rempa <kbd>Caps</kbd> to work as a <kbd>SUPER</kbd>
+**Obs.:** I remap <kbd>Caps</kbd> to work as a <kbd>SUPER</kbd>
 
 ### Basics
 

@@ -151,8 +151,8 @@ keys = [
     Key([SUPER], "l", lazy.layout.right(), desc="Move focus to right"),
     Key([SUPER], "j", lazy.layout.down(), desc="Move focus down"),
     Key([SUPER], "k", lazy.layout.up(), desc="Move focus up"),
-    Key([ALT], "Tab", lazy.group.next_window(), desc="Focus next window"),
-    Key([ALT, "shift"], "Tab", lazy.group.next_window(), desc="Focus previous window"),
+    Key([SUPER, ALT], "k", lazy.group.prev_window(), desc="Focus next window"),
+    Key([SUPER, ALT], "j", lazy.group.next_window(), desc="Focus next window"),
     
     # Move windows between left/right columns or move up/down in current stack.
     Key([SUPER, "shift"], "h", lazy.layout.shuffle_left(), desc="Move window to the left"),
@@ -163,8 +163,8 @@ keys = [
     # Floating Windows
     Key([SUPER], "f", lazy.window.toggle_floating(), desc="Toggle window floating"),
     Key([SUPER], "c", lazy.window.center(), desc="Center float window"),
-    Key([SUPER], "u", lazy.window.bring_to_front(), desc="Bring float window to front"),
-    Key([SUPER, "shift"], "u", lazy.window.move_to_bottom(), desc="Move float window to bottom"),
+    Key([SUPER, ALT, "shift"], "k", lazy.window.bring_to_front(), desc="Bring float window to front"),
+    Key([SUPER, ALT, "shift"], "j", lazy.window.move_to_bottom(), desc="Move float window to bottom"),
 
     # Resize windows
     Key([], "F10", lazy.window.toggle_fullscreen(), desc="Toggle fullscreen on the focused window"),
@@ -195,7 +195,7 @@ groups = [
     Group(name="6", layout="monadtall"),
     Group(name="7", layout="monadtall"),
     # Spotify Group
-    Group(name="8", label="󰓇", matches=[Match(wm_class="spotify")], spawn="spotify-launcher", layout="max"),
+    Group(name="8", label="󰓇", matches=[Match(wm_class="spotify")], spawn="", layout="max"),
     # Discord Group
     Group(name="9", label="", matches=[Match(wm_class="discord")], spawn="discord", layout="max")
 ]

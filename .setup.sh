@@ -101,7 +101,7 @@ echo_color "DOTFILES CONFIGURED!"
 
 echo_color "\n\nINSTALLING PACKAGES DEFINED IN $PACKAGE_LIST_FILE..."
 
-PACKAGE_LIST_FILE="$HOME/packages.md"
+PACKAGE_LIST_FILE="$HOME/PACKAGES.md"
 
 # Read and filter the packages from the file, ignoring comments and empty lines
 PACKAGE_LIST=$(grep -v '^\s*#' "$PACKAGE_LIST_FILE" | grep -v '^\s*$' | tr '\n' ' ' )

@@ -325,7 +325,7 @@ bar_primary = bar.Bar(
                 
                 widget.Spacer(10),
                 widget.DF(
-                    partition="/", 
+                    partition="/home/igortxra", 
                     format='  Free: {uf}{m}',
                     visible_on_warn=False,
                     background=None,

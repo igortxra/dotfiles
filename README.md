@@ -4,7 +4,7 @@ Here I store my dotfiles, which is meant to be used in Arch Linux.
 
 # Table of Contents
 1. [Main Applications](#main-applications)
-2. [Installing (Considering you are installing from scratch)](#installing-considering-you-are-installing-from-scratch)
+2. [Installing](#installing)
     1. [1. Use `archinstall` script to execute minimal installation](#1-use-archinstall-script-to-execute-minimal-installation)
     2. [2. When the basic installation is finished, reboot and login with the created user](#2-when-the-basic-installation-is-finished-reboot-and-login-with-the-created-user)
     3. [3. Run the setup script](#3-run-the-setup-script)
@@ -32,7 +32,9 @@ Here I store my dotfiles, which is meant to be used in Arch Linux.
 - Dunst (Notification Daemon)
 - Picom (Compositor)
 
-## Installing (Consigering you are installing from scratch)
+## Installing
+(Consigering you are installing from scratch)
+
 ### 1. Use `archinstall` script to execute minimal installation:
   - Add your user (with sudo privileges);
   - Select **NetworkManager** as newtork;
@@ -61,7 +63,7 @@ You will see the Qtile Interface.
 #### Set Wallpaper
 A wallpaper will not be set by default. You need:
 - Download a Wallpaper image and save into `~/Wallpapers`.
-- Reload Qtile ([Check keybinding](### 1. Basics)).
+- Reload Qtile (Check Keybindings).
 
 **Obs.:** Qtile Bar has a widget for change the wallpaper.
 
@@ -70,7 +72,7 @@ If u want to use more than one screen/monitor do the following:
 - Use `arandr` to configure your screen.
 - Open a terminal and run `autorandr --save <profile-name>`. E.g: `autorandr --save two-screens`.
 - Repeat the last two steps for each profile you want to create.
-- Now these profiles can be switched with the Screen Menu ([Check Keybinding](### 2. Spawners/Menus)).
+- Now these profiles can be switched with the Screen Menu (Check Keybindings).
 
 ## Qtile Keybindings
 The <kbd>Caps Lock</kbd> act as <kbd>SUPER</kbd>. If you want to change this, edit `~/.local/bin/autostart.sh`;

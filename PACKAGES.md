@@ -102,7 +102,6 @@ fuse2
 docker
 neovim
 github-cli
-asdf-vm
 kubectl
 kind
 google-cloud-cli

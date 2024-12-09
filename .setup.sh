@@ -114,7 +114,7 @@ else
   echo_color "INSTALLING PACKAGES: $PACKAGE_LIST"
 
   # Run yay as the specified user
-  log_output yay -S --needed --noconfirm --asexplicit --batchinstall $(echo $PACKAGE_LIST)
+  log_output yay -S --needed --noconfirm --asexplicit --batchinstall --sudoloop $(echo $PACKAGE_LIST)
 
   # Check if the installation was successful
   if [ $? -eq 0 ]; then
@@ -142,6 +142,10 @@ git clone https://github.com/igortxra/nvim "$HOME/.config/nvim"
 
 echo_color "NEOVIM CONFIGURED!"
 
+###############
+### asdf-vm ###
+###############
+git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.14.1
 
 ################################
 ### Change Defaut User Shell ###

@@ -513,7 +513,7 @@ floating_layout = layout.Floating(
         Match(wm_class="com.vixalien.sticky"),  # Sticky Notes
         Match(wm_class="nm-connection-editor"), # Network Manager Connection Editor
         Match(wm_class="pwvucontrol"), # Audio Settings
-
+        Match(wm_class="VirtualBox"), # VirtualBox
     ],
     border_width=0
 )

@@ -2,6 +2,28 @@
 
 Here I store my dotfiles, which is meant to be used in Arch Linux.
 
+# Table of Contents
+1. [Main Applications](#main-applications)
+2. [Installing (Considering you are installing from scratch)](#installing-considering-you-are-installing-from-scratch)
+    1. [1. Use `archinstall` script to execute minimal installation](#1-use-archinstall-script-to-execute-minimal-installation)
+    2. [2. When the basic installation is finished, reboot and login with the created user](#2-when-the-basic-installation-is-finished-reboot-and-login-with-the-created-user)
+    3. [3. Run the setup script](#3-run-the-setup-script)
+    4. [4. Reboot and Login](#4-reboot-and-login)
+    5. [5. Post-setup customizations](#5-post-setup-customizations)
+3. [Qtile Keybindings](#qtile-keybindings)
+    1. [1. Basics](#1-basics)
+    2. [2. Spawners/Menus](#2-spawnersmenus)
+    3. [3. Screenshots](#3-screenshots)
+    4. [4. Switch Between Windows](#4-switch-between-windows)
+    5. [5. Move Windows](#5-move-windows)
+    6. [6. Floating Windows](#6-floating-windows)
+    7. [7. Resize Windows](#7-resize-windows)
+    8. [8. Notifications](#8-notifications)
+    9. [9. Music Control](#9-music-control)
+    10. [10. Groups](#10-groups)
+    11. [11. Move Window to Group (Non-exclusive groups)](#11-move-window-to-group-non-exclusive-groups)
+4. [Screenshots](#screenshots)
+
 ## Main Applications
 - Qtile (Window Manager)
 - Zsh (Default Shell)

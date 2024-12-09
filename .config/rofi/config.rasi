@@ -18,8 +18,8 @@ configuration {
 * {
     font: "Jetbrains Mono 12";
     foreground: #f8f8f2;
-    background-color: #11111300;
-    window-bg-color: #111113F0;
+    background-color: #11111100;
+    window-bg-color: #111111F0;
     active-background: #342652;
     urgent-background: #ff5555;
     urgent-foreground: #282a36;
@@ -27,7 +27,7 @@ configuration {
     selected-urgent-background: @urgent-background;
     selected-active-background: @active-background;
     separatorcolor: @active-background;
-    bordercolor: #111113;
+    bordercolor: #111111;
 }
 
 #window {

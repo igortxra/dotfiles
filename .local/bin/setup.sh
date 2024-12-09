@@ -75,6 +75,27 @@ log_output yay -Sy
 
 echo_color "YAY CONFIGURED!"
 
+
+################
+### DOTFILES ###
+################
+
+echo_color "\n\nPULLING DOTFILES..."
+
+DOTFILES_URL=https://github.com/$USER/dotfiles.git
+DOTFILES_DIR=$HOME/.dotfiles
+
+# Clone dotfiles as bare repository
+log_output git clone --bare "$DOTFILES_URL" "$DOTFILES_DIR"
+
+# Configure dotfiles to not show untracked files in `git status` command
+log_output /usr/bin/git --git-dir=$DOTFILES_DIR --work-tree=$HOME config --local status.showUntrackedFiles no
+
+# Apply dotfiles
+log_output /usr/bin/git --git-dir=$DOTFILES_DIR --work-tree=$HOME checkout -f
+
+echo_color "DOTFILES CONFIGURED!"
+
 ##########################
 ### Installig Packages ###
 ##########################
@@ -122,25 +143,6 @@ git clone https://github.com/igortxra/nvim "$HOME/.config/nvim"
 
 echo_color "NEOVIM CONFIGURED!"
 
-################
-### DOTFILES ###
-################
-
-echo_color "\n\nPULLING DOTFILES..."
-
-DOTFILES_URL=https://github.com/$USER/dotfiles.git
-DOTFILES_DIR=$HOME/.dotfilessqn
-
-# Clone dotfiles as bare repository
-log_output git clone --bare "$DOTFILES_URL" "$DOTFILES_DIR"
-
-# Configure dotfiles to not show untracked files in `git status` command
-log_output /usr/bin/git --git-dir=$DOTFILES_DIR --work-tree=$HOME config --local status.showUntrackedFiles no
-
-# Apply dotfiles
-log_output /usr/bin/git --git-dir=$DOTFILES_DIR --work-tree=$HOME checkout -f
-
-echo_color "DOTFILES CONFIGURED!"
 
 ################################
 ### Change Defaut User Shell ###

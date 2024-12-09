@@ -192,5 +192,7 @@ The <kbd>Caps Lock</kbd> act as <kbd>SUPER</kbd>. If you want to change this, ed
 
 
 ## Screenshots
-| TODO
+![screenshot_1](https://github.com/user-attachments/assets/c589e495-bc97-4faf-9ea2-9b7f43334d57)
+
+
 

@@ -34,7 +34,7 @@ picom
 
 # Browser
 qutebrowser
-google-chrome
+google-chrome # AUR
 
 # File Manager
 thunar
@@ -49,9 +49,11 @@ dunst
 
 # Themes
 lxappearance
-dracula-gtk-theme
-dracula-icons-git
-dracula-cursors-git
+tela-circle-icon-theme-black # AUR
+material-black-colors-theme # AUR
+dracula-gtk-theme # AUR
+dracula-icons-git # AUR
+dracula-cursors-git # AUR
 
 # Fonts
 ttf-iosevka-nerd
@@ -62,7 +64,7 @@ xorg-fonts-75dpi
 
 # Clipboard
 xclip
-rofi-greenclip
+rofi-greenclip # AUR
 
 # Automations
 ansible
@@ -70,7 +72,8 @@ ansible-completion-git
 
 # Utils
 tldr
-batify
+galculator
+batify # AUR
 htop
 btop
 fzf
@@ -86,6 +89,11 @@ npm
 python-dbus-next
 python-psutil
 zram-generator
+pwvucontrol
+
+# bluetooth
+bluez
+bluez-utils
 
 # Required to run AppImages
 fuse2
@@ -94,10 +102,14 @@ fuse2
 docker
 neovim
 github-cli
-asdf-vm
+asdf-vm # AUR
 kubectl
 kind
+google-cloud-cli
+postman
 
 # Personal Needs
 discord
+betterdiscord-installer
 spotify-launcher
+

@@ -17,7 +17,7 @@ git
 github-cli
 
 # Window Manager
-# qtile
+qtile
 
 # Shell
 zsh

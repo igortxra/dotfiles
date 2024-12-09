@@ -4,7 +4,6 @@
 ### BASIC CONFIGURATIONS AND AUXILIARY FUNCTIONS ###
 ####################################################
 
-USERNAME=$(echo $USER)
 LOGFILE="$HOME/setup.log"
 COLOR='\033[0;35m'
 RESET='\033[0m'

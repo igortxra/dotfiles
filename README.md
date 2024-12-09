@@ -10,109 +10,165 @@ Here I store my dotfiles, which is meant to be used in Arch Linux.
 - Dunst (Notification Daemon)
 - Picom (Compositor)
 
-## How I use it
-I use `arhcinstall` script + and [`my ansible playbook`](https://github.com/igortxra/ansible-arch-setup.git)
-Access the link to get more info.
+## Installing (Consigering you are installing from scratch)
+### 1. Use `archinstall` script to execute minimal installation:
+  - Add your user (with sudo privileges);
+  - Select **NetworkManager** as newtork;
+  - Select **Xorg** as installation profile (will install xorg and graphic drivers);
+  - Add **git** and **vim** (or any text editor) as additional package;
+
+### 2. When the basic installation is finished, reboot and login with the created user.
+
+### 3. Run the setup script
+Once logged in, clone this repository and execute the setup script:
+```bash
+# Clone dotfiles into a temporary folder
+git clone --depth 1 https://github.com/igortxra/dotfiles.git $HOME/temp
+
+# Run setup script
+. $HOME/temp/.setup.sh
+
+# Remove temporary clone
+rm -rf $HOME/temp
+```
+
+### 4. Reboot and Login
+You will see the Qtile Interface.
+
+### 5. Post-setup customizations
+#### Set Wallpaper
+A wallpaper will not be set by default. You need:
+- Download a Wallpaper image and save into `~/Wallpapers`.
+- Reload Qtile ([Check keybinding](### 1. Basics)).
+
+**Obs.:** Qtile Bar has a widget for change the wallpaper.
+
+#### Configure screen profiles
+If u want to use more than one screen/monitor do the following:
+- Use `arandr` to configure your screen.
+- Open a terminal and run `autorandr --save <profile-name>`. E.g: `autorandr --save two-screens`.
+- Repeat the last two steps for each profile you want to create.
+- Now these profiles can be switched with the Screen Menu ([Check Keybinding](### 2. Spawners/Menus)).
 
 ## Qtile Keybindings
-**Obs.:** I remap <kbd>Caps</kbd> to work as a <kbd>SUPER</kbd>
+The <kbd>Caps Lock</kbd> act as <kbd>SUPER</kbd>. If you want to change this, edit `~/.local/bin/autostart.sh`;
 
-### Basics
+### 1. Basics
 
-| Keybinding                          | Description                            |
-|-------------------------------------|----------------------------------------|
-| <kbd>SUPER</kbd> + <kbd>Control</kbd> + <kbd>R</kbd>                 | Reload the config                      |
-| <kbd>SUPER</kbd> + <kbd>Control</kbd> + <kbd>Q</kbd>                 | Shutdown Qtile                         |
-| <kbd>SUPER</kbd> + <kbd>X</kbd>                            | Kill focused window                    |
-| <kbd>SUPER</kbd> + <kbd>Return</kbd>                       | Launch terminal                        |
-| <kbd>SUPER</kbd> + <kbd>Tab</kbd>                          | Toggle between layouts                 |
-| <kbd>SUPER</kbd> + <kbd>B</kbd>                            | Toggle bar                             |
-| <kbd>SUPER</kbd> + <kbd>M</kbd>                            | Change focused screen                  |
+| **Keys**                         | **Description**                             |
+|----------------------------------|---------------------------------------------|
+| <kbd>SUPER + control + r</kbd>            | Reload the config                          |
+| <kbd>SUPER + control + q</kbd>            | Shutdown Qtile                             |
+| <kbd>SUPER + x</kbd>                      | Kill focused window                        |
+| <kbd>SUPER + Return</kbd>                 | Launch terminal                            |
+| <kbd>SUPER + Tab</kbd>                    | Toggle between layouts                     |
+| <kbd>SUPER + b</kbd>                      | Toggle bar visibility                      |
+| <kbd>SUPER + m</kbd>                      | Change focus to the next screen            |
 
-### Spawners/Menus
+---
 
-| Keybinding                          | Description                            |
-|-------------------------------------|----------------------------------------|
-| <kbd>SUPER</kbd> + <kbd>E</kbd>                            | Spawn file manager                     |
-| <kbd>SUPER</kbd> + <kbd>Space</kbd>                        | Spawn app launcher                     |
-| <kbd>SUPER</kbd> + <kbd>P</kbd>                            | Spawn power menu                       |
-| <kbd>SUPER</kbd> + <kbd>S</kbd>                            | Spawn screens menu                     |
-| <kbd>SUPER</kbd> + <kbd>V</kbd>                            | Spawn clipboard menu                   |
-| <kbd>SUPER</kbd> + <kbd>Equal</kbd>                        | Spawn utils menu                       |
+### 2. Spawners/Menus
 
-### Screenshots
+| **Keys**                         | **Description**                             |
+|----------------------------------|---------------------------------------------|
+| <kbd>SUPER + e</kbd>                      | Spawn file manager                         |
+| <kbd>SUPER + space</kbd>                  | Spawn application launcher                 |
+| <kbd>SUPER + p</kbd>                      | Spawn power menu                           |
+| <kbd>SUPER + s</kbd>                      | Spawn screens menu                         |
+| <kbd>SUPER + v</kbd>                      | Spawn clipboard menu                       |
+| <kbd>SUPER + =</kbd>                      | Spawn utils menu                           |
 
-| Keybinding                          | Description                            |
-|-------------------------------------|----------------------------------------|
-| <kbd>Print</kbd>                                | Launch screenshot menu                 |
-| <kbd>Shift</kbd> + <kbd>Print</kbd>                        | Launch screenshot fullscreen           |
+---
 
-### Switch between windows
+### 3. Screenshots
 
-| Keybinding                          | Description                            |
-|-------------------------------------|----------------------------------------|
-| <kbd>SUPER</kbd> + <kbd>H</kbd>                            | Move focus to left                     |
-| <kbd>SUPER</kbd> + <kbd>L</kbd>                            | Move focus to right                    |
-| <kbd>SUPER</kbd> + <kbd>J</kbd>                            | Move focus down                        |
-| <kbd>SUPER</kbd> + <kbd>K</kbd>                            | Move focus up                          |
-| <kbd>ALT</kbd> + <kbd>Tab</kbd>                            | Focus next window                      |
-| <kbd>ALT</kbd> + <kbd>Shift</kbd> + <kbd>Tab</kbd>                    | Focus previous window                  |
+| **Keys**                         | **Description**                             |
+|----------------------------------|---------------------------------------------|
+| <kbd>Print</kbd>                          | Launch screenshot menu                     |
+| <kbd>SHIFT + Print</kbd>                  | Take a full-screen screenshot              |
 
-### Move windows between left/right columns or move up/down in current stack
+---
 
-| Keybinding                          | Description                            |
-|-------------------------------------|----------------------------------------|
-| <kbd>SUPER</kbd> + <kbd>Shift</kbd> + <kbd>H</kbd>                    | Move window to the left                |
-| <kbd>SUPER</kbd> + <kbd>Shift</kbd> + <kbd>L</kbd>                    | Move window to the right               |
-| <kbd>SUPER</kbd> + <kbd>Shift</kbd> + <kbd>J</kbd>                    | Move window down                       |
-| <kbd>SUPER</kbd> + <kbd>Shift</kbd> + <kbd>K</kbd>                    | Move window up                         |
+### 4. Switch Between Windows
 
-### Floating Windows
+| **Keys**                         | **Description**                             |
+|----------------------------------|---------------------------------------------|
+| <kbd>SUPER + h</kbd>                      | Move focus to the left                     |
+| <kbd>SUPER + l</kbd>                      | Move focus to the right                    |
+| <kbd>SUPER + j</kbd>                      | Move focus down                            |
+| <kbd>SUPER + k</kbd>                      | Move focus up                              |
+| <kbd>SUPER + ALT + k</kbd>                | Focus the previous window                  |
+| <kbd>SUPER + ALT + j</kbd>                | Focus the next window                      |
 
-| Keybinding                          | Description                            |
-|-------------------------------------|----------------------------------------|
-| <kbd>SUPER</kbd> + <kbd>F</kbd>                            | Toggle window floating                 |
-| <kbd>SUPER</kbd> + <kbd>C</kbd>                            | Center float window                    |
-| <kbd>SUPER</kbd> + <kbd>U</kbd>                            | Bring float window to front            |
-| <kbd>SUPER</kbd> + <kbd>Shift</kbd> + <kbd>U</kbd>                    | Move float window to bottom            |
+---
 
-### Resize windows
+### 5. Move Windows
 
-| Keybinding                          | Description                            |
-|-------------------------------------|----------------------------------------|
-| <kbd>F10</kbd>                                  | Toggle fullscreen on the focused window|
-| <kbd>SUPER</kbd> + <kbd>I</kbd>                            | Increase window size                   |
-| <kbd>SUPER</kbd> + <kbd>D</kbd>                            | Decrease window size                   |
-| <kbd>SUPER</kbd> + <kbd>R</kbd>                            | Reset Windows Size                     |
-| <kbd>SUPER</kbd> + <kbd>G</kbd>                            | Maximize Window                        |
+| **Keys**                         | **Description**                             |
+|----------------------------------|---------------------------------------------|
+| <kbd>SUPER + SHIFT + h</kbd>              | Move window to the left                     |
+| <kbd>SUPER + SHIFT + l</kbd>              | Move window to the right                    |
+| <kbd>SUPER + SHIFT + j</kbd>              | Move window down                            |
+| <kbd>SUPER + SHIFT + k</kbd>              | Move window up                              |
 
-### Notifications
+---
 
-| Keybinding                          | Description                            |
-|-------------------------------------|----------------------------------------|
-| <kbd>SUPER</kbd> + <kbd>N</kbd>                            | Open notification context              |
-| <kbd>SUPER</kbd> + <kbd>Shift</kbd> + <kbd>N</kbd>                    | Close notification context             |
+### 6. Floating Windows
 
-### Music Control 
+| **Keys**                         | **Description**                             |
+|----------------------------------|---------------------------------------------|
+| <kbd>SUPER + f</kbd>                      | Toggle window floating                     |
+| <kbd>SUPER + c</kbd>                      | Center float window                        |
+| <kbd>SUPER + ALT + SHIFT + k</kbd>        | Bring floating window to the front         |
+| <kbd>SUPER + ALT + SHIFT + j</kbd>        | Move floating window to the bottom         |
 
-| Keybinding                          | Description                            |
-|-------------------------------------|----------------------------------------|
-| <kbd>SUPER</kbd> + <kbd>Period</kbd>                       | Next music track                       |
-| <kbd>SUPER</kbd> + <kbd>Comma</kbd>                        | Previous music track                   |
-| <kbd>SUPER</kbd> + <kbd>Semicolon</kbd>                    | Toggle play/pause music track          |
+---
 
-### Group Switch
+### 7. Resize Windows
 
-| Keybinding                          | Description                            |
-|-------------------------------------|----------------------------------------|
-| <kbd>SUPER</kbd> + <kbd>\<group name></kbd>      | Switch to group (1-9)        |
+| **Keys**                         | **Description**                             |
+|----------------------------------|---------------------------------------------|
+| <kbd>F10</kbd>                            | Toggle fullscreen on the focused window    |
+| <kbd>SUPER + i</kbd>                      | Increase window size                       |
+| <kbd>SUPER + d</kbd>                      | Decrease window size                       |
+| <kbd>SUPER + r</kbd>                      | Reset window size                          |
+| <kbd>SUPER + g</kbd>                      | Maximize window                            |
 
-### Move Window to Group (Non-exclusive groups)
+---
 
-| Keybinding                          | Description                            |
-|-------------------------------------|----------------------------------------|
-| <kbd>SUPER</kbd> + <kbd>Shift</kbd> + <kbd>\<group name\></kbd>      | Move focused window to group (1-7)
+### 8. Notifications
+
+| **Keys**                         | **Description**                             |
+|----------------------------------|---------------------------------------------|
+| <kbd>SUPER + n</kbd>                      | Open notification context                  |
+| <kbd>SUPER + SHIFT + n</kbd>              | Close notification context                 |
+
+---
+
+### 9. Music Control
+
+| **Keys**                         | **Description**                             |
+|----------------------------------|---------------------------------------------|
+| <kbd>SUPER + period</kbd>                 | Next music track                           |
+| <kbd>SUPER + comma</kbd>                  | Previous music track                       |
+| <kbd>SUPER + semicolon</kbd>              | Toggle play/pause music track              |
+
+---
+
+### 10. Groups
+| Keybinding                                  | Description                            |
+|---------------------------------------------|----------------------------------------|
+| <kbd>SUPER</kbd> + <kbd>{number}</kbd>      | Switch to group (1-9)                  |
+---
+
+### 11. Move Window to Group (Non-exclusive groups)
+
+| Keybinding                                                      | Description                            |
+|-----------------------------------------------------------------|----------------------------------------|
+| <kbd>SUPER</kbd> + <kbd>Shift</kbd> + <kbd>{number}</kbd>      | Move focused window to group (1-7)      /
+---
 
 
 ## Screenshots
 | TODO
+

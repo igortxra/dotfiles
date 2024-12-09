@@ -34,7 +34,7 @@ picom
 
 # Browser
 qutebrowser
-google-chrome # AUR
+google-chrome
 
 # File Manager
 thunar
@@ -49,11 +49,11 @@ dunst
 
 # Themes
 lxappearance
-tela-circle-icon-theme-black # AUR
-material-black-colors-theme # AUR
-dracula-gtk-theme # AUR
-dracula-icons-git # AUR
-dracula-cursors-git # AUR
+tela-circle-icon-theme-black
+material-black-colors-theme
+dracula-gtk-theme
+dracula-icons-git
+dracula-cursors-git
 
 # Fonts
 ttf-iosevka-nerd
@@ -64,7 +64,7 @@ xorg-fonts-75dpi
 
 # Clipboard
 xclip
-rofi-greenclip # AUR
+rofi-greenclip
 
 # Automations
 ansible
@@ -73,7 +73,7 @@ ansible-completion-git
 # Utils
 tldr
 galculator
-batify # AUR
+batify
 htop
 btop
 fzf
@@ -102,7 +102,7 @@ fuse2
 docker
 neovim
 github-cli
-asdf-vm # AUR
+asdf-vm
 kubectl
 kind
 google-cloud-cli

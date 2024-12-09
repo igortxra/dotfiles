@@ -90,6 +90,7 @@ python-dbus-next
 python-psutil
 zram-generator
 pwvucontrol
+neofetch
 
 # bluetooth
 bluez

@@ -68,6 +68,7 @@ MENU_SCREENSHOT="flameshot gui"
 MENU_SCREENS=f"{PATH_SCRIPTS}/menus/screens.sh &"
 MENU_AUDIO="pwvucontrol"
 MENU_NETWORK="nm-connection-editor"
+MENU_WINDOWS="rofi -show window"
 # -----------------------------------------------------------------------------------------
 
 # WIDGETS
@@ -141,6 +142,7 @@ keys = [
     Key([SUPER], "s", lazy.spawn(MENU_SCREENS), desc="Spawn screens menu"),
     Key([SUPER], "v", lazy.spawn(MENU_CLIPBOARD), desc="Spawn clipboard menu"),
     Key([SUPER], "equal", lazy.spawn(MENU_UTILS), desc="Spawn utils menu"),
+    Key([SUPER], "w", lazy.spawn(MENU_WINDOWS), desc="Spawn windows menu"),
 
     # Screenshots
     Key([], "Print", lazy.spawn(MENU_SCREENSHOT), desc='Launch screenshot menu'),

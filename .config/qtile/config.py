@@ -232,13 +232,12 @@ for group in groups:
 
 # LAYOUTS
 layouts = [
-    layout.Max(margin=20, border_width=0),
-    layout.MonadTall(border_focus=COLOR_FG_2, margin=20, single_border_width=0, border_width=1),
-    layout.MonadWide(border_focus=COLOR_FG_2, margin=20, single_border_width=0, border_width=1, ratio=0.75),
-    layout.Matrix(border_focus=COLOR_FG_2, margin=10, single_border_width=0, border_width=1),
+    layout.Max(border_focus=COLOR_PURPLE, margin=20, border_width=0),
+    layout.MonadTall(border_focus=COLOR_PURPLE, margin=20, single_border_width=0, border_width=2),
+    layout.MonadWide(border_focus=COLOR_PURPLE, margin=20, single_border_width=0, border_width=2, ratio=0.75),
+    layout.Matrix(border_focus=COLOR_PURPLE, margin=10, single_border_width=0, border_width=2),
 
     ## Not Used Layouts.
-    # layout.Columns(),
     # layout.Stack(num_stacks=2),
     # layout.Bsp(),
     # layout.RatioTile(),

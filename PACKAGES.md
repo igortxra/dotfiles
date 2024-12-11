@@ -113,3 +113,8 @@ discord
 betterdiscord-installer
 spotify-launcher
 
+# Betterlockscreen
+i3lock-color
+bc
+imagemagick
+betterlockscreen

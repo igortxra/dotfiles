@@ -20,6 +20,9 @@ zinit light zsh-users/zsh-syntax-highlighting
 zinit light zsh-users/zsh-completions
 zinit light zsh-users/zsh-autosuggestions
 
+# Git Aliases
+zinit snippet https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/refs/heads/master/plugins/git/git.plugin.zsh
+
 zinit light Aloxaf/fzf-tab
 
 # History
@@ -49,7 +52,7 @@ bindkey '^f' autosuggest-accept
 
 # End of lines configured by zsh-newuser-install
 # The following lines were added by compinstall
-zstyle :compinstall filename '/home/igortxra/.zshrc'
+zstyle :compinstall filename '$HOME/.zshrc'
 zstyle ":completion:*" matcher-list 'm:{a-z}={A-Za-z}'
 zstyle ":completion:*" list-colors "${(s.:.)LS_COLORS}"
 zstyle ":completion:*" menu no
@@ -75,3 +78,11 @@ path+=("$HOME/.local/bin")
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
+# Make prompt displays at bottom
+precmd() {
+  local rows
+  rows=999
+  print -Pn "\e[${rows}H"
+}
+
+PROMPT='%n@%m %~ %#\n'

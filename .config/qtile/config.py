@@ -53,6 +53,7 @@ FONT = "Iosevka Nerd Font"
 # PATHS
 PATH_HOME = path.expanduser("~")
 PATH_SCRIPTS = f"{PATH_HOME}/.local/bin/"
+PATH_SCREENSHOTS = f"{PATH_HOME}/Screenshots"
 # -----------------------------------------------------------------------------------------
 
 # INIT SCRIPT
@@ -64,7 +65,7 @@ MENU_APP = f"{PATH_SCRIPTS}/menus/apps.sh &"
 MENU_CLIPBOARD = f"{PATH_SCRIPTS}/menus/clipboard.sh &"
 MENU_POWER = f"{PATH_SCRIPTS}/menus/power.sh &"
 MENU_UTILS=f"{PATH_SCRIPTS}/menus/utils.sh &"
-MENU_SCREENSHOT="flameshot gui"
+MENU_SCREENSHOT=f"flameshot gui --path {PATH_SCREENSHOTS}"
 MENU_SCREENS=f"{PATH_SCRIPTS}/menus/screens.sh &"
 MENU_AUDIO="pwvucontrol"
 MENU_NETWORK="nm-connection-editor"
@@ -78,7 +79,7 @@ WIDGET_CALENDAR = f"{PATH_SCRIPTS}/widgets/calendar.sh"
 
 # DO ACTIONS
 SHOW_UPGRADABLE_PACKAGES=f"{PATH_SCRIPTS}/utils/show-upgradable-packages.sh &"
-TAKE_SCREENSHOT_FULLSCREEN="flameshot full"
+TAKE_SCREENSHOT_FULLSCREEN=f"flameshot full --path {PATH_SCREENSHOTS}"
 OPEN_NOTIFICATION="dunstctl context && dunstctl close"
 CLOSE_NOTIFICATION="dunstctl close"
 MUSIC_NEXT="playerctl --player=spotify next"
@@ -165,14 +166,13 @@ keys = [
     # Floating Windows
     Key([SUPER], "f", lazy.window.toggle_floating(), desc="Toggle window floating"),
     Key([SUPER], "c", lazy.window.center(), desc="Center float window"),
-    Key([SUPER, ALT, "shift"], "k", lazy.window.bring_to_front(), desc="Bring float window to front"),
-    Key([SUPER, ALT, "shift"], "j", lazy.window.move_to_bottom(), desc="Move float window to bottom"),
+    Key([SUPER, ALT], "b", lazy.window.move_to_bottom(), desc="Move float window to bottom"),
+    Key([SUPER, ALT], "f", lazy.window.bring_to_front(), desc="Move float window to front"),
 
     # Resize windows
     Key([], "F10", lazy.window.toggle_fullscreen(), desc="Toggle fullscreen on the focused window"),
     Key([SUPER], "i", lazy.layout.grow(), desc="Increase window size"),
     Key([SUPER], "d", lazy.layout.shrink(), desc="Decrease window size"),
-    Key([SUPER], "r", lazy.layout.reset(), desc="Reset Windows Size"),
     Key([SUPER], "g", lazy.layout.maximize(), desc="Maximize Window"),
     Key([SUPER], "r", lazy.layout.reset(), desc="Reset Windows Size"),
     
@@ -198,22 +198,17 @@ groups = [
     Group(name="7", layout="monadtall"),
     # Spotify Group
     Group(name="8", label="󰓇", matches=[Match(wm_class="spotify")], spawn="", layout="max"),
-    # Discord Group
-    Group(name="9", label="", matches=[Match(wm_class="discord")], spawn="discord", layout="max")
+    #Discord Group
+    Group(name="9", label=" ", matches=[Match(wm_class="discord")], spawn="", layout="max")
 ]
 
 
 for group in groups:
 
-    # Configure spawn behavior: Spawn application when focus the group
-    commands: List[LazyCall] = [lazy.group[group.name].toscreen()]
-    if group.spawn is not None:
-        commands.append(lazy.spawn(group.spawn))
-
     # Super + <group name> = switch to group
     keys.append(
         Key([SUPER], group.name,
-            *commands,
+            lazy.group[group.name].toscreen(),
             desc="Switch to group {}".format(group.name),
         ))
     
@@ -495,7 +490,7 @@ mouse = [
 # MORE
 dgroups_key_binder = None
 dgroups_app_rules = []  # type: list
-follow_mouse_focus = True
+follow_mouse_focus = False
 bring_front_click = False
 floats_kept_above = True
 cursor_warp = True
@@ -515,6 +510,7 @@ floating_layout = layout.Floating(
         Match(wm_class="nm-connection-editor"), # Network Manager Connection Editor
         Match(wm_class="pwvucontrol"), # Audio Settings
         Match(wm_class="VirtualBox"), # VirtualBox
+        Match(wm_class="feh"), # Image Viewer
     ],
     border_width=0
 )

@@ -1,3 +1,17 @@
 .dotfiles
-.cache
 .asdf
+.cargo
+
+# Caches
+.cache
+**/cache
+**/Cache
+**/*Cache
+**/*cache
+
+# Logs
+**/*.log
+
+# Specific apps
+.config/Postman
+.config/discord

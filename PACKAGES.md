@@ -2,20 +2,6 @@
 vim
 git
 
-# Screen Configuration
-arandr
-autorandr
-
-# Wallpapers
-feh
-
-# Screenshots
-flameshot
-
-# Version Control
-git
-github-cli
-
 # Window Manager
 qtile
 
@@ -27,10 +13,9 @@ kitty
 
 # Launcher
 rofi
-dmenu
 
 # Compositor
-picom
+picom-git
 
 # Browser
 qutebrowser
@@ -44,15 +29,19 @@ tumbler
 ffmpegthumbnailer
 ranger
 
+# Screen Locker
+betterlockscreen
+
 # Notification
 dunst
+
+# Wallpapers
+feh
 
 # Themes
 lxappearance
 tela-circle-icon-theme-black
 material-black-colors-theme
-dracula-gtk-theme
-dracula-icons-git
 dracula-cursors-git
 
 # Fonts
@@ -66,31 +55,50 @@ xorg-fonts-75dpi
 xclip
 rofi-greenclip
 
-# Automations
-ansible
-ansible-completion-git
+# Screenshots
+flameshot
+peek
 
-# Utils
-tldr
-galculator
-batify
-htop
+# Network Utils
+nm-connection-editor
+
+# Screen Utils
+arandr
+autorandr
+
+# Audio Utils
+alsa-utils
+playerctl
+pwvucontrol
+easyeffects
+
+# CLI Utils
+git-delta
+xprop
+wget
+tealdeer
+exa
+bat
+zoxide
 btop
-fzf
 less
 man-db
+fzf
 unzip
 ripgrep
-archey3
+
+# Utilities
+galculator
+batify
 numlockx
-alsa-utils
+zram-generator
+neofetch
+
+# Programming
 nodejs
 npm
 python-dbus-next
 python-psutil
-zram-generator
-pwvucontrol
-neofetch
 
 # bluetooth
 bluez
@@ -100,21 +108,20 @@ bluez-utils
 fuse2
 
 # Developer Tools
-docker
 neovim
-github-cli
+docker
+docker-compose
 kubectl
 kind
+github-cli
 google-cloud-cli
-postman
+postman-bin
+virtualbox
+virtualbox-host-modules-arch
 
 # Personal Needs
 discord
 betterdiscord-installer
 spotify-launcher
-
-# Betterlockscreen
-i3lock-color
-bc
-imagemagick
-betterlockscreen
+gimp
+qgis

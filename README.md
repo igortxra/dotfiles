@@ -151,10 +151,9 @@ If you want to change this, edit `~/.local/bin/autostart.sh`;
 | Keys                                                                       | Description                                |
 |----------------------------------------------------------------------------|--------------------------------------------|
 | <kbd>SUPER</kbd> + <kbd>f</kbd>                                            | Toggle window floating                     |
-| <kbd>SUPER</kbd> + <kbd>f</kbd>                                            | Toggle window floating                     |
-| <kbd>SUPER</kbd> + <kbd>c</kbd>                                            | Center float window                        |
-| <kbd>SUPER</kbd> + <kbd>ALT</kbd> + <kbd>SHIFT</kbd> + <kbd>k</kbd>        | Bring floating window to the front         |
-| <kbd>SUPER</kbd> + <kbd>ALT</kbd> + <kbd>SHIFT</kbd> + <kbd>j</kbd>        | Move floating window to the bottom         |
+| <kbd>SUPER</kbd> + <kbd>c</kbd>                                            | Center float window (and bring to front)   |
+| <kbd>SUPER</kbd> + <kbd>ALT</kbd> + <kbd>f</kbd>                           | Bring floating window to the front         |
+| <kbd>SUPER</kbd> + <kbd>ALT</kbd> + <kbd>b</kbd>                           | Move floating window to the bottom         |
 
 ---
 
@@ -199,7 +198,7 @@ If you want to change this, edit `~/.local/bin/autostart.sh`;
 ### Move Window to Group
 | Keybinding                                                     | Description                            |
 |----------------------------------------------------------------|----------------------------------------|
-| <kbd>SUPER</kbd> + <kbd>Shift</kbd> + <kbd>{number}</kbd>      | Move focused window to group (1-7)     |
+| <kbd>SUPER</kbd> + <kbd>Shift</kbd> + <kbd>{number}</kbd>      | Move focused window to group (1-9)     |
 
 ---
 

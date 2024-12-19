@@ -1,4 +1,7 @@
 # My Dotfiles
+🗄️ Here I store my dotfiles.
+
+🫠 Basically an `Arch Linux` OS with `Qtile` as Window Manager; `Xorg` as display server with `Picom` compositor.
 
 ## Summary
   - [Main Applications](#main-applications)
@@ -125,7 +128,7 @@ If you want to change this, edit `~/.local/bin/autostart.sh`;
 
 ### Screenshots
 
-| Keys                                     | **Description                             |
+| Keys                                     | Description                             |
 |------------------------------------------|-------------------------------------------|
 | <kbd>Print</kbd>                         | Launch screenshot menu                    |
 | <kbd>SHIFT</kbd> + <kbd>Print</kbd>      | Take a full-screen screenshot             |
@@ -169,7 +172,7 @@ If you want to change this, edit `~/.local/bin/autostart.sh`;
 
 ### Notifications
 
-| Keys                                                 | **Description                |
+| Keys                                                 | Description                |
 |------------------------------------------------------|------------------------------|
 | <kbd>SUPER</kbd> + <kbd>n</kbd>                      | Open notification context    |
 | <kbd>SUPER</kbd> + <kbd>SHIFT</kbd> + <kbd>n</kbd>   | Close notification context   |

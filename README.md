@@ -3,6 +3,9 @@
 
 🫠 Basically an `Arch Linux` OS with `Qtile` as Window Manager; `Xorg` as display server with `Picom` compositor.
 
+## How it Looks 
+![image](https://github.com/user-attachments/assets/7bddf0a4-3cb6-4110-bbf9-f72b2befa1a4)
+
 ## Summary
   - [Main Applications](#main-applications)
   - [Installing](#installing)
@@ -201,10 +204,6 @@ If you want to change this, edit `~/.local/bin/autostart.sh`;
 | <kbd>SUPER</kbd> + <kbd>Shift</kbd> + <kbd>{number}</kbd>      | Move focused window to group (1-9)     |
 
 ---
-
-
-## How it Looks 
-![screenshot_1](https://github.com/user-attachments/assets/c589e495-bc97-4faf-9ea2-9b7f43334d57)
 
 
 

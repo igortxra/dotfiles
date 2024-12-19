@@ -1,27 +1,27 @@
-# Essential
+## Essential
 vim
 git
 
-# Window Manager
+## Window Manager
 qtile
 
-# Shell
+## Shell
 zsh
 
-# Terminal Emulator
+## Terminal Emulator
 kitty
 
-# Launcher
+## Launcher
 rofi
 
-# Compositor
+## Compositor
 picom-git
 
-# Browser
+## Browsers
 qutebrowser
 google-chrome
 
-# File Manager
+## File Manager
 thunar
 thunar-volman
 gvfs
@@ -29,50 +29,50 @@ tumbler
 ffmpegthumbnailer
 ranger
 
-# Screen Locker
+## Screen Locker
 betterlockscreen
 
-# Notification
+## Notification
 dunst
 
-# Wallpapers
+## Wallpapers
 feh
 
-# Themes
+## Themes
 lxappearance
 tela-circle-icon-theme-black
 material-black-colors-theme
 dracula-cursors-git
 
-# Fonts
+## Fonts
 ttf-iosevka-nerd
 noto-fonts-cjk
 noto-fonts-emoji
 xorg-fonts-100dpi
 xorg-fonts-75dpi
 
-# Clipboard
+## Clipboard
 xclip
 rofi-greenclip
 
-# Screenshots
+## Screenshots
 flameshot
 peek
 
-# Network Utils
+## Network Utils
 nm-connection-editor
 
-# Screen Utils
+## Screen Utils
 arandr
 autorandr
 
-# Audio Utils
+## Audio Utils
 alsa-utils
 playerctl
 pwvucontrol
 easyeffects
 
-# CLI Utils
+## CLI Utils
 git-delta
 xprop
 wget
@@ -87,27 +87,27 @@ fzf
 unzip
 ripgrep
 
-# Utilities
+## Utilities
 galculator
 batify
 numlockx
 zram-generator
 neofetch
 
-# Programming
+## Programming
 nodejs
 npm
 python-dbus-next
 python-psutil
 
-# bluetooth
+## bluetooth
 bluez
 bluez-utils
 
-# Required to run AppImages
+## Required to run AppImages
 fuse2
 
-# Developer Tools
+## Developer Tools
 neovim
 docker
 docker-compose
@@ -119,7 +119,7 @@ postman-bin
 virtualbox
 virtualbox-host-modules-arch
 
-# Personal Needs
+## Personal Needs
 discord
 betterdiscord-installer
 spotify-launcher

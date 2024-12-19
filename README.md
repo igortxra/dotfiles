@@ -3,7 +3,7 @@
 ## Summary
   - [Main Applications](#main-applications)
   - [Installing](#installing)
-    - [1. Minimal installation](###minimal-installation)
+    - [1. Minimal installation](#minimal-installation)
     - [2. Setup Script](#setup-script)
     - [3. First-run settings](#first-run-settings)
       - [Wallpaper](#wallpaper)

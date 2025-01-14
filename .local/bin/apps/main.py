@@ -23,31 +23,49 @@ def get_volume():
 
 
 # Stores current volume; Scale is >= 0 <= 1.0
-volume = 1.0
+prev_volume = get_volume()
+volume = get_volume()
+was_last_track_ads = False
 
 
 def handler_function(*args):
-    """ Mute spotify when the ads starts and unmute when stops."""
     global volume
+    global prev_volume
+    global was_last_track_ads
+    
+    """ Mute spotify when the ads starts and unmute when stops."""
     try:
-
-        # Get actual volume before mute it
-        volume = get_volume()
-
-
         # All ads has this metadata
-        if bool(re.search("advertisement", args[1]["Metadata"]["xesam:title"].lower())):
+        is_ads = bool(re.search("advertisement", args[1]["Metadata"]["xesam:title"].lower()))
+        if is_ads and was_last_track_ads is False:
+            # Get actual volume before mute it
+            volume = get_volume()
 
             # Use Playerctl to mute spotify
             subprocess.run(["playerctl", "-p", "spotify", "volume", "0"])
-        else:
 
+            was_last_track_ads = True
+            print(f"Ads detected - Muting. Previous volume was {volume}")
+            subprocess.run([f"notify-send", "Ads Detected!", "Muting spotify...", "-a", "Ads Detector"])
+
+        if not is_ads and was_last_track_ads:
+            print(f"Ads gone - Unmuting. Volume set to {prev_volume}")
+            subprocess.run(
+                [f"notify-send", "Ads gone!", "Unmuting spotify...", "-a", "Ads Detector"])
+            
             # Use Playerctl to unmute spotify
             subprocess.run(
-                [f"playerctl", "-p", "spotify", "volume", f"{volume}"])
+                [f"playerctl", "-p", "spotify", "volume", f"{prev_volume}"])
+
+            was_last_track_ads = False
+
+        else:
+            print(f"Keeping volume...")
+
+
     except Exception as e:
         # I just wanted to silence the ignorable errors with this try except
-        print(str(e))
+        # print(str(e))
         pass
 
 

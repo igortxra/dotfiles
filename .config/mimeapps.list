@@ -1,16 +1,19 @@
 [Default Applications]
-x-scheme-handler/postman=Postman.desktop
+application/json=nvim.desktop
+image/png=feh.desktop
 text/markdown=nvim.desktop
-text/x-python=nvim.desktop
-text/x-makefile=nvim.desktop
+text/plain=nvim.desktop
 application/pdf=google-chrome.desktop
+application/octet-stream=org.qgis.qgis.desktop
+x-scheme-handler/postman=Postman.desktop
+application/x-zerosize=nvim.desktop
 
 [Added Associations]
-image/gif=google-chrome.desktop;
-application/vnd.shp=qgis.desktop
-inode/directory=nvim.desktop;
+application/json=nvim.desktop;
+image/png=feh.desktop;
 text/markdown=nvim.desktop;
-text/x-python=nvim.desktop;
 text/plain=nvim.desktop;
-text/x-makefile=nvim.desktop;
-application/pdf=google-chrome.desktop;
+application/pdf=mupdf.desktop;google-chrome.desktop;
+application/octet-stream=org.qgis.qgis.desktop;
+application/x-zerosize=nvim.desktop;
+application/zip=org.qgis.qgis.desktop;xarchiver.desktop;

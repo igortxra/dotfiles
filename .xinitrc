@@ -1,3 +1,3 @@
 #!/bin/sh
 
-exec qtile start
+exec dbus-launch --exit-with-session qtile start

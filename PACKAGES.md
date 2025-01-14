@@ -24,6 +24,8 @@ google-chrome
 ## File Manager
 thunar
 thunar-volman
+thunar-archive-plugin
+xarchiver
 gvfs
 tumbler
 ffmpegthumbnailer

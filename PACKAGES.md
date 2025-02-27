@@ -91,6 +91,8 @@ less
 man-db
 fzf
 ripgrep
+exfat-utils
+jq
 
 ## Utilities
 btop
@@ -125,6 +127,8 @@ virtualbox
 virtualbox-host-modules-arch
 bruno
 postman-bin
+beekeeper-studio
+terraform
 
 ## Discord
 discord
@@ -133,11 +137,18 @@ betterdiscord-installer
 ## Musics
 spotify-launcher
 
-## Image Editor
+## Image Editor/Viewer
 gimp
+mirage
+
+## Video Player
+vlc
 
 ## Qgis
 qgis
 python-oswlib
 python-psycopg2
 python-gdal
+
+## Libreoffice
+libreoffice-fresh-br

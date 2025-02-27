@@ -13,6 +13,7 @@ kitty
 
 ## Launcher
 rofi
+dmenu
 
 ## Compositor
 picom-git
@@ -21,24 +22,28 @@ picom-git
 qutebrowser
 google-chrome
 
-## File Manager
+## File Management
 thunar
 thunar-volman
 thunar-archive-plugin
 xarchiver
+zip
+unzip
 gvfs
 tumbler
 ffmpegthumbnailer
 ranger
+xdg-user-dirs
 
 ## Screen Locker
 betterlockscreen
+feh
 
-## Notification
+## Notifications
 dunst
 
-## Wallpapers
-feh
+## Note Taking
+obsidian
 
 ## Themes
 lxappearance
@@ -57,7 +62,7 @@ xorg-fonts-75dpi
 xclip
 rofi-greenclip
 
-## Screenshots
+## Screenshots / Gif Generators
 flameshot
 peek
 
@@ -79,17 +84,16 @@ git-delta
 xprop
 wget
 tealdeer
-exa
+eza
 bat
 zoxide
-btop
 less
 man-db
 fzf
-unzip
 ripgrep
 
 ## Utilities
+btop
 galculator
 batify
 numlockx
@@ -117,13 +121,23 @@ kubectl
 kind
 github-cli
 google-cloud-cli
-postman-bin
 virtualbox
 virtualbox-host-modules-arch
+bruno
+postman-bin
 
-## Personal Needs
+## Discord
 discord
 betterdiscord-installer
+
+## Musics
 spotify-launcher
+
+## Image Editor
 gimp
+
+## Qgis
 qgis
+python-oswlib
+python-psycopg2
+python-gdal

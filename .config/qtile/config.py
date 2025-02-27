@@ -193,10 +193,11 @@ groups = [
     Group(name="1", label="1",  layout="monadtall"),
     Group(name="2", label="2",  layout="monadwide"),
     Group(name="3", label="3",  layout="monadwide"),
-    Group(name="4", label="4",  layout="monadwide"),
+    Group(name="4", label="4",  layout="monadtall"),
     Group(name="5", label="5",  layout="monadtall"),
     Group(name="6", label="6",  layout="monadtall"),
-    Group(name="7", label="7",  layout="monadtall"),
+    # Qgis Group
+    Group(name="7", label="7", matches=[Match(wm_class="qgis")], layout="max"),
     # Spotify Group
     Group(name="8", label="8", matches=[Match(wm_class="spotify")], layout="max"),
     # Discord Group

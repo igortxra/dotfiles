@@ -51,7 +51,7 @@ FONT = "Iosevka Nerd Font"
 
 # PATHS
 PATH_HOME = path.expanduser("~")
-PATH_SCRIPTS = f"{PATH_HOME}/.local/bin/"
+PATH_SCRIPTS = f"{PATH_HOME}/.local/bin"
 PATH_SCREENSHOTS = f"{PATH_HOME}/Screenshots"
 # -----------------------------------------------------------------------------------------
 
@@ -72,6 +72,7 @@ MENU_WINDOWS="rofi -show window"
 # -----------------------------------------------------------------------------------------
 
 # WIDGETS
+WIDGET_DOTFILES=f"{PATH_SCRIPTS}/widgets/dotfiles-status.sh"
 WIDGET_NETWORK=f"{PATH_SCRIPTS}/widgets/network.sh"
 WIDGET_CALENDAR = f"{PATH_SCRIPTS}/widgets/calendar.sh"
 # -----------------------------------------------------------------------------------------
@@ -353,6 +354,20 @@ bar_primary = bar.Bar(
 
         widget.Spacer(),
 
+        widget.GenPollText(
+            func=lambda: subprocess.check_output(WIDGET_DOTFILES, shell=True).decode(),
+            update_interval=1, 
+            foreground=COLOR_GREEN,
+            background=None,
+            max_chars=20,
+            padding=5,
+            # mouse_callbacks={
+            #     "Button3": lazy.spawn(MENU_NETWORK)
+            # },
+        ),
+
+        widget.Spacer(10),
+        widget.Sep(),
 
         widget.Volume(
             fmt="󱄠",

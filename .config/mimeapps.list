@@ -7,13 +7,18 @@ application/pdf=google-chrome.desktop
 application/octet-stream=org.qgis.qgis.desktop
 x-scheme-handler/postman=Postman.desktop
 application/x-zerosize=nvim.desktop
+x-scheme-handler/betterdiscord=discord.desktop
 
 [Added Associations]
 application/json=nvim.desktop;
 image/png=feh.desktop;
 text/markdown=nvim.desktop;
-text/plain=nvim.desktop;
+text/plain=libreoffice-calc.desktop;libreoffice-writer.desktop;nvim.desktop;
 application/pdf=mupdf.desktop;google-chrome.desktop;
 application/octet-stream=org.qgis.qgis.desktop;
 application/x-zerosize=nvim.desktop;
 application/zip=org.qgis.qgis.desktop;xarchiver.desktop;
+image/jpeg=mirage.desktop;
+text/csv=libreoffice-calc.desktop;nvim.desktop;
+application/geo+json=nvim.desktop;org.qgis.qgis.desktop;
+image/tiff=org.qgis.qgis.desktop;

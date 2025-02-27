@@ -15,3 +15,6 @@
 # Specific apps
 .config/Postman
 .config/discord
+
+# No need to update these
+.config/flameshot/flameshot.ini

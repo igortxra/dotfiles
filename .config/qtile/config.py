@@ -367,8 +367,7 @@ bar_primary = bar.Bar(
             # },
         ),
 
-        widget.Spacer(10),
-        widget.Sep(),
+        widget.Spacer(20),
 
         widget.Volume(
             fmt="󱄠",
@@ -391,10 +390,6 @@ bar_primary = bar.Bar(
             padding=5,
             font="Liberation Mono"
         ),
-
-        widget.Spacer(10),
-        widget.Sep(),
-        
         widget.Spacer(10),
         widget.BatteryIcon(
             theme_path="/usr/share/icons/Tela-circle-black/22/panel/",
@@ -454,10 +449,8 @@ bar_top = bar.Bar(
                     }
                 ),
 
-                widget.Spacer(10),
-                widget.Sep(),
                 
-                widget.Spacer(10),
+                widget.Spacer(20),
                 widget.DF(
                     partition="/home/igortxra", 
                     format='  Free: {uf}{m}',
@@ -466,22 +459,13 @@ bar_top = bar.Bar(
                     foreground=COLOR_FLAMINGO
                 ),
 
-                widget.Spacer(10),
-                widget.Sep(),
-                
-                widget.Spacer(10),
+                widget.Spacer(20),
                 widget.Memory(padding=5, fmt=" {}", format="{MemUsed: .0f} /{MemTotal: .0f} ({mm})", measure_mem="G", background=None, foreground=COLOR_PURPLE),
                 
-                widget.Spacer(10),
-                widget.Sep(),
-                
-                widget.Spacer(10),
+                widget.Spacer(20),
                 widget.CPU(fmt="󰍛 {}", background=None, foreground=COLOR_PINK),
 
-                widget.Spacer(10),
-                widget.Sep(),
-                
-                widget.Spacer(10),
+                widget.Spacer(20),
                 widget.GenPollText(
                     func=lambda: subprocess.check_output(WIDGET_NETWORK).decode(),
                     update_interval=1, 
@@ -495,10 +479,7 @@ bar_top = bar.Bar(
                 ),
 
 
-                widget.Spacer(10),
-                widget.Sep(),
-                widget.Spacer(10),
-                
+                widget.Spacer(20),
                 widget.Wallpaper(
                     label="󰸉  Change Wallpaper",
                     directory=f"{PATH_HOME}/Wallpapers"

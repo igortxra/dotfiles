@@ -5,7 +5,7 @@ spotify-launcher &
 SPOTIFY_PID=$!
 
 # Inicia o script Python
-python ~/.local/bin/apps/main.py &
+python ~/.local/bin/apps/spotify/main.py &
 PYTHON_PID=$!
 
 # Espera o Spotify ser fechado

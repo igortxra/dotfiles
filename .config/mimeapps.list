@@ -13,6 +13,7 @@ x-scheme-handler/http=google-chrome.desktop
 x-scheme-handler/https=google-chrome.desktop
 x-scheme-handler/about=google-chrome.desktop
 x-scheme-handler/unknown=google-chrome.desktop
+x-scheme-handler/mailto=google-chrome.desktop
 
 [Added Associations]
 application/json=org.qgis.qgis.desktop;firefox.desktop;nvim.desktop;
@@ -22,7 +23,7 @@ text/plain=libreoffice-calc.desktop;libreoffice-writer.desktop;nvim.desktop;
 application/pdf=mupdf.desktop;google-chrome.desktop;
 application/octet-stream=org.qgis.qgis.desktop;
 application/x-zerosize=nvim.desktop;
-application/zip=org.qgis.qgis.desktop;xarchiver.desktop;
+application/zip=xarchiver.desktop;org.qgis.qgis.desktop;
 image/jpeg=mirage.desktop;
 text/csv=libreoffice-calc.desktop;nvim.desktop;
 application/geo+json=nvim.desktop;org.qgis.qgis.desktop;

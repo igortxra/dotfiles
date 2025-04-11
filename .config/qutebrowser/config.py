@@ -167,7 +167,18 @@ c.tabs.last_close = 'close'
 # Type: List of FuzzyUrl, or FuzzyUrl
 c.url.start_pages = 'https://github.com'
 
-c.url.searchengines = {'DEFAULT': 'https://start.duckduckgo.com/?q={}', 'aw': 'https://wiki.archlinux.org/?search={}', 'goog': 'https://www.google.com/search?q={}', 're': 'https://www.reddit.com/search?q={}', 'gh': 'https://github.com/search?q={}', 'ghr': 'https://github.com/{unquoted}', 'wiki': 'https://en.wikipedia.org/wiki/{}', 'yt': 'https://www.youtube.com/results?search_query={}', 'qtile': 'http://docs.qtile.org/en/stable/search.html?q={}'}
+c.url.searchengines = {
+    'DEFAULT': 'https://start.duckduckgo.com/?q={}',
+    'aw': 'https://wiki.archlinux.org/?search={}', 
+    'goog': 'https://www.google.com/search?q={}',
+    're': 'https://www.reddit.com/search?q={}', 
+    'gh': 'https://github.com/search?q={}', 
+    'ghr': 'https://github.com/{unquoted}',
+    'wiki': 'https://en.wikipedia.org/wiki/{}',
+    'yt': 'https://www.youtube.com/results?search_query={}',
+    'qtile': 'http://docs.qtile.org/en/stable/search.html?q={}',
+    'firestore': "https://console.cloud.google.com/firestore/databases/-default-/data/panel/demand-collection-v2/{}"
+}
 
 
 # credits to theova/base16-qutebrowser for the original template

@@ -68,6 +68,7 @@ MENU_SCREENSHOT=f"flameshot gui"
 MENU_SCREENS=f"{PATH_SCRIPTS}/menus/screens.sh &"
 MENU_AUDIO="pwvucontrol"
 MENU_NETWORK="nm-connection-editor"
+MENU_NETWORK_TERMINAL='kitty --hold tldr nmcli'
 MENU_WINDOWS="rofi -show window"
 # -----------------------------------------------------------------------------------------
 
@@ -471,9 +472,10 @@ bar_top = bar.Bar(
                     update_interval=1, 
                     foreground=COLOR_GREEN,
                     background=None,
-                    max_chars=20,
+                    max_chars=50,
                     padding=5,
                     mouse_callbacks={
+                        "Button1": lazy.spawn(MENU_NETWORK_TERMINAL),
                         "Button3": lazy.spawn(MENU_NETWORK)
                     },
                 ),

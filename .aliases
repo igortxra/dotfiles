@@ -2,4 +2,7 @@ alias g="git"
 alias dotfiles="git --git-dir=$HOME/.dotfiles --work-tree=$HOME"
 alias dc="docker-compose"
 alias ls="ls --color"
+
+# !!! Needs files that are not stored in Dotfiles repository !!!
 alias demand="~/Desktop/Snippets/problema-com-demanda/demand.sh"
+alias bater-ponto="cd ~/Desktop/Snippets/bater-ponto/ && uv run python main.py"

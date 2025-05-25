@@ -1,5 +1,5 @@
 # My Dotfiles
-🗄️ Here I store my dotfiles.
+🗄️ Here I store my dotfiles. Think the repo root as the $HOME dir. This README.md are a mini documentation of how I manage my OS.
 
 🫠 Basically an `Arch Linux` OS with `Qtile` as Window Manager; `Xorg` as display server with `Picom` compositor.
 

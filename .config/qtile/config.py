@@ -28,11 +28,27 @@ import subprocess
 from os import path
 
 from libqtile import bar, layout, widget
-from libqtile.config import Click, Drag, Group, Key, Match, Screen
+from libqtile.config import Click, Drag, DropDown, Group, Key, Match, ScratchPad, Screen
+from libqtile.core.manager import Qtile
 from libqtile.lazy import lazy
 from libqtile.hook import subscribe
 
 # AUXILIARY FUNCTIONS
+def go_to_group(group_name: str):
+    def _inner(qtile: Qtile):
+        if group_name == "0":
+            qtile.groups_map[group_name].toscreen()
+            if qtile.current_window is None:
+                qtile.spawn("obsidian")
+
+        if group_name == "9":
+            qtile.groups_map[group_name].toscreen()
+            if qtile.current_window is None:
+                qtile.spawn("discord")
+        else:
+            qtile.groups_map[group_name].toscreen()
+    return _inner
+
 def get_number_of_screens():
     """ Get number of connected monitors """
     xr = subprocess.check_output(
@@ -45,7 +61,8 @@ SCREEN_COUNT = get_number_of_screens()
 
 # BASIC APPLICATIONS
 TERMINAL = "kitty"
-FILE_MANAGER = "thunar"
+# FILE_MANAGER = "thunar"
+FILE_MANAGER = "ranger"
 FONT = "Iosevka Nerd Font"
 # -----------------------------------------------------------------------------------------
 
@@ -70,6 +87,7 @@ MENU_AUDIO="pwvucontrol"
 MENU_NETWORK="nm-connection-editor"
 MENU_NETWORK_TERMINAL='kitty --hold tldr nmcli'
 MENU_WINDOWS="rofi -show window"
+MENU_AUTOMATIONS=f"{PATH_SCRIPTS}/menus/automations.sh &"
 # -----------------------------------------------------------------------------------------
 
 # WIDGETS
@@ -105,7 +123,7 @@ COLOR_GREEN = "#a6e3a1"
 COLOR_FLAMINGO = "#f0c6c6"
 COLOR_PINK = "#f5bde6"
 
-COLOR_BAR_BG = COLOR_BG_1 + "77"
+COLOR_BAR_BG = COLOR_BG_1 + "77" # 77 for transparency
 
 # COLOR_SURFACE_0="#313244"
 # COLOR_SAPPHIRE="#74c7ec"
@@ -139,13 +157,14 @@ keys = [
     Key([SUPER], 'm', lazy.next_screen(), desc='Change focused screen'), 
  
     # Spawners/Menus
-    Key([SUPER], "e", lazy.spawn(FILE_MANAGER), desc="Spawn file manager"),
+    # Key([SUPER], "e", lazy.spawn(FILE_MANAGER), desc="Spawn file manager"),
     Key([SUPER], "space", lazy.spawn(MENU_APP), desc="Spawn a app launcher"),
     Key([SUPER], "p", lazy.spawn(MENU_POWER), desc="Spawn power menu"),
     Key([SUPER], "s", lazy.spawn(MENU_SCREENS), desc="Spawn screens menu"),
     Key([SUPER], "v", lazy.spawn(MENU_CLIPBOARD), desc="Spawn clipboard menu"),
     Key([SUPER], "equal", lazy.spawn(MENU_UTILS), desc="Spawn utils menu"),
     Key([SUPER], "w", lazy.spawn(MENU_WINDOWS), desc="Spawn windows menu"),
+    Key([SUPER], "a", lazy.spawn(MENU_AUTOMATIONS), desc="Spawn automations menu"),
 
     # Screenshots
     Key([], "Print", lazy.spawn(MENU_SCREENSHOT), desc='Launch screenshot menu'),
@@ -156,6 +175,7 @@ keys = [
     Key([SUPER], "l", lazy.layout.right(), desc="Move focus to right"),
     Key([SUPER], "j", lazy.layout.down(), desc="Move focus down"),
     Key([SUPER], "k", lazy.layout.up(), desc="Move focus up"),
+
     Key([SUPER, ALT], "k", lazy.group.prev_window(), desc="Focus next window"),
     Key([SUPER, ALT], "j", lazy.group.next_window(), desc="Focus next window"),
     
@@ -179,8 +199,8 @@ keys = [
     Key([SUPER], "r", lazy.layout.reset(), desc="Reset Windows Size"),
     
     # Notifications
-    Key([SUPER], "n", lazy.spawn(OPEN_NOTIFICATION), desc="Open notification context"),
-    Key([SUPER, "shift"], "n", lazy.spawn(CLOSE_NOTIFICATION), desc="Close notification context"),
+    Key([SUPER, "shift"], "n", lazy.spawn(OPEN_NOTIFICATION), desc="Open notification context"),
+    Key([SUPER], "n", lazy.spawn(CLOSE_NOTIFICATION), desc="Close notification context"),
 
     # Music Control 
     Key([SUPER], "period", lazy.spawn(MUSIC_NEXT), desc='Next music track'),
@@ -202,17 +222,17 @@ groups = [
     # Spotify Group
     Group(name="8", label="8", matches=[Match(wm_class="spotify")], layout="max"),
     # Discord Group
-    Group(name="9", label="9", matches=[Match(wm_class="discord")], layout="max")
+    Group(name="9", label=" ", matches=[Match(wm_class="discord")], layout="max", exclusive=True, spawn="discord"),
+    Group(name="0", label=" ", matches=[Match(wm_class="obsidian")], layout="max", exclusive=True, spawn="obsidian")
 ]
-
 
 for group in groups:
 
     # Super + <group name> = switch to group
     keys.append(
         Key([SUPER], group.name,
-            lazy.group[group.name].toscreen(),
-            desc="Switch to group {}".format(group.name),
+        lazy.function(go_to_group(group.name)),
+        desc="Switch to group {}".format(group.name),
         ))
     
     # Super + shift + letter of group = move focused window to group
@@ -225,6 +245,20 @@ for group in groups:
     )
 # -----------------------------------------------------------------------------------------
 
+groups.append(
+    ScratchPad("scratchpad", [
+        # define a drop down terminal.
+        # it is placed in the upper third of screen by default.
+        DropDown("terminal", "kitty --override confirm_os_window_close=0" , x=0.25, y=0.2, width=0.5, height=0.6, opacity=0.9),
+        DropDown("file_manager", "kitty --override confirm_os_window_close=0 --execute ranger" , x=0.25, y=0.2, width=0.5, height=0.6, opacity=0.9),
+        DropDown("quick_edit", "kitty --name quick-edit -e nvim +':Telescope find_files hidden=True'" , x=0.1, y=0.1, width=0.8, height=0.8, opacity=0.9)
+
+    ]),
+)
+
+keys.append(Key([], 'F1', lazy.group['scratchpad'].dropdown_toggle('terminal')))
+keys.append(Key([], 'F2', lazy.group['scratchpad'].dropdown_toggle('file_manager')))
+keys.append(Key([], 'F3', lazy.group['scratchpad'].dropdown_toggle('quick_edit')))
 
 # LAYOUTS
 layouts = [
@@ -483,7 +517,7 @@ bar_top = bar.Bar(
 
                 widget.Spacer(20),
                 widget.Wallpaper(
-                    label="󰸉  Change Wallpaper",
+                    label="󰸉 ",
                     directory=f"{PATH_HOME}/Wallpapers"
                 ),
 
@@ -544,9 +578,11 @@ floating_layout = layout.Floating(
         Match(wm_class="pwvucontrol"), # Audio Settings
         Match(wm_class="VirtualBox"), # VirtualBox
         Match(wm_class="feh"), # Image Viewer
+        Match(wm_class="Chromium-browser"), # For automations i created
     ],
     border_width=1,
-    border_focus="#ffffff"
+    border_focus="#ffffff",
+
 )
 auto_fullscreen = True
 focus_on_window_activation = "focus"

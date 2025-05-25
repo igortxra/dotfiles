@@ -161,11 +161,11 @@ config.set('content.local_content_can_access_file_urls', False, 'file:///home/ig
 #   - startpage: Load the start page.
 #   - default-page: Load the default page.
 #   - close: Close the window.
-c.tabs.last_close = 'close'
+c.tabs.last_close = 'ignore'
 
 # Page(s) to open at the start.
 # Type: List of FuzzyUrl, or FuzzyUrl
-c.url.start_pages = 'https://github.com'
+c.url.start_pages = 'https://github.com/dashboard'
 
 c.url.searchengines = {
     'DEFAULT': 'https://start.duckduckgo.com/?q={}',
@@ -177,9 +177,11 @@ c.url.searchengines = {
     'wiki': 'https://en.wikipedia.org/wiki/{}',
     'yt': 'https://www.youtube.com/results?search_query={}',
     'qtile': 'http://docs.qtile.org/en/stable/search.html?q={}',
-    'firestore': "https://console.cloud.google.com/firestore/databases/-default-/data/panel/demand-collection-v2/{}"
+    'firestore': "https://console.cloud.google.com/firestore/databases/-default-/data/panel/demand-collection-v2/{}?project=scan-275215",
+    'secret': 'https://console.cloud.google.com/security/secret-manager/secret/{}/versions?project=scan-275215'
 }
 
+c.editor.command = ["kitty", "-e", "nvim", "{file}"]
 
 # credits to theova/base16-qutebrowser for the original template
 

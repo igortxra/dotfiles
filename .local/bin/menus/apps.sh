@@ -1,3 +1,3 @@
 #!/bin/sh
 
-rofi -show drun
+rofi -show drun -p "Apps"

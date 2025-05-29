@@ -1,9 +1,15 @@
+/* Dark theme. */
+@import "~/.cache/wal/colors-rofi-dark"
+
 configuration {
-    show-icons:      true;
-    display-drun:    "";
-    disable-history: false;
-
-
+    show-icons: true;
+    display-drun: "";
+    disable-history: true;
+    font: "monospace 12";
+    location: 0;            /* Bottom center */
+    anchor: south;           /* Fixa no rodapé */
+    fullscreen: false;
+    sidebar-mode: false;
     kb-remove-to-eol: "";
     kb-mode-complete: "";
     kb-accept-entry: "Return";
@@ -11,91 +17,39 @@ configuration {
     kb-row-up: "Control+k,Up";
     kb-row-down: "Control+j,Down";
     kb-row-left: "Control+h";
-    kb-row-right: "Control+l";
 
 }
+
 
 * {
     font: "Jetbrains Mono 12";
-    foreground: #f8f8f2;
-    background-color: #11111100;
-    window-bg-color: #111111F0;
-    active-background: #342652;
-    urgent-background: #ff5555;
-    urgent-foreground: #282a36;
-    selected-background: @active-background;
-    selected-urgent-background: @urgent-background;
-    selected-active-background: @active-background;
-    separatorcolor: @active-background;
-    bordercolor: #111111;
 }
 
 #window {
-    background-color: @window-bg-color;
-    border:           3;
-    border-radius:    6;
-    border-color:     @bordercolor;
-    padding:          15;
+    border:           0;
+    padding: 20 20 20 20px;
+    width: 20%;
+    margin: 0;
 }
 #mainbox {
-    border:  0;
-    padding: 0;
+    orientation: vertical;
 }
 #message {
     border:       0px;
-    border-color: @separatorcolor;
     padding:      1px;
 }
 #textbox {
-    text-color: @foreground;
+    padding: 5px;
 }
 #listview {
-    fixed-height: 0;
-    border:       0px;
-    border-color: @bordercolor;
-    spacing:      2px ;
     scrollbar:    false;
-    padding:      2px 0px 0px ;
+    columns: 1;
+    layout: vertical;
+    fixed-height: false;
 }
 #element {
-    border:  0;
-    padding: 3px ;
-}
-#element.normal.normal {
-    background-color: @background-color;
-    text-color:       @foreground;
-}
-#element.normal.urgent {
-    background-color: @urgent-background;
-    text-color:       @urgent-foreground;
-}
-#element.normal.active {
-    background-color: @active-background;
-    text-color:       @foreground;
-}
-#element.selected.normal {
-    background-color: @selected-background;
-    text-color:       @foreground;
-}
-#element.selected.urgent {
-    background-color: @selected-urgent-background;
-    text-color:       @foreground;
-}
-#element.selected.active {
-    background-color: @selected-active-background;
-    text-color:       @foreground;
-}
-#element.alternate.normal {
-    background-color: @background-color;
-    text-color:       @foreground;
-}
-#element.alternate.urgent {
-    background-color: @urgent-background;
-    text-color:       @foreground;
-}
-#element.alternate.active {
-    background-color: @active-background;
-    text-color:       @foreground;
+    padding: 5px 5px ;
+    margin: 0 0px;
 }
 #scrollbar {
     width:        2px ;
@@ -105,39 +59,26 @@ configuration {
 }
 #sidebar {
     border:       2px dash 0px 0px ;
-    border-color: @separatorcolor;
 }
 #button.selected {
-    background-color: @selected-background;
-    text-color:       @foreground;
 }
 #inputbar {
     spacing:    0;
-    text-color: @foreground;
-    padding:    1px ;
-}
-#case-indicator {
-    spacing:    0;
-    text-color: @foreground;
+    padding:    0 0 0 0;
 }
 #entry {
     spacing:    0;
-    text-color: @foreground;
 }
 #prompt {
-    spacing:    0;
-    text-color: @foreground;
+    margin: 15 0;
 }
 #inputbar {
-    children:   [ prompt,textbox-prompt-colon,entry,case-indicator ];
+    children:   [entry];
+    orientation: vertical;
 }
 #textbox-prompt-colon {
     expand:     false;
-    str:        ">";
+    str:        "";
     margin:     0px 0.3em 0em 0em ;
-    text-color: @foreground;
 }
-element-text, element-icon {
-    background-color: inherit;
-    text-color: inherit;
-}
+

@@ -28,7 +28,7 @@ import subprocess
 from os import path
 
 from libqtile import bar, layout, widget
-from libqtile.config import Click, Drag, DropDown, Group, Key, Match, ScratchPad, Screen
+from libqtile.config import Click, Drag, DropDown, Group, Key, KeyChord, Match, ScratchPad, Screen
 from libqtile.core.manager import Qtile
 from libqtile.lazy import lazy
 from libqtile.hook import subscribe
@@ -36,17 +36,7 @@ from libqtile.hook import subscribe
 # AUXILIARY FUNCTIONS
 def go_to_group(group_name: str):
     def _inner(qtile: Qtile):
-        if group_name == "0":
-            qtile.groups_map[group_name].toscreen()
-            if qtile.current_window is None:
-                qtile.spawn("obsidian")
-
-        if group_name == "9":
-            qtile.groups_map[group_name].toscreen()
-            if qtile.current_window is None:
-                qtile.spawn("discord")
-        else:
-            qtile.groups_map[group_name].toscreen()
+        qtile.groups_map[group_name].toscreen()
     return _inner
 
 def get_number_of_screens():
@@ -76,6 +66,42 @@ PATH_SCREENSHOTS = f"{PATH_HOME}/Screenshots"
 AUTOSTART = f"{PATH_SCRIPTS}/autostart.sh"
 # -----------------------------------------------------------------------------------------
 
+# COLORS
+colors = []
+cache=f'{PATH_HOME}/.cache/wal/colors'
+def load_colors(cache):
+    with open(cache, 'r') as file:
+        for i in range(16):
+            colors.append(file.readline().strip())
+    colors.append('#ffffff')
+    lazy.reload()
+
+load_colors(cache)
+
+# FIXED COLORS
+COLOR_BAR = "#11111199"
+COLOR_RED = "#FF0000"
+COLOR_YELLOW = "#FFFF00"
+
+# MAIN COLORS
+COLOR_PRIMARY = colors[2]
+COLOR_SECONDARY = colors[1]
+COLOR_4 = colors[4]
+
+# FOREGROUNDS
+COLOR_FG_1 = colors[-1]
+COLOR_FG_2 = colors[-2]
+
+# BACKGROUNDS
+COLOR_BG_1 = colors[0]
+COLOR_BG_2 = colors[1]
+COLOR_BG_3 = colors[2]
+
+# STATUS
+COLOR_INACTIVE = colors[7]
+
+# -----------------------------------------------------------------------------------------
+
 # MENUS
 MENU_APP = f"{PATH_SCRIPTS}/menus/apps.sh &"
 MENU_CLIPBOARD = f"{PATH_SCRIPTS}/menus/clipboard.sh &"
@@ -88,13 +114,13 @@ MENU_NETWORK="nm-connection-editor"
 MENU_NETWORK_TERMINAL='kitty --hold tldr nmcli'
 MENU_WINDOWS="rofi -show window"
 MENU_AUTOMATIONS=f"{PATH_SCRIPTS}/menus/automations.sh &"
+MENU_WALLPAPER=f"{PATH_SCRIPTS}/menus/wallpaper.sh &"
 # -----------------------------------------------------------------------------------------
 
 # WIDGETS
 WIDGET_DOTFILES=f"{PATH_SCRIPTS}/widgets/dotfiles-status.sh"
 WIDGET_NETWORK=f"{PATH_SCRIPTS}/widgets/network.sh"
-WIDGET_CALENDAR = f"{PATH_SCRIPTS}/widgets/calendar.sh"
-# -----------------------------------------------------------------------------------------
+WIDGET_CALENDAR = f"{PATH_SCRIPTS}/widgets/calendar.sh" # -----------------------------------------------------------------------------------------
 
 # DO ACTIONS
 SHOW_UPGRADABLE_PACKAGES=f"{PATH_SCRIPTS}/utils/show-upgradable-packages.sh &"
@@ -104,37 +130,34 @@ CLOSE_NOTIFICATION="dunstctl close"
 MUSIC_NEXT="playerctl --player=spotify next"
 MUSIC_PREVIOUS="playerctl --player=spotify previous"
 MUSIC_PLAY_PAUSE="playerctl --player=spotify play-pause"
+SHOW_VOLUME=f"{PATH_SCRIPTS}/widgets/notify-volume.sh"
 # -----------------------------------------------------------------------------------------
 
-# COLORS
-# Catppuccin Mocha Colors - https://github.com/catppuccin/catppuccin
+# HOOKS
 
-COLOR_FG_1 = "#ffffff"
-COLOR_FG_2 = "#f5e0dc"
-
-COLOR_BG_1 = "#111113"
-COLOR_BG_2 = "#45475a"
-
-COLOR_RED = "#F38Ba8"
-COLOR_PURPLE = "#cba6f7"
-COLOR_ORANGE = "#fab387"
-COLOR_YELLOW = "#f9e2af"
-COLOR_GREEN = "#a6e3a1"
-COLOR_FLAMINGO = "#f0c6c6"
-COLOR_PINK = "#f5bde6"
-
-COLOR_BAR_BG = COLOR_BG_1 + "77" # 77 for transparency
-
-# COLOR_SURFACE_0="#313244"
-# COLOR_SAPPHIRE="#74c7ec"
-COLOR_BLUE="#8aadf4"
-
-# -----------------------------------------------------------------------------------------
-
-# AUTOSTART
 @subscribe.startup_once
 def setup():
     subprocess.Popen([AUTOSTART])
+
+@subscribe.client_new 
+def new_clinet(client):
+    if "thunar" in client.get_wm_class():
+        client.set_position_floating(500,500)
+        client.set_size_floating(800,400)
+
+@lazy.function
+def resize_floating_window(qtile, width: int = 0, height: int = 0):
+    w = qtile.current_window
+    if w.floating:
+        w.cmd_set_size_floating(w.width + width, w.height + height)
+
+@lazy.function
+def move_floating_window(qtile, x: int = 0, y: int = 0):
+    w = qtile.current_window
+    if w.floating:
+        px, py =w.cmd_get_position()
+        w.cmd_move_floating(px + x, py + y)
+
 # -----------------------------------------------------------------------------------------
 
 # KEYBINDINGS
@@ -162,7 +185,7 @@ keys = [
     Key([SUPER], "p", lazy.spawn(MENU_POWER), desc="Spawn power menu"),
     Key([SUPER], "s", lazy.spawn(MENU_SCREENS), desc="Spawn screens menu"),
     Key([SUPER], "v", lazy.spawn(MENU_CLIPBOARD), desc="Spawn clipboard menu"),
-    Key([SUPER], "equal", lazy.spawn(MENU_UTILS), desc="Spawn utils menu"),
+    Key([SUPER], "equal", lazy.spawn(MENU_WALLPAPER), desc="Spawn wallpaper menu"),
     Key([SUPER], "w", lazy.spawn(MENU_WINDOWS), desc="Spawn windows menu"),
     Key([SUPER], "a", lazy.spawn(MENU_AUTOMATIONS), desc="Spawn automations menu"),
 
@@ -176,8 +199,9 @@ keys = [
     Key([SUPER], "j", lazy.layout.down(), desc="Move focus down"),
     Key([SUPER], "k", lazy.layout.up(), desc="Move focus up"),
 
-    Key([SUPER, ALT], "k", lazy.group.prev_window(), desc="Focus next window"),
-    Key([SUPER, ALT], "j", lazy.group.next_window(), desc="Focus next window"),
+    # Useful for floating windows
+    Key([SUPER, ALT], "tab", lazy.group.next_window(), desc="Focus next window"),
+    Key([SUPER, ALT, "shift"], "tab", lazy.group.prev_window(), desc="Focus prev window"),
     
     # Move windows between left/right columns or move up/down in current stack.
     Key([SUPER, "shift"], "h", lazy.layout.shuffle_left(), desc="Move window to the left"),
@@ -186,10 +210,18 @@ keys = [
     Key([SUPER, "shift"], "k", lazy.layout.shuffle_up(), desc="Move window up"),
 
     # Floating Windows
-    Key([SUPER], "f", lazy.window.toggle_floating(), desc="Toggle window floating"),
+    Key([SUPER], "f", lazy.window.toggle_floating(), lazy.window.center(), desc="Toggle window floating"),
     Key([SUPER], "c", lazy.window.center(), desc="Center float window"),
     Key([SUPER, ALT], "b", lazy.window.move_to_bottom(), desc="Move float window to bottom"),
     Key([SUPER, ALT], "f", lazy.window.bring_to_front(), desc="Move float window to front"),
+    Key([SUPER, ALT], "l", lazy.window.resize_floating(dw=10, dh=0), desc='increase width by 10'),
+    Key([SUPER, ALT], "h", lazy.window.resize_floating(dw=-10, dh=0), desc='decrease width by 10'),
+    Key([SUPER, ALT], "j", lazy.window.resize_floating(dw=0, dh=10), desc='increase height by 10'),
+    Key([SUPER, ALT], "k", lazy.window.resize_floating(dw=0, dh=-10), desc='decrease height by 10'),
+    Key([SUPER, ALT, "shift"], "l", lazy.window.move_floating(dx=10, dy=0), desc='increase width by 10'),
+    Key([SUPER, ALT, "shift"], "h", lazy.window.move_floating(dx=-10, dy=0), desc='decrease width by 10'),
+    Key([SUPER, ALT, "shift"], "j", lazy.window.move_floating(dx=0, dy=10), desc='increase height by 10'),
+    Key([SUPER, ALT, "shift"], "k", lazy.window.move_floating(dx=0, dy=-10), desc='decrease height by 10'),
 
     # Resize windows
     Key([], "F10", lazy.window.toggle_fullscreen(), desc="Toggle fullscreen on the focused window"),
@@ -206,6 +238,30 @@ keys = [
     Key([SUPER], "period", lazy.spawn(MUSIC_NEXT), desc='Next music track'),
     Key([SUPER], "comma", lazy.spawn(MUSIC_PREVIOUS), desc='Previous music track'),
     Key([SUPER], "semicolon", lazy.spawn(MUSIC_PLAY_PAUSE), desc='Toggle play/pause music track'),
+
+    # System Metrics
+    Key([SUPER, "control"], "c", lazy.spawn("kitty --hold btop -p 1")),
+    # System Admin
+    KeyChord(
+        [SUPER, "shift"], "space", 
+        [
+            # Volume Menu
+            KeyChord([], "v", [
+                Key([], "k", lazy.spawn("pamixer --increase 5"), lazy.spawn(SHOW_VOLUME)),
+                Key([], "j", lazy.spawn("pamixer --decrease 5"), lazy.spawn(SHOW_VOLUME)),
+                Key([], "m", lazy.spawn("pamixer -t"))
+            ], name="Volume", mode=True),
+
+            # Metrics Menu
+            KeyChord([], "m", [
+                Key([], "m", lazy.spawn("pamixer --decrease 5"), lazy.spawn(SHOW_VOLUME)),
+                Key([], "p", lazy.spawn("pamixer -t"))
+            ], name="Metrics", mode=False)
+        ],
+        name="Menu",
+        mode=True,
+        
+    )
 ]
 # -----------------------------------------------------------------------------------------
 
@@ -262,12 +318,12 @@ keys.append(Key([], 'F3', lazy.group['scratchpad'].dropdown_toggle('quick_edit')
 
 # LAYOUTS
 layouts = [
-    layout.Max(border_focus=COLOR_PURPLE, margin=20, border_width=1, border_on_single=True),
-    layout.MonadTall(border_focus=COLOR_PURPLE, margin=20, single_border_width=1, border_width=2, border_on_single=True),
-    layout.MonadWide(border_focus=COLOR_PURPLE, margin=20, single_border_width=1, border_width=2, ratio=0.75, border_on_single=True),
-    layout.Matrix(border_focus=COLOR_PURPLE, margin=10, single_border_width=1, border_width=2, border_on_single=True),
+    layout.Max(border_focus=COLOR_PRIMARY, margin=[100, 300, 100, 300], border_width=0, border_on_single=True),
+    layout.MonadTall(border_focus=COLOR_PRIMARY, margin=20, single_border_width=1, border_width=2, border_on_single=True),
+    layout.MonadWide(border_focus=COLOR_PRIMARY, margin=20, single_border_width=1, border_width=2, ratio=0.70, border_on_single=True),
 
     ## Not Used Layouts.
+    # layout.Matrix(border_focus=COLOR_BASE, margin=10, single_border_width=1, border_width=2, border_on_single=True),
     # layout.Stack(num_stacks=2),
     # layout.Bsp(),
     # layout.RatioTile(),
@@ -288,23 +344,23 @@ widget_defaults = dict(
 # Groupbox for the primary screen
 widget_groupbox_main = widget.GroupBox(
     active="#999",
-    background=COLOR_BAR_BG,
+    background=COLOR_BAR,
     borderwidth=2,
     center_aligned=True,
     disable_drag=True,
     fmt=" {} ",
     hide_unused=True,
-    inactive=COLOR_BG_2,
-    highlight_color=[COLOR_BAR_BG, COLOR_BAR_BG],
+    inactive=COLOR_INACTIVE,
+    highlight_color=[COLOR_BAR, COLOR_BAR],
     highlight_method='block',
     urgent_alert_method='border',
-    urgent_border=COLOR_ORANGE,
-    urgent_text=COLOR_BLUE,
+    urgent_border=COLOR_RED,
+    urgent_text=COLOR_PRIMARY,
     this_screen_border="#333", # Border or line colour for group on this screen when unfocused.
-    other_screen_border=COLOR_BAR_BG, # Border or line colour for group on other screen when unfocused.
-    this_current_screen_border=COLOR_PURPLE, # Border or line colour for group on this screen when focused.
-    other_current_screen_border=COLOR_BAR_BG, # Border or line colour for group on other screen when focused.
-    block_highlight_text_color=COLOR_FG_1,
+    other_screen_border=COLOR_BAR, # Border or line colour for group on other screen when unfocused.
+    this_current_screen_border=COLOR_PRIMARY, # Border or line colour for group on this screen when focused.
+    other_current_screen_border=COLOR_BAR, # Border or line colour for group on other screen when focused.
+    block_highlight_text_color=COLOR_FG_2,
     padding_x=0,
     padding_y=0,
     margin_y=3,
@@ -315,23 +371,23 @@ widget_groupbox_main = widget.GroupBox(
 # Groupbox for the secondary screens
 widget_groupbox_secondary = widget.GroupBox(
     active="#999",
-    background=COLOR_BAR_BG,
+    background=COLOR_BAR,
     borderwidth=2,
     center_aligned=True,
     disable_drag=True,
     fmt=" {} ",
     hide_unused=True,
-    inactive=COLOR_BG_2,
-    highlight_color=[COLOR_BAR_BG, COLOR_BAR_BG],
+    inactive=COLOR_INACTIVE,
+    highlight_color=[COLOR_BAR, COLOR_BAR],
     highlight_method='block',
     urgent_alert_method='border',
-    urgent_border=COLOR_ORANGE,
-    urgent_text=COLOR_BLUE,
+    urgent_border=COLOR_RED,
+    urgent_text=COLOR_PRIMARY,
     this_screen_border="#333", # Border or line colour for group on this screen when unfocused.
-    other_screen_border=COLOR_BAR_BG, # Border or line colour for group on other screen when unfocused.
-    this_current_screen_border=COLOR_PURPLE, # Border or line colour for group on this screen when focused.
-    other_current_screen_border=COLOR_BAR_BG, # Border or line colour for group on other screen when focused.
-    block_highlight_text_color=COLOR_FG_1,
+    other_screen_border=COLOR_BAR, # Border or line colour for group on other screen when unfocused.
+    this_current_screen_border=COLOR_PRIMARY, # Border or line colour for group on this screen when focused.
+    other_current_screen_border=COLOR_BAR, # Border or line colour for group on other screen when focused.
+    block_highlight_text_color=COLOR_SECONDARY,
     padding_x=0,
     padding_y=0,
     margin_y=3,
@@ -343,42 +399,11 @@ widget_groupbox_secondary = widget.GroupBox(
 # BARS and WIDGETS
 bar_primary = bar.Bar(
     widgets=[
-        widget.CurrentLayoutIcon(scale=0.7),
-        
-        widget.Spacer(14),
 
-        widget_groupbox_main,
-
-        widget.Spacer(20),
-
-        widget.Mpris2(
-            name="spotify",
-            display_metadata=['xesam:title', 'xesam:artist'],
-            scroll_chars=None,
-            objname="org.mpris.MediaPlayer2.spotify",
-            scroll_interval=0,
-            background=None,
-            foreground=COLOR_ORANGE,
-            fmt='{}   ',
-            paused_text='   {track}',
-            padding=10,
-        ),
-
-                
-        widget.Spacer(10),
-        widget.Clipboard(
-            fmt=" 󰅎  Copied ",
-            max_width=2,
-            foreground=COLOR_GREEN,
-            background=None,
-            timeout=1,
-        ),
-
-        widget.Spacer(),
         widget.Clock(
-            format="%Y-%m-%d 󰣇  %a %I:%M:%S %p", 
+            format="%Y-%m-%d %H:%M:%S %p", 
             background=None, 
-            foreground=COLOR_PURPLE,
+            foreground=COLOR_FG_1,
             mouse_callbacks={
                 "Button1": lazy.spawn(WIDGET_CALENDAR + " curr"),
                 "Button4": lazy.spawn(WIDGET_CALENDAR + " prev"),
@@ -390,16 +415,44 @@ bar_primary = bar.Bar(
 
         widget.Spacer(),
 
-        widget.GenPollText(
-            func=lambda: subprocess.check_output(WIDGET_DOTFILES, shell=True).decode(),
-            update_interval=1, 
-            foreground=COLOR_GREEN,
+        widget.CurrentLayoutIcon(scale=0.7),
+        
+        widget.Spacer(14),
+
+        widget_groupbox_main,
+
+        widget.Spacer(20),
+
+        widget.Spacer(10),
+        widget.Chord(
+            fmt=" {} ",
+            name_transform=lambda n: n.upper(),
+            foreground=COLOR_FG_1,
+            background=COLOR_PRIMARY,
+        ),
+
+        widget.Spacer(),
+
+        widget.Clipboard(
+            fmt=" 󰅎  Copied ",
+            max_width=2,
+            foreground=COLOR_FG_1,
             background=None,
-            max_chars=20,
-            padding=5,
-            # mouse_callbacks={
-            #     "Button3": lazy.spawn(MENU_NETWORK)
-            # },
+            timeout=2,
+        ),
+
+        widget.Spacer(10),
+        widget.Mpris2(
+            name="spotify",
+            display_metadata=['xesam:title', 'xesam:artist'],
+            scroll_chars=None,
+            objname="org.mpris.MediaPlayer2.spotify",
+            scroll_interval=0,
+            background=COLOR_PRIMARY,
+            foreground=COLOR_FG_2,
+            fmt='{}   ',
+            paused_text='   {track}',
+            padding=10,
         ),
 
         widget.Spacer(20),
@@ -431,9 +484,9 @@ bar_primary = bar.Bar(
             update_interval=2,
         ),
         widget.Battery(
-            foreground=COLOR_FG_1,
-            background=COLOR_BAR_BG,
-            low_background=COLOR_BAR_BG,
+            foreground=COLOR_FG_2,
+            background=COLOR_BAR,
+            low_background=COLOR_BAR,
             low_foreground=COLOR_RED,
             low_percentage=0.40,
             notify_below=30,
@@ -450,9 +503,9 @@ bar_primary = bar.Bar(
     ],
     size=25,
     margin=[-5,0,0,0],
-    background=COLOR_BAR_BG,
+    background=COLOR_BAR,
     border_width=[4, 20, 4, 20],
-    border_color=COLOR_BAR_BG,
+    border_color=COLOR_BAR,
 )
 
 bar_secondary = bar.Bar(
@@ -464,47 +517,63 @@ bar_secondary = bar.Bar(
     ], 
     size=25,
     margin=[-5,0,0,0],
-    background=COLOR_BAR_BG,
+    background=COLOR_BAR,
     border_width=[4, 20, 4, 20],
-    border_color=COLOR_BAR_BG,
+    border_color=COLOR_BAR,
 )
 
 bar_top = bar.Bar(
     widgets=[
-                widget.TextBox(""),
-                widget.Spacer(),
-                
+
+                widget.Spacer(20),
+                widget.GenPollText(
+                    func=lambda: subprocess.check_output(WIDGET_DOTFILES, shell=True).decode(),
+                    update_interval=1, 
+                    foreground=COLOR_FG_2,
+                    background=None,
+                    max_chars=20,
+                    padding=5,
+                ),
+
+                # widget.Spacer(20),
+                # widget.Wallpaper(
+                #     label="󰸉 ",
+                #     directory=f"{PATH_HOME}/Wallpapers",
+                #     foreground=COLOR_BASE,
+                # ),
+
+                widget.Spacer(20),
                 widget.CheckUpdates(
                     display_format="  {updates}",
                     colour_have_updates=COLOR_YELLOW,
-                    colour_no_updates=COLOR_GREEN,
+                    colour_no_updates=COLOR_PRIMARY,
                     no_update_string=" ",
                     mouse_callbacks={
                         "Button1": lazy.spawn(SHOW_UPGRADABLE_PACKAGES)
                     }
                 ),
 
-                
-                widget.Spacer(20),
+                widget.Spacer(),
+
                 widget.DF(
                     partition="/home/igortxra", 
-                    format='  Free: {uf}{m}',
+                    format='  {uf}{m}',
                     visible_on_warn=False,
                     background=None,
-                    foreground=COLOR_FLAMINGO
+                    foreground=COLOR_FG_2
                 ),
 
                 widget.Spacer(20),
-                widget.Memory(padding=5, fmt=" {}", format="{MemUsed: .0f} /{MemTotal: .0f} ({mm})", measure_mem="G", background=None, foreground=COLOR_PURPLE),
+                widget.Memory(padding=5, fmt=" {}", format="{MemUsed: .2f}{mm}", measure_mem="G", background=None, foreground=COLOR_FG_2),
                 
                 widget.Spacer(20),
-                widget.CPU(fmt="󰍛 {}", background=None, foreground=COLOR_PINK),
+                widget.CPU(format='{load_percent}%', fmt=" {}", background=None, foreground=COLOR_FG_2),
 
                 widget.Spacer(20),
                 widget.GenPollText(
                     func=lambda: subprocess.check_output(WIDGET_NETWORK).decode(),
                     update_interval=1, 
-                    foreground=COLOR_GREEN,
+                    foreground=COLOR_FG_2,
                     background=None,
                     max_chars=50,
                     padding=5,
@@ -514,14 +583,9 @@ bar_top = bar.Bar(
                     },
                 ),
 
-
-                widget.Spacer(20),
-                widget.Wallpaper(
-                    label="󰸉 ",
-                    directory=f"{PATH_HOME}/Wallpapers"
-                ),
-
                 widget.Spacer(),
+
+                widget.Spacer(40),
 
                 widget.Systray(padding=20, icon_size=18),
                 widget.Spacer(20),
@@ -529,9 +593,9 @@ bar_top = bar.Bar(
     ], 
     size=23,
     margin=[0,0,0,0],
-    background=COLOR_BAR_BG,
+    background=COLOR_BAR,
     border_width=[4, 20, 4, 20],
-    border_color=COLOR_BAR_BG,
+    border_color=COLOR_BAR,
 )
 
 bars = [bar_primary, bar_secondary]
@@ -579,6 +643,7 @@ floating_layout = layout.Floating(
         Match(wm_class="VirtualBox"), # VirtualBox
         Match(wm_class="feh"), # Image Viewer
         Match(wm_class="Chromium-browser"), # For automations i created
+        Match(wm_class="btop"), # For automations i created
     ],
     border_width=1,
     border_focus="#ffffff",

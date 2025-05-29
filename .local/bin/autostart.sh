@@ -17,3 +17,6 @@ picom &
 
 # Auto detect screen profile
 autorandr --change &
+
+# Set wallpaper and colorscheme
+wal -R

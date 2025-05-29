@@ -13,7 +13,6 @@ kitty
 
 ## Launcher
 rofi
-dmenu
 
 ## Compositor
 picom-git
@@ -34,9 +33,12 @@ tumbler
 ffmpegthumbnailer
 ranger
 xdg-user-dirs
+dragon-drop-git
+rsync
+sshfs
 
 ## Screen Locker
-betterlockscreen
+betterlockscreen-git
 feh
 
 ## Notifications
@@ -76,12 +78,11 @@ autorandr
 ## Audio Utils
 alsa-utils
 playerctl
-pwvucontrol
 easyeffects
+pamixer
 
 ## CLI Utils
 git-delta
-xprop
 wget
 tealdeer
 eza
@@ -93,6 +94,7 @@ fzf
 ripgrep
 exfat-utils
 jq
+nmap
 
 ## Utilities
 btop
@@ -103,7 +105,6 @@ zram-generator
 neofetch
 
 ## Programming
-nodejs
 npm
 python-dbus-next
 python-psutil
@@ -118,6 +119,7 @@ fuse2
 ## Developer Tools
 neovim
 docker
+docker-buildx
 docker-compose
 kubectl
 kind

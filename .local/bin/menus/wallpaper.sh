@@ -18,6 +18,6 @@ if [ -n "$SELECTED" ]; then
   # Reconstrói o caminho completo do arquivo selecionado
   FULL_PATH=$(find "$WALLPAPER_DIR" -type f -name "$SELECTED" | head -n 1)
 
-  wal -i $FULL_PATH --cols16 --saturate 0.7 -o $HOME/.local/bin/colors.sh
+  wal -i $FULL_PATH --cols16 -t --saturate 0.7 -o $HOME/.local/bin/colors.sh
   qtile cmd-obj -o root -f reload_config
 fi

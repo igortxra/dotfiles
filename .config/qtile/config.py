@@ -1,4 +1,5 @@
 # Copyright (c) 2010 Aldo Cortesi
+
 # Copyright (c) 2010, 2014 dequis
 # Copyright (c) 2012 Randall Ma
 # Copyright (c) 2012-2014 Tycho Andersen
@@ -127,10 +128,12 @@ SHOW_UPGRADABLE_PACKAGES=f"{PATH_SCRIPTS}/utils/show-upgradable-packages.sh &"
 TAKE_SCREENSHOT_FULLSCREEN=f"flameshot full --path {PATH_SCREENSHOTS}"
 OPEN_NOTIFICATION="dunstctl context && dunstctl close"
 CLOSE_NOTIFICATION="dunstctl close"
+POP_NOTIFICATION="dunstctl history-pop"
 MUSIC_NEXT="playerctl --player=spotify next"
 MUSIC_PREVIOUS="playerctl --player=spotify previous"
 MUSIC_PLAY_PAUSE="playerctl --player=spotify play-pause"
 SHOW_VOLUME=f"{PATH_SCRIPTS}/widgets/notify-volume.sh"
+SYSTEM_METRICS="kitty --name btop --hold btop -p 1"
 # -----------------------------------------------------------------------------------------
 
 # HOOKS
@@ -151,12 +154,6 @@ def resize_floating_window(qtile, width: int = 0, height: int = 0):
     if w.floating:
         w.cmd_set_size_floating(w.width + width, w.height + height)
 
-@lazy.function
-def move_floating_window(qtile, x: int = 0, y: int = 0):
-    w = qtile.current_window
-    if w.floating:
-        px, py =w.cmd_get_position()
-        w.cmd_move_floating(px + x, py + y)
 
 # -----------------------------------------------------------------------------------------
 
@@ -169,97 +166,96 @@ keys = [
     # A list of available commands that can be bound to keys can be found
     # at https://docs.qtile.org/en/latest/manual/config/lazy.html
 
-    # Basics
+    # BASIC
+    Key([SUPER], "Return", lazy.spawn(TERMINAL), desc="Launch terminal"),
+    Key([SUPER], "Backspace", lazy.window.kill(), desc="Kill focused window"),
+    Key([SUPER], "Tab", lazy.next_layout(), desc="Toggle between layouts"),
+
+
+    # CONTROLS
     Key([SUPER, "control"], "r", lazy.reload_config(), desc="Reload the config"),
     Key([SUPER, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
-    Key([SUPER], "x", lazy.window.kill(), desc="Kill focused window"),
-    Key([SUPER], "Return", lazy.spawn(TERMINAL), desc="Launch terminal"),
-    Key([SUPER], "Tab", lazy.next_layout(), desc="Toggle between layouts"),
-    Key([SUPER], "t", lazy.hide_show_bar("top"), desc="Toggle bar"),
-    Key([SUPER], "b", lazy.hide_show_bar("bottom"), desc="Toggle bar"),
-    Key([SUPER], 'm', lazy.next_screen(), desc='Change focused screen'), 
- 
-    # Spawners/Menus
-    # Key([SUPER], "e", lazy.spawn(FILE_MANAGER), desc="Spawn file manager"),
-    Key([SUPER], "space", lazy.spawn(MENU_APP), desc="Spawn a app launcher"),
-    Key([SUPER], "p", lazy.spawn(MENU_POWER), desc="Spawn power menu"),
-    Key([SUPER], "s", lazy.spawn(MENU_SCREENS), desc="Spawn screens menu"),
-    Key([SUPER], "v", lazy.spawn(MENU_CLIPBOARD), desc="Spawn clipboard menu"),
-    Key([SUPER], "equal", lazy.spawn(MENU_WALLPAPER), desc="Spawn wallpaper menu"),
-    Key([SUPER], "w", lazy.spawn(MENU_WINDOWS), desc="Spawn windows menu"),
-    Key([SUPER], "a", lazy.spawn(MENU_AUTOMATIONS), desc="Spawn automations menu"),
+    Key([SUPER, "control"], "t", lazy.hide_show_bar("top"), desc="Toggle bar"),
+    Key([SUPER, "control"], "b", lazy.hide_show_bar("bottom"), desc="Toggle bar"),
+    Key([SUPER, "control"], "c", lazy.spawn(SYSTEM_METRICS)),
 
-    # Screenshots
-    Key([], "Print", lazy.spawn(MENU_SCREENSHOT), desc='Launch screenshot menu'),
-    Key(["shift"], "Print", lazy.spawn(TAKE_SCREENSHOT_FULLSCREEN), desc='Launch screenshot fullscreen'),
 
-    # Switch between windows
+    # Change Focus
     Key([SUPER], "h", lazy.layout.left(), desc="Move focus to left"),
     Key([SUPER], "l", lazy.layout.right(), desc="Move focus to right"),
     Key([SUPER], "j", lazy.layout.down(), desc="Move focus down"),
     Key([SUPER], "k", lazy.layout.up(), desc="Move focus up"),
-
-    # Useful for floating windows
-    Key([SUPER, ALT], "tab", lazy.group.next_window(), desc="Focus next window"),
-    Key([SUPER, ALT, "shift"], "tab", lazy.group.prev_window(), desc="Focus prev window"),
+    Key([SUPER], 'm', lazy.next_screen(), desc='Change focused screen'), 
     
-    # Move windows between left/right columns or move up/down in current stack.
+    # Move windows
     Key([SUPER, "shift"], "h", lazy.layout.shuffle_left(), desc="Move window to the left"),
     Key([SUPER, "shift"], "l", lazy.layout.shuffle_right(), desc="Move window to the right"),
     Key([SUPER, "shift"], "j", lazy.layout.shuffle_down(), desc="Move window down"),
     Key([SUPER, "shift"], "k", lazy.layout.shuffle_up(), desc="Move window up"),
 
-    # Floating Windows
-    Key([SUPER], "f", lazy.window.toggle_floating(), lazy.window.center(), desc="Toggle window floating"),
-    Key([SUPER], "c", lazy.window.center(), desc="Center float window"),
-    Key([SUPER, ALT], "b", lazy.window.move_to_bottom(), desc="Move float window to bottom"),
-    Key([SUPER, ALT], "f", lazy.window.bring_to_front(), desc="Move float window to front"),
-    Key([SUPER, ALT], "l", lazy.window.resize_floating(dw=10, dh=0), desc='increase width by 10'),
-    Key([SUPER, ALT], "h", lazy.window.resize_floating(dw=-10, dh=0), desc='decrease width by 10'),
-    Key([SUPER, ALT], "j", lazy.window.resize_floating(dw=0, dh=10), desc='increase height by 10'),
-    Key([SUPER, ALT], "k", lazy.window.resize_floating(dw=0, dh=-10), desc='decrease height by 10'),
-    Key([SUPER, ALT, "shift"], "l", lazy.window.move_floating(dx=10, dy=0), desc='increase width by 10'),
-    Key([SUPER, ALT, "shift"], "h", lazy.window.move_floating(dx=-10, dy=0), desc='decrease width by 10'),
-    Key([SUPER, ALT, "shift"], "j", lazy.window.move_floating(dx=0, dy=10), desc='increase height by 10'),
-    Key([SUPER, ALT, "shift"], "k", lazy.window.move_floating(dx=0, dy=-10), desc='decrease height by 10'),
-
-    # Resize windows
+    # Resize
     Key([], "F10", lazy.window.toggle_fullscreen(), desc="Toggle fullscreen on the focused window"),
     Key([SUPER], "i", lazy.layout.grow(), desc="Increase window size"),
     Key([SUPER], "d", lazy.layout.shrink(), desc="Decrease window size"),
     Key([SUPER], "g", lazy.layout.maximize(), desc="Maximize Window"),
     Key([SUPER], "r", lazy.layout.reset(), desc="Reset Windows Size"),
-    
-    # Notifications
-    Key([SUPER, "shift"], "n", lazy.spawn(OPEN_NOTIFICATION), desc="Open notification context"),
-    Key([SUPER], "n", lazy.spawn(CLOSE_NOTIFICATION), desc="Close notification context"),
+
+    # Spawners/Menus
+    # Key([SUPER], "e", lazy.spawn(FILE_MANAGER), desc="Spawn file manager"),
+    Key([SUPER], "space", lazy.spawn(MENU_APP), desc="Spawn a app launcher"),
+    Key([SUPER], "a", lazy.spawn(MENU_AUTOMATIONS), desc="Spawn automations menu"),
+    Key([SUPER], "w", lazy.spawn(MENU_WINDOWS), desc="Spawn windows menu"),
+    Key([SUPER], "s", lazy.spawn(MENU_SCREENS), desc="Spawn screens menu"),
+    Key([SUPER], "v", lazy.spawn(MENU_CLIPBOARD), desc="Spawn clipboard menu"),
+    Key([SUPER], "p", lazy.spawn(MENU_POWER), desc="Spawn power menu"),
+    Key([SUPER], "equal", lazy.spawn(MENU_WALLPAPER), desc="Spawn wallpaper menu"),
+
+    # Screenshots
+    Key([], "Print", lazy.spawn(MENU_SCREENSHOT), desc='Launch screenshot menu'),
+    Key(["shift"], "Print", lazy.spawn(TAKE_SCREENSHOT_FULLSCREEN), desc='Launch screenshot fullscreen'),
+
+    # Floating Windows
+    Key([SUPER, ALT], "f", lazy.window.toggle_floating(), lazy.window.center(), desc="Toggle window floating"),
+    Key([SUPER, ALT], "c", lazy.window.center(), desc="Center float window"),
+    Key([SUPER, ALT], "tab", lazy.group.next_window(), desc="Focus next window"),
+    Key([SUPER, ALT, "shift"], "tab", lazy.group.prev_window(), desc="Focus prev window"),
+    Key([SUPER, ALT], "h", lazy.window.resize_floating(dw=-20, dh=0), desc='decrease width by 20'),
+    Key([SUPER, ALT], "j", lazy.window.resize_floating(dw=0, dh=20), desc='increase height by 20'),
+    Key([SUPER, ALT], "k", lazy.window.resize_floating(dw=0, dh=-20), desc='decrease height by 20'),
+    Key([SUPER, ALT], "l", lazy.window.resize_floating(dw=20, dh=0), desc='increase width by 20'),
+    Key([SUPER, ALT, "shift"], "h", lazy.window.move_floating(dx=-20, dy=0), desc='move floating left'),
+    Key([SUPER, ALT, "shift"], "j", lazy.window.move_floating(dx=0, dy=20), desc='move floating down'),
+    Key([SUPER, ALT, "shift"], "k", lazy.window.move_floating(dx=0, dy=-20), desc='move flaoting up'),
+    Key([SUPER, ALT, "shift"], "l", lazy.window.move_floating(dx=20, dy=0), desc='move floating right'),
+    # Key([SUPER, ALT], "f", lazy.window.bring_to_front(), desc="Move float window to front"),
+    # Key([SUPER, ALT], "b", lazy.window.move_to_bottom(), desc="Move float window to bottom"),
+
 
     # Music Control 
     Key([SUPER], "period", lazy.spawn(MUSIC_NEXT), desc='Next music track'),
     Key([SUPER], "comma", lazy.spawn(MUSIC_PREVIOUS), desc='Previous music track'),
     Key([SUPER], "semicolon", lazy.spawn(MUSIC_PLAY_PAUSE), desc='Toggle play/pause music track'),
 
-    # System Metrics
-    Key([SUPER, "control"], "c", lazy.spawn("kitty --hold btop -p 1")),
+
     # System Admin
     KeyChord(
-        [SUPER, "shift"], "space", 
+        [SUPER, "control"], "v", 
         [
-            # Volume Menu
-            KeyChord([], "v", [
-                Key([], "k", lazy.spawn("pamixer --increase 5"), lazy.spawn(SHOW_VOLUME)),
-                Key([], "j", lazy.spawn("pamixer --decrease 5"), lazy.spawn(SHOW_VOLUME)),
-                Key([], "m", lazy.spawn("pamixer -t"))
-            ], name="Volume", mode=True),
+            Key([], "k", lazy.spawn("pamixer --increase 5"), lazy.spawn(SHOW_VOLUME)),
+            Key([], "j", lazy.spawn("pamixer --decrease 5"), lazy.spawn(SHOW_VOLUME)),
+            Key([], "m", lazy.spawn("pamixer -t"))
+        ], name="Volume", mode=True),
 
-            # Metrics Menu
-            KeyChord([], "m", [
-                Key([], "m", lazy.spawn("pamixer --decrease 5"), lazy.spawn(SHOW_VOLUME)),
-                Key([], "p", lazy.spawn("pamixer -t"))
-            ], name="Metrics", mode=False)
+    # Notifications
+    KeyChord(
+        [SUPER], "n", 
+        [
+            Key([], "Return", lazy.spawn(OPEN_NOTIFICATION), lazy.spawn(CLOSE_NOTIFICATION)),
+            Key([], "Backspace", lazy.spawn(CLOSE_NOTIFICATION)),
+            Key([], "j", lazy.spawn(POP_NOTIFICATION))
         ],
-        name="Menu",
-        mode=True,
+        name="Notifications",
+        mode=False,
         
     )
 ]

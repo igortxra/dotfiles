@@ -132,7 +132,10 @@ POP_NOTIFICATION="dunstctl history-pop"
 MUSIC_NEXT="playerctl --player=spotify next"
 MUSIC_PREVIOUS="playerctl --player=spotify previous"
 MUSIC_PLAY_PAUSE="playerctl --player=spotify play-pause"
-SHOW_VOLUME=f"{PATH_SCRIPTS}/widgets/notify-volume.sh"
+MUSIC_VOLUME_UP="playerctl -p spotify volume 0.1+"
+MUSIC_VOLUME_DOWN="playerctl -p spotify volume 0.1-"
+SHOW_MUSIC_VOLUME=f"{PATH_SCRIPTS}/utils/notify-music-volume.sh"
+SHOW_VOLUME=f"{PATH_SCRIPTS}/utils/notify-volume.sh"
 SYSTEM_METRICS="kitty --name btop --hold btop -p 1"
 # -----------------------------------------------------------------------------------------
 
@@ -227,8 +230,6 @@ keys = [
     Key([SUPER, ALT, "shift"], "j", lazy.window.move_floating(dx=0, dy=20), desc='move floating down'),
     Key([SUPER, ALT, "shift"], "k", lazy.window.move_floating(dx=0, dy=-20), desc='move flaoting up'),
     Key([SUPER, ALT, "shift"], "l", lazy.window.move_floating(dx=20, dy=0), desc='move floating right'),
-    # Key([SUPER, ALT], "f", lazy.window.bring_to_front(), desc="Move float window to front"),
-    # Key([SUPER, ALT], "b", lazy.window.move_to_bottom(), desc="Move float window to bottom"),
 
 
     # Music Control 
@@ -236,17 +237,20 @@ keys = [
     Key([SUPER], "comma", lazy.spawn(MUSIC_PREVIOUS), desc='Previous music track'),
     Key([SUPER], "semicolon", lazy.spawn(MUSIC_PLAY_PAUSE), desc='Toggle play/pause music track'),
 
+    # Music Volume Control
+    Key([SUPER, "shift"], "period", lazy.spawn(MUSIC_VOLUME_UP), lazy.spawn(SHOW_MUSIC_VOLUME), desc='Music Volume Up'),
+    Key([SUPER, "shift"], "comma", lazy.spawn(MUSIC_VOLUME_DOWN), lazy.spawn(SHOW_MUSIC_VOLUME), desc='Music Volume Down'),
 
-    # System Admin
+    # Volume Control
     KeyChord(
         [SUPER, "control"], "v", 
         [
-            Key([], "k", lazy.spawn("pamixer --increase 5"), lazy.spawn(SHOW_VOLUME)),
-            Key([], "j", lazy.spawn("pamixer --decrease 5"), lazy.spawn(SHOW_VOLUME)),
-            Key([], "m", lazy.spawn("pamixer -t"))
+            Key([], "period", lazy.spawn("pamixer --increase 5"), lazy.spawn(SHOW_VOLUME)),
+            Key([], "comma", lazy.spawn("pamixer --decrease 5"), lazy.spawn(SHOW_VOLUME)),
+            Key([], "semicolon", lazy.spawn("pamixer -t"))
         ], name="Volume", mode=True),
 
-    # Notifications
+    # Notifications Control
     KeyChord(
         [SUPER], "n", 
         [
@@ -264,18 +268,18 @@ keys = [
 # GROUPS
 groups = [
     Group(name="1", label="1",  layout="monadtall"),
-    Group(name="2", label="2",  layout="monadwide"),
-    Group(name="3", label="3",  layout="monadwide"),
+    Group(name="2", label="2",  layout="monadtall"),
+    Group(name="3", label="3",  layout="monadtall"),
     Group(name="4", label="4",  layout="monadtall"),
     Group(name="5", label="5",  layout="monadtall"),
     Group(name="6", label="6",  layout="monadtall"),
     # Qgis Group
-    Group(name="7", label="7", matches=[Match(wm_class="qgis")], layout="max"),
+    Group(name="7", label="7", matches=[Match(wm_class="qgis")], layout="monadtall"),
     # Spotify Group
-    Group(name="8", label="8", matches=[Match(wm_class="spotify")], layout="max"),
+    Group(name="8", label="8", matches=[Match(wm_class="spotify")], layout="monadtall"),
     # Discord Group
-    Group(name="9", label=" ", matches=[Match(wm_class="discord")], layout="max", exclusive=True, spawn="discord"),
-    Group(name="0", label=" ", matches=[Match(wm_class="obsidian")], layout="max", exclusive=True, spawn="obsidian")
+    Group(name="9", label=" ", matches=[Match(wm_class="discord")], layout="monadtall", exclusive=True, spawn="discord"),
+    Group(name="0", label=" ", matches=[Match(wm_class="obsidian")], layout="monadtall", exclusive=True, spawn="obsidian")
 ]
 
 for group in groups:
@@ -314,7 +318,8 @@ keys.append(Key([], 'F3', lazy.group['scratchpad'].dropdown_toggle('quick_edit')
 
 # LAYOUTS
 layouts = [
-    layout.Max(border_focus=COLOR_PRIMARY, margin=[100, 300, 100, 300], border_width=0, border_on_single=True),
+    layout.Max(border_focus=COLOR_PRIMARY, margin=20, border_width=0, border_on_single=True),
+    layout.Max(border_focus=COLOR_PRIMARY, margin=[100, 200, 100, 200], border_width=0, border_on_single=True),
     layout.MonadTall(border_focus=COLOR_PRIMARY, margin=20, single_border_width=1, border_width=2, border_on_single=True),
     layout.MonadWide(border_focus=COLOR_PRIMARY, margin=20, single_border_width=1, border_width=2, ratio=0.70, border_on_single=True),
 

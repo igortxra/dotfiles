@@ -16,5 +16,6 @@
 .config/Postman
 .config/discord
 
-# No need to update these
+# Auto updated by Wal
 .config/flameshot/flameshot.ini
+.config/dunst/dunstrc

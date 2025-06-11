@@ -33,6 +33,8 @@ tumbler
 ffmpegthumbnailer
 ranger
 xdg-user-dirs
+xdg-desktop-portal
+xdg-desktop-portal-gtk
 dragon-drop-git
 rsync
 sshfs
@@ -48,6 +50,7 @@ dunst
 obsidian
 
 ## Themes
+python-pywal16
 lxappearance
 tela-circle-icon-theme-black
 material-black-colors-theme
@@ -82,6 +85,7 @@ easyeffects
 pamixer
 
 ## CLI Utils
+pacleaner
 git-delta
 wget
 tealdeer
@@ -103,6 +107,7 @@ batify
 numlockx
 zram-generator
 neofetch
+xdotool
 
 ## Programming
 npm

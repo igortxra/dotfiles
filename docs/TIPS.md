@@ -34,3 +34,10 @@ comm -13 <(grep -v -e '^\s*$' -e '^#' ~/PACKAGES.md | sort) <(pacman -Qqe | sort
 ```bash
 comm -23 <(grep -v -e '^\s*$' -e '^#' ~/PACKAGES.md | sort) <(pacman -Qqe | sort) 
 ```
+
+## Disk Usage
+#### Remove $HOME/.cache/ 
+#### Uninstall programs not used
+#### docker system prune --all --force --volumes
+#### yay -Scc (clean packages cache)
+

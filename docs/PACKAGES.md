@@ -146,7 +146,6 @@ spotify-launcher
 
 ## Image Editor/Viewer
 gimp
-mirage
 
 ## Video Player
 vlc

@@ -404,7 +404,7 @@ bar_primary = bar.Bar(
     widgets=[
 
         widget.Clock(
-            format="%Y-%m-%d %H:%M:%S %p", 
+            format="%a %d - %H:%M", 
             background=None, 
             foreground=COLOR_FG_1,
             mouse_callbacks={

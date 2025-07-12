@@ -46,9 +46,6 @@ feh
 ## Notifications
 dunst
 
-## Note Taking
-obsidian
-
 ## Themes
 python-pywal16
 lxappearance
@@ -134,7 +131,6 @@ virtualbox
 virtualbox-host-modules-arch
 bruno
 postman-bin
-beekeeper-studio
 terraform
 
 ## Discord

@@ -40,14 +40,20 @@ def go_to_group(group_name: str):
         qtile.groups_map[group_name].toscreen()
     return _inner
 
-def get_number_of_screens():
+def get_screen_info():
     """ Get number of connected monitors """
-    xr = subprocess.check_output(
-        'xrandr --query | grep " connected"', shell=True).decode().split('\n')
-    monitors = len(xr) - 1 if len(xr) > 2 else len(xr)
-    return monitors
+    cmd_get_active_screens = 'xrandr --query | grep " connected"'
+    output = subprocess.check_output(cmd_get_active_screens, shell=True) .decode() .split('\n')
+    monitors = len(output) - 1 if len(output) > 2 else len(output)
+    
+    primery_screen_index = 0
+    for i, monitor_description in enumerate(output):
+        if "primary" in monitor_description:
+            primery_screen_index = i 
+    
+    return monitors, primery_screen_index
 
-SCREEN_COUNT = get_number_of_screens()
+SCREEN_COUNT, PRIMARY_SCREEN_INDEX  = get_screen_info()
 # -----------------------------------------------------------------------------------------
 
 # BASIC APPLICATIONS
@@ -607,9 +613,11 @@ bars = [bar_primary, bar_secondary]
 # SCREENS
 screens = []
 for i in range(SCREEN_COUNT):
-    s = Screen(bottom=bars[i])
-    if int(i) == 0:
+    if i == PRIMARY_SCREEN_INDEX:
+        s = Screen(bottom=bar_primary)
         s.top=bar_top
+    else:
+        s = Screen(bottom=bar_secondary)
     screens.append(s)
 # -----------------------------------------------------------------------------------------
 

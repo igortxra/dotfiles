@@ -182,7 +182,10 @@ c.url.searchengines = {
     'yt': 'https://www.youtube.com/results?search_query={}',
     'qtile': 'http://docs.qtile.org/en/stable/search.html?q={}',
     'firestore': "https://console.cloud.google.com/firestore/databases/-default-/data/panel/demand-collection-v2/{}?project=scan-275215",
-    'secret': 'https://console.cloud.google.com/security/secret-manager/secret/{}/versions?project=scan-275215'
+    'secret': 'https://console.cloud.google.com/security/secret-manager/secret/{}/versions?project=scan-275215',
+    'athenas': 'https://athenas.cromai.com/demands/{}',
+    'translate': 'https://translate.google.com.br/?sl=en&tl=pt&{}=%0A&op=translate',
+    'ud': 'https://www.urbandictionary.com/define.php?term={}'
 }
 
 c.editor.command = ["kitty", "-e", "nvim", "{file}"]

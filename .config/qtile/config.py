@@ -122,7 +122,6 @@ MENU_NETWORK_TERMINAL='kitty --hold tldr nmcli'
 MENU_WINDOWS="rofi -show window"
 MENU_AUTOMATIONS=f"{PATH_SCRIPTS}/menus/automations.sh &"
 MENU_WALLPAPER=f"{PATH_SCRIPTS}/menus/wallpaper.sh &"
-MENU_APP_IMAGES=f"{PATH_SCRIPTS}/menus/appimages.sh &"
 # -----------------------------------------------------------------------------------------
 
 # WIDGETS
@@ -213,7 +212,6 @@ keys = [
     # Spawners/Menus
     # Key([SUPER], "e", lazy.spawn(FILE_MANAGER), desc="Spawn file manager"),
     Key([SUPER], "space", lazy.spawn(MENU_APP), desc="Spawn a app launcher"),
-    Key([SUPER], "o", lazy.spawn(MENU_APP_IMAGES), desc="Spawn a app image launcher"),
     Key([SUPER], "a", lazy.spawn(MENU_AUTOMATIONS), desc="Spawn automations menu"),
     Key([SUPER], "w", lazy.spawn(MENU_WINDOWS), desc="Spawn windows menu"),
     Key([SUPER], "s", lazy.spawn(MENU_SCREENS), desc="Spawn screens menu"),

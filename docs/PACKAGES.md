@@ -105,6 +105,7 @@ numlockx
 zram-generator
 neofetch
 xdotool
+python-pyudev
 
 ## Programming
 npm

@@ -40,20 +40,14 @@ def go_to_group(group_name: str):
         qtile.groups_map[group_name].toscreen()
     return _inner
 
-def get_screen_info():
+def get_number_of_screens():
     """ Get number of connected monitors """
     cmd_get_active_screens = 'xrandr --query | grep " connected"'
-    output = subprocess.check_output(cmd_get_active_screens, shell=True) .decode() .split('\n')
-    monitors = len(output) - 1 if len(output) > 2 else len(output)
-    
-    primery_screen_index = 0
-    for i, monitor_description in enumerate(output):
-        if "primary" in monitor_description:
-            primery_screen_index = i 
-    
-    return monitors, primery_screen_index
+    xr = subprocess .check_output(cmd_get_active_screens, shell=True) .decode() .split('\n')
+    monitors = len(xr) - 1 if len(xr) > 2 else len(xr)
+    return monitors
 
-SCREEN_COUNT, PRIMARY_SCREEN_INDEX  = get_screen_info()
+SCREEN_COUNT = get_number_of_screens()
 # -----------------------------------------------------------------------------------------
 
 # BASIC APPLICATIONS
@@ -122,6 +116,7 @@ MENU_NETWORK_TERMINAL='kitty --hold tldr nmcli'
 MENU_WINDOWS="rofi -show window"
 MENU_AUTOMATIONS=f"{PATH_SCRIPTS}/menus/automations.sh &"
 MENU_WALLPAPER=f"{PATH_SCRIPTS}/menus/wallpaper.sh &"
+MENU_APP_IMAGES=f"{PATH_SCRIPTS}/menus/appimages.sh &"
 # -----------------------------------------------------------------------------------------
 
 # WIDGETS
@@ -212,6 +207,7 @@ keys = [
     # Spawners/Menus
     # Key([SUPER], "e", lazy.spawn(FILE_MANAGER), desc="Spawn file manager"),
     Key([SUPER], "space", lazy.spawn(MENU_APP), desc="Spawn a app launcher"),
+    Key([SUPER], "o", lazy.spawn(MENU_APP_IMAGES), desc="Spawn a app image launcher"),
     Key([SUPER], "a", lazy.spawn(MENU_AUTOMATIONS), desc="Spawn automations menu"),
     Key([SUPER], "w", lazy.spawn(MENU_WINDOWS), desc="Spawn windows menu"),
     Key([SUPER], "s", lazy.spawn(MENU_SCREENS), desc="Spawn screens menu"),
@@ -401,12 +397,9 @@ widget_groupbox_secondary = widget.GroupBox(
     fontsize=20,
     font="Liberation Mono"
 )
+
 # -----------------------------------------------------------------------------------------
-
-# BARS and WIDGETS
-bar_primary = bar.Bar(
-    widgets=[
-
+widgets = [
         widget.Clock(
             format="%a %d - %H:%M", 
             background=None, 
@@ -426,7 +419,7 @@ bar_primary = bar.Bar(
         
         widget.Spacer(14),
 
-        widget_groupbox_main,
+        # GROUP BOX WILL BE INSERTED HERE - INDEX 4
 
         widget.Spacer(20),
 
@@ -507,7 +500,14 @@ bar_primary = bar.Bar(
             padding=1,
             font="Liberation Mono"
         ),
-    ],
+    ]
+
+
+# BARS and WIDGETS
+primary_screen_widgets = widgets.copy()
+primary_screen_widgets.insert(4, widget_groupbox_main)
+bar_primary = bar.Bar(
+    widgets=primary_screen_widgets,
     size=25,
     margin=[-5,0,0,0],
     background=COLOR_BAR,
@@ -515,13 +515,10 @@ bar_primary = bar.Bar(
     border_color=COLOR_BAR,
 )
 
+secondary_screen_widgets = widgets.copy()
+secondary_screen_widgets.insert(4, widget_groupbox_secondary)
 bar_secondary = bar.Bar(
-    widgets=[
-        widget.CurrentLayoutIcon(scale=0.7),
-        widget.Spacer(14),
-        widget_groupbox_secondary,
-        widget.Spacer(),
-    ], 
+    widgets=secondary_screen_widgets,
     size=25,
     margin=[-5,0,0,0],
     background=COLOR_BAR,
@@ -531,71 +528,70 @@ bar_secondary = bar.Bar(
 
 bar_top = bar.Bar(
     widgets=[
+        widget.Spacer(20),
+        widget.GenPollText(
+            func=lambda: subprocess.check_output(WIDGET_DOTFILES, shell=True).decode(),
+            update_interval=1, 
+            foreground=COLOR_FG_2,
+            background=None,
+            max_chars=20,
+            padding=5,
+        ),
 
-                widget.Spacer(20),
-                widget.GenPollText(
-                    func=lambda: subprocess.check_output(WIDGET_DOTFILES, shell=True).decode(),
-                    update_interval=1, 
-                    foreground=COLOR_FG_2,
-                    background=None,
-                    max_chars=20,
-                    padding=5,
-                ),
+        # widget.Spacer(20),
+        # widget.Wallpaper(
+        #     label="󰸉 ",
+        #     directory=f"{PATH_HOME}/Wallpapers",
+        #     foreground=COLOR_BASE,
+        # ),
 
-                # widget.Spacer(20),
-                # widget.Wallpaper(
-                #     label="󰸉 ",
-                #     directory=f"{PATH_HOME}/Wallpapers",
-                #     foreground=COLOR_BASE,
-                # ),
+        widget.Spacer(20),
+        widget.CheckUpdates(
+            display_format="  {updates}",
+            colour_have_updates=COLOR_YELLOW,
+            colour_no_updates=COLOR_PRIMARY,
+            no_update_string=" ",
+            mouse_callbacks={
+                "Button1": lazy.spawn(SHOW_UPGRADABLE_PACKAGES)
+            }
+        ),
 
-                widget.Spacer(20),
-                widget.CheckUpdates(
-                    display_format="  {updates}",
-                    colour_have_updates=COLOR_YELLOW,
-                    colour_no_updates=COLOR_PRIMARY,
-                    no_update_string=" ",
-                    mouse_callbacks={
-                        "Button1": lazy.spawn(SHOW_UPGRADABLE_PACKAGES)
-                    }
-                ),
+        widget.Spacer(),
 
-                widget.Spacer(),
+        widget.DF(
+            partition="/home/igortxra", 
+            format='  {uf}{m}',
+            visible_on_warn=False,
+            background=None,
+            foreground=COLOR_FG_2
+        ),
 
-                widget.DF(
-                    partition="/home/igortxra", 
-                    format='  {uf}{m}',
-                    visible_on_warn=False,
-                    background=None,
-                    foreground=COLOR_FG_2
-                ),
+        widget.Spacer(20),
+        widget.Memory(padding=5, fmt=" {}", format="{MemUsed: .2f}{mm}", measure_mem="G", background=None, foreground=COLOR_FG_2),
+        
+        widget.Spacer(20),
+        widget.CPU(format='{load_percent}%', fmt=" {}", background=None, foreground=COLOR_FG_2),
 
-                widget.Spacer(20),
-                widget.Memory(padding=5, fmt=" {}", format="{MemUsed: .2f}{mm}", measure_mem="G", background=None, foreground=COLOR_FG_2),
-                
-                widget.Spacer(20),
-                widget.CPU(format='{load_percent}%', fmt=" {}", background=None, foreground=COLOR_FG_2),
+        widget.Spacer(20),
+        widget.GenPollText(
+            func=lambda: subprocess.check_output(WIDGET_NETWORK).decode(),
+            update_interval=1, 
+            foreground=COLOR_FG_2,
+            background=None,
+            max_chars=50,
+            padding=5,
+            mouse_callbacks={
+                "Button1": lazy.spawn(MENU_NETWORK_TERMINAL),
+                "Button3": lazy.spawn(MENU_NETWORK)
+            },
+        ),
 
-                widget.Spacer(20),
-                widget.GenPollText(
-                    func=lambda: subprocess.check_output(WIDGET_NETWORK).decode(),
-                    update_interval=1, 
-                    foreground=COLOR_FG_2,
-                    background=None,
-                    max_chars=50,
-                    padding=5,
-                    mouse_callbacks={
-                        "Button1": lazy.spawn(MENU_NETWORK_TERMINAL),
-                        "Button3": lazy.spawn(MENU_NETWORK)
-                    },
-                ),
+        widget.Spacer(),
 
-                widget.Spacer(),
+        widget.Spacer(40),
 
-                widget.Spacer(40),
-
-                widget.Systray(padding=20, icon_size=18),
-                widget.Spacer(20),
+        widget.Systray(padding=20, icon_size=18),
+        widget.Spacer(20),
 
     ], 
     size=23,
@@ -610,13 +606,10 @@ bars = [bar_primary, bar_secondary]
 
 # SCREENS
 screens = []
-for i in range(SCREEN_COUNT):
-    if i == PRIMARY_SCREEN_INDEX:
-        s = Screen(bottom=bar_primary)
-        s.top=bar_top
-    else:
-        s = Screen(bottom=bar_secondary)
-    screens.append(s)
+main_screen = Screen(bottom=bar_primary, top=bar_top)
+screens.append(main_screen)
+for _ in range(SCREEN_COUNT):
+    screens.append(Screen(bottom=bar_secondary, top=bar_top))
 # -----------------------------------------------------------------------------------------
 
 # MOUSE

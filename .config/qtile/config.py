@@ -399,6 +399,19 @@ widget_groupbox_secondary = widget.GroupBox(
 )
 
 # -----------------------------------------------------------------------------------------
+
+clock_widget = widget.Clock(
+    format="%a %d - %H:%M", 
+    background=None, 
+    foreground=COLOR_FG_1,
+    mouse_callbacks={
+        "Button1": lazy.spawn(WIDGET_CALENDAR + " curr"),
+        "Button4": lazy.spawn(WIDGET_CALENDAR + " prev"),
+        "Button5": lazy.spawn(WIDGET_CALENDAR + " next"),
+    },
+    fontsize=18,
+    font="Liberation Mono")
+
 widgets = [
         widget.Clock(
             format="%a %d - %H:%M", 
@@ -419,7 +432,7 @@ widgets = [
         
         widget.Spacer(14),
 
-        # GROUP BOX WILL BE INSERTED HERE - INDEX 4
+        widget_groupbox_main,
 
         widget.Spacer(20),
 
@@ -504,10 +517,8 @@ widgets = [
 
 
 # BARS and WIDGETS
-primary_screen_widgets = widgets.copy()
-primary_screen_widgets.insert(4, widget_groupbox_main)
 bar_primary = bar.Bar(
-    widgets=primary_screen_widgets,
+    widgets=widgets,
     size=25,
     margin=[-5,0,0,0],
     background=COLOR_BAR,
@@ -515,10 +526,17 @@ bar_primary = bar.Bar(
     border_color=COLOR_BAR,
 )
 
-secondary_screen_widgets = widgets.copy()
-secondary_screen_widgets.insert(4, widget_groupbox_secondary)
 bar_secondary = bar.Bar(
-    widgets=secondary_screen_widgets,
+    widgets=[
+        widget.Sep(foreground=COLOR_BAR),
+        widget.Spacer(),
+        widget.CurrentLayoutIcon(scale=0.7),
+        widget.Spacer(14),
+        widget_groupbox_secondary,
+        widget.Spacer(),
+        widget.Sep(foreground=COLOR_BAR),
+    ]
+    ,
     size=25,
     margin=[-5,0,0,0],
     background=COLOR_BAR,
@@ -609,7 +627,7 @@ screens = []
 main_screen = Screen(bottom=bar_primary, top=bar_top)
 screens.append(main_screen)
 for _ in range(SCREEN_COUNT):
-    screens.append(Screen(bottom=bar_secondary, top=bar_top))
+    screens.append(Screen(bottom=bar_secondary))
 # -----------------------------------------------------------------------------------------
 
 # MOUSE

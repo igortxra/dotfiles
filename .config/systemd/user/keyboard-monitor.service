@@ -1,0 +1,14 @@
+[Unit]
+Description=Keyboard Monitor (Python)
+After=graphical-session.target
+
+[Service]
+ExecStart=%h/.local/bin/utils/RemapCAPS.py
+Restart=always
+Environment=DISPLAY=:0
+Environment=XAUTHORITY=%h/.Xauthority
+Environment=DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/%U/bus
+
+[Install]
+WantedBy=default.target
+

@@ -1,0 +1,21 @@
+.dotfiles
+.asdf
+.cargo
+
+# Caches
+.cache
+**/cache
+**/Cache
+**/*Cache
+**/*cache
+
+# Logs
+**/*.log
+
+# Specific apps
+.config/Postman
+.config/discord
+
+# Auto updated by Wal
+.config/flameshot/flameshot.ini
+.config/dunst/dunstrc

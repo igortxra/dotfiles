@@ -1,0 +1,84 @@
+/* Dark theme. */
+@import "~/.cache/wal/colors-rofi-dark"
+
+configuration {
+    show-icons: true;
+    display-drun: "";
+    disable-history: true;
+    font: "monospace 12";
+    location: 0;            /* Bottom center */
+    anchor: south;           /* Fixa no rodapé */
+    fullscreen: false;
+    sidebar-mode: false;
+    kb-remove-to-eol: "";
+    kb-mode-complete: "";
+    kb-accept-entry: "Return";
+    kb-remove-char-back: "BackSpace";
+    kb-row-up: "Control+k,Up";
+    kb-row-down: "Control+j,Down";
+    kb-row-left: "Control+h";
+
+}
+
+
+* {
+    font: "Jetbrains Mono 12";
+}
+
+#window {
+    border:           0;
+    padding: 20 20 20 20px;
+    width: 20%;
+    margin: 0;
+}
+#mainbox {
+    orientation: vertical;
+}
+#message {
+    border:       0px;
+    padding:      1px;
+}
+#textbox {
+    padding: 5px;
+}
+#listview {
+    scrollbar:    false;
+    columns: 1;
+    layout: vertical;
+    fixed-height: false;
+}
+#element {
+    padding: 5px 5px ;
+    margin: 0 0px;
+}
+#scrollbar {
+    width:        2px ;
+    border:       0;
+    handle-width: 8px ;
+    padding:      0;
+}
+#sidebar {
+    border:       2px dash 0px 0px ;
+}
+#button.selected {
+}
+#inputbar {
+    spacing:    0;
+    padding:    0 0 0 0;
+}
+#entry {
+    spacing:    0;
+}
+#prompt {
+    margin: 15 0;
+}
+#inputbar {
+    children:   [entry];
+    orientation: vertical;
+}
+#textbox-prompt-colon {
+    expand:     false;
+    str:        "";
+    margin:     0px 0.3em 0em 0em ;
+}
+

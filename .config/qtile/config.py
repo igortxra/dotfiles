@@ -156,6 +156,11 @@ MUSIC_VOLUME_DOWN = "playerctl -p spotify volume 0.1-"
 SHOW_MUSIC_VOLUME = f"{PATH_SCRIPTS}/utils/notify-music-volume.sh"
 SHOW_VOLUME = f"{PATH_SCRIPTS}/utils/notify-volume.sh"
 SYSTEM_METRICS = "kitty --name btop --hold btop -p 1"
+INCREASE_BRIGHTNESS = "brightnessctl set +10%"
+DECREASE_BRIGHTNESS = "brightnessctl set 10%-"
+INCREASE_VOLUME = "pamixer --increase 5"
+DECREASE_VOLUME = "pamixer --decrease 5"
+TOGGLE_AUDIO_MUTE = "pamixer -t"
 # -----------------------------------------------------------------------------------------
 
 # HOOKS
@@ -187,6 +192,15 @@ SUPER = "mod4"
 ALT = "mod1"
 
 keys = [
+    # 
+    Key([], "XF86MonBrightnessUp", lazy.spawn(INCREASE_BRIGHTNESS), desc="Increase Brightness"),
+    Key([], "XF86MonBrightnessDown", lazy.spawn(DECREASE_BRIGHTNESS), desc="Decrease Brightness"),
+    Key([], "XF86AudioRaiseVolume", lazy.spawn(INCREASE_VOLUME), lazy.spawn(SHOW_VOLUME), desc="Raise Volume"),
+    Key([], "XF86AudioLowerVolume", lazy.spawn(DECREASE_VOLUME), lazy.spawn(SHOW_VOLUME), desc="Lower Volume"),
+    Key([], "XF86AudioMute", lazy.spawn(TOGGLE_AUDIO_MUTE), lazy.spawn(SHOW_VOLUME), desc="Toggle Audio Mute"),
+    Key([], "XF86AudioPlay", lazy.spawn(MUSIC_PLAY_PAUSE), lazy.spawn(SHOW_VOLUME), desc="Toggle Play/Pause music"),
+
+
     # A list of available commands that can be bound to keys can be found
     # at https://docs.qtile.org/en/latest/manual/config/lazy.html
     # BASIC
@@ -341,14 +355,14 @@ keys = [
         [
             Key(
                 [],
-                "period",
+                "k",
                 lazy.spawn("pamixer --increase 5"),
                 lazy.spawn(SHOW_VOLUME),
             ),
             Key(
-                [], "comma", lazy.spawn("pamixer --decrease 5"), lazy.spawn(SHOW_VOLUME)
+                [], "j", lazy.spawn("pamixer --decrease 5"), lazy.spawn(SHOW_VOLUME)
             ),
-            Key([], "semicolon", lazy.spawn("pamixer -t")),
+            Key([], "m", lazy.spawn("pamixer -t")),
         ],
         name="Volume",
         mode=True,
@@ -536,7 +550,7 @@ widget_groupbox_main = widget.GroupBox(
     padding_y=0,
     margin_y=3,
     fontsize=20,
-    font="Liberation Mono",
+    font="Iosevka Nerd Font",
 )
 
 # Groupbox for the secondary screens
@@ -563,7 +577,7 @@ widget_groupbox_secondary = widget.GroupBox(
     padding_y=0,
     margin_y=3,
     fontsize=20,
-    font="Liberation Mono",
+    font="Iosevka Nerd Font",
 )
 
 # -----------------------------------------------------------------------------------------

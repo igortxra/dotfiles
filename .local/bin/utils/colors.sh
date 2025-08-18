@@ -12,4 +12,5 @@ pgrep qutebrowser > /dev/null && qutebrowser ':config-source'
 ln -sf ~/.cache/wal/flameshot/flameshot.ini ~/.config/flameshot/flameshot.ini
 
 # Notify the changes
+ln -sf ~/.cache/wal/dunst/dunstrc ~/.config/dunst/dunstrc
 dunstify -r 2 "Wallpaper and theme updated!"

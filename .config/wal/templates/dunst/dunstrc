@@ -24,16 +24,16 @@
     # dynamic width from 0 to 300
     # width = (0, 300)
     # constant width of 300
-    width = (0, 500)
+    width = (0, 400)
 
     # The maximum height of a single notification, excluding the frame.
-    height = (0, 500)
+    height = (0, 900)
 
     # Position the notification in the top right corner
     origin = bottom-right
 
     # Offset from the origin
-    offset = (25, 63)
+    offset = (5, 35)
 
     # Scale factor. It is auto-detected if value is 0.
     scale = 0
@@ -91,7 +91,8 @@
     frame_width = 1
 
     # Defines color of the frame around the notification window.
-    frame_color = "#111113"
+    frame_color = "{color2}"
+
                    
     # Define a color for the separator.
     # possible values are:

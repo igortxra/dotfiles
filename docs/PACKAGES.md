@@ -109,7 +109,7 @@ python-pyudev
 
 ## Programming
 npm
-python-dbus-next
+python-dbus-fast
 python-psutil
 
 ## bluetooth

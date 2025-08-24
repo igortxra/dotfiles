@@ -99,11 +99,10 @@ echo_color "Dotfiles configured!"
 ### INSTALLING PACKAGES ###
 ##########################
 
+PACKAGE_LIST_FILE="$HOME/docs/PACKAGES.md"
 echo_color "\n\nInstalling packages defined in $PACKAGE_LIST_FILE..."
 
-PACKAGE_LIST_FILE="$HOME/docs/PACKAGES.md"
 PACKAGE_LIST=$(grep -v '^\s*#' "$PACKAGE_LIST_FILE" | grep -v '^\s*$' | tr '\n' ' ' )
-
 if [ -z "$PACKAGE_LIST" ]; then
   echo_color "No package specified. Skipping."
 else
@@ -152,6 +151,4 @@ sudo systemctl enable betterlockscreen@$USER
 #####################################
 ## Configure Wallpaper and colors ###
 #####################################
-log_output() {
-    "$@" 2>&1 | tee -a "$LOGFILE"
-}
+wal -i $HOME/Wallpapers/default.jpg --cols16 -t --saturate 0.7 -o $HOME/.local/bin/utils/colors.sh

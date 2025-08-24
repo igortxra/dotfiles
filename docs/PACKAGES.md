@@ -2,6 +2,7 @@
 
 ## Undisposable
 vim
+neovim
 git
 
 ## Shell
@@ -84,7 +85,6 @@ playerctl
 alsa-utils
 pamixer
 
-
 ## Utilities
 galculator
 man-db
@@ -143,9 +143,6 @@ python-gdal
 
 
 # Developer Tools
-## IDE / Code Editor
-neovim
-
 ## Docker
 docker
 docker-buildx

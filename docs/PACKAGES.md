@@ -1,12 +1,14 @@
-## Essential
+# Essential
+
+## Undisposable
 vim
 git
 
-## Window Manager
-qtile
-
 ## Shell
 zsh
+
+## Window Manager
+qtile
 
 ## Terminal Emulator
 kitty
@@ -14,39 +16,41 @@ kitty
 ## Launcher
 rofi
 
-## Compositor
-picom-git
-
-## Browsers
+## Browser
 qutebrowser
-google-chrome
-
-## File Management
-thunar
-thunar-volman
-thunar-archive-plugin
-xarchiver
-zip
-unzip
-gvfs
-tumbler
-ffmpegthumbnailer
-ranger
-xdg-user-dirs
-xdg-desktop-portal
-xdg-desktop-portal-gtk
-dragon-drop-git
-rsync
-sshfs
-
-## Screen Locker
-betterlockscreen-git
-feh
 
 ## Notifications
 dunst
 
-## Themes
+## File Management and Backup
+ranger
+dragon-drop-git
+rsync
+sshfs
+thunar
+thunar-volman
+thunar-archive-plugin
+zip
+unzip
+xarchiver
+gvfs
+tumbler
+ffmpegthumbnailer
+xdg-user-dirs
+xdg-desktop-portal
+xdg-desktop-portal-gtk
+
+## Screen Locker
+betterlockscreen-git
+i3lock-color
+feh
+
+## Bluetooth
+bluez
+bluez-utils
+
+## Themes and Appearance
+picom-git
 python-pywal16
 lxappearance
 tela-circle-icon-theme-black
@@ -64,94 +68,105 @@ xorg-fonts-75dpi
 xclip
 rofi-greenclip
 
+## Network Utils
+nm-connection-editor
+
 ## Screenshots / Gif Generators
 flameshot
 peek
 
-## Network Utils
-nm-connection-editor
-
-## Screen Utils
+## Screen/Display Utils
 arandr
 autorandr
 
 ## Audio Utils
-alsa-utils
 playerctl
-easyeffects
+alsa-utils
 pamixer
 
-## CLI Utils
-pacleaner
-git-delta
-wget
-tealdeer
-eza
-bat
-zoxide
-less
-man-db
-fzf
-ripgrep
-exfat-utils
-jq
-nmap
 
 ## Utilities
-btop
 galculator
+man-db
+fzf
+zoxide
+less
+tealdeer
+git-delta
+wget
+eza
+bat
+ripgrep
+jq
+nmap
+neofetch
+btop
+exfat-utils
+pacleaner
 batify
 numlockx
 zram-generator
-neofetch
 xdotool
-python-pyudev
 
-## Programming
+## Other
 npm
 python-dbus-fast
 python-psutil
+python-uv
+python-pyudev
 
-## bluetooth
-bluez
-bluez-utils
+## Media Player
+vlc
+
+
+
+# Optionals
+## Musics
+spotify-launcher
+
+## Notebook Facilities
+brightnessctl
 
 ## Required to run AppImages
 fuse2
 
-## Developer Tools
-neovim
-docker
-docker-buildx
-docker-compose
-kubectl
-kind
-github-cli
-google-cloud-cli
-virtualbox
-virtualbox-host-modules-arch
-bruno
-postman-bin
-terraform
-
-## Discord
-discord
-betterdiscord-installer
-
-## Musics
-spotify-launcher
-
-## Image Editor/Viewer
+## Common Softwares
 gimp
+libreoffice-fresh-br
 
-## Video Player
-vlc
-
-## Qgis
+## QGIS
 qgis
-python-oswlib
 python-psycopg2
 python-gdal
 
-## Libreoffice
-libreoffice-fresh-br
+
+
+
+# Developer Tools
+## IDE / Code Editor
+neovim
+
+## Docker
+docker
+docker-buildx
+docker-compose
+
+## Kubernetes
+kubectl
+kind
+
+## Github
+github-cli
+
+## GCP
+google-cloud-cli
+
+## Virtual Machine
+virtualbox
+virtualbox-host-modules-arch
+
+## IaC
+terraform
+
+## HTTP Client
+bruno

@@ -164,6 +164,3 @@ virtualbox-host-modules-arch
 
 ## IaC
 terraform
-
-## HTTP Client
-bruno

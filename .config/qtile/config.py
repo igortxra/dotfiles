@@ -68,8 +68,7 @@ SCREEN_COUNT = get_number_of_screens()
 
 # BASIC APPLICATIONS
 TERMINAL = "kitty"
-# FILE_MANAGER = "thunar"
-FILE_MANAGER = "ranger"
+FILE_MANAGER = "thunar"
 FONT = "Iosevka Nerd Font"
 # -----------------------------------------------------------------------------------------
 
@@ -247,7 +246,7 @@ keys = [
     Key([SUPER], "g", lazy.layout.maximize(), desc="Maximize Window"),
     Key([SUPER], "r", lazy.layout.reset(), desc="Reset Windows Size"),
     # Spawners/Menus
-    # Key([SUPER], "e", lazy.spawn(FILE_MANAGER), desc="Spawn file manager"),
+    Key([SUPER], "e", lazy.spawn(FILE_MANAGER), desc="Spawn file manager"),
     Key([SUPER], "space", lazy.spawn(MENU_APP), desc="Spawn a app launcher"),
     Key([SUPER], "a", lazy.spawn(MENU_AUTOMATIONS), desc="Spawn automations menu"),
     Key([SUPER], "w", lazy.spawn(MENU_WINDOWS), desc="Spawn windows menu"),
@@ -408,14 +407,7 @@ groups = [
         exclusive=True,
         spawn="discord",
     ),
-    Group(
-        name="0",
-        label=" ",
-        matches=[Match(wm_class="obsidian")],
-        layout="monadtall",
-        exclusive=True,
-        spawn="obsidian",
-    ),
+    Group(name="0", label=" "),
 ]
 
 for group in groups:
@@ -439,47 +431,6 @@ for group in groups:
         ),
     )
 # -----------------------------------------------------------------------------------------
-
-groups.append(
-    ScratchPad(
-        "scratchpad",
-        [
-            # define a drop down terminal.
-            # it is placed in the upper third of screen by default.
-            DropDown(
-                "terminal",
-                "kitty --override confirm_os_window_close=0",
-                x=0.25,
-                y=0.2,
-                width=0.5,
-                height=0.6,
-                opacity=0.9,
-            ),
-            DropDown(
-                "file_manager",
-                "kitty --override confirm_os_window_close=0 --execute ranger",
-                x=0.25,
-                y=0.2,
-                width=0.5,
-                height=0.6,
-                opacity=0.9,
-            ),
-            DropDown(
-                "quick_edit",
-                "kitty --name quick-edit -e nvim +':Telescope find_files hidden=True'",
-                x=0.1,
-                y=0.1,
-                width=0.8,
-                height=0.8,
-                opacity=0.9,
-            ),
-        ],
-    ),
-)
-
-keys.append(Key([], "F1", lazy.group["scratchpad"].dropdown_toggle("terminal")))
-keys.append(Key([], "F2", lazy.group["scratchpad"].dropdown_toggle("file_manager")))
-keys.append(Key([], "F3", lazy.group["scratchpad"].dropdown_toggle("quick_edit")))
 
 # LAYOUTS
 layouts = [

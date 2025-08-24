@@ -4,7 +4,7 @@
 configuration {
     show-icons: true;
     display-drun: "";
-    disable-history: true;
+    disable-history: false;
     font: "monospace 12";
     location: 0;            /* Bottom center */
     anchor: south;           /* Fixa no rodapé */

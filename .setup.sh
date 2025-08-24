@@ -148,3 +148,10 @@ chsh $USER --shell=/bin/zsh
 ## Configure Screen Locker (Betterlockscreen) ###
 #################################################
 sudo systemctl enable betterlockscreen@$USER
+
+#####################################
+## Configure Wallpaper and colors ###
+#####################################
+log_output() {
+    "$@" 2>&1 | tee -a "$LOGFILE"
+}

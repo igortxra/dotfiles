@@ -113,51 +113,51 @@ python-psutil
 python-uv
 python-pyudev
 
-## Media Player
-vlc
-
-# Optionals
-## Musics
-spotify-launcher
-
 ## Notebook Facilities
 brightnessctl
 
-## Required to run AppImages
-fuse2
-
-## Common Softwares
-gimp
-libreoffice-fresh-br
-
-## QGIS
-qgis
-python-psycopg2
-python-gdal
-
-# Developer Tools
-
 ## Code Editor
-neovim
+# neovim
 
-## Docker
-docker
-docker-buildx
-docker-compose
-
-## Kubernetes
-kubectl
-kind
-
-## Github
-github-cli
-
-## GCP
-google-cloud-cli
-
-## Virtual Machine
-virtualbox
-virtualbox-host-modules-arch
-
-## IaC
-terraform
+# Optionals
+# 
+# ## Media Player
+# vlc
+# ## Musics
+# spotify-launcher
+# 
+# ## Required to run AppImages
+# fuse2
+# 
+# ## Common Softwares
+# gimp
+# libreoffice-fresh-br
+# 
+# ## QGIS
+# qgis
+# python-psycopg2
+# python-gdal
+# 
+# # Developer Tools
+# 
+# ## Docker
+# docker
+# docker-buildx
+# docker-compose
+# 
+# ## Kubernetes
+# kubectl
+# kind
+# 
+# ## Github
+# github-cli
+# 
+# ## GCP
+# google-cloud-cli
+# 
+# ## Virtual Machine
+# virtualbox
+# virtualbox-host-modules-arch
+# 
+# ## IaC
+# terraform

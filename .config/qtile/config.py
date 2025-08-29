@@ -1,5 +1,4 @@
 # Copyright (c) 2010 Aldo Cortesi
-
 # Copyright (c) 2010, 2014 dequis
 # Copyright (c) 2012 Randall Ma
 # Copyright (c) 2012-2014 Tycho Andersen
@@ -32,12 +31,10 @@ from libqtile import bar, layout, widget
 from libqtile.config import (
     Click,
     Drag,
-    DropDown,
     Group,
     Key,
     KeyChord,
     Match,
-    ScratchPad,
     Screen,
 )
 from libqtile.core.manager import Qtile
@@ -49,7 +46,6 @@ from libqtile.hook import subscribe
 def go_to_group(group_name: str):
     def _inner(qtile: Qtile):
         qtile.groups_map[group_name].toscreen()
-
     return _inner
 
 
@@ -69,17 +65,16 @@ SCREEN_COUNT = get_number_of_screens()
 # BASIC APPLICATIONS
 TERMINAL = "kitty"
 FILE_MANAGER = "thunar"
-FONT = "Iosevka Nerd Font"
+DEFAULT_FONT = "Iosevka Nerd Font"
 # -----------------------------------------------------------------------------------------
 
 # PATHS
 PATH_HOME = path.expanduser("~")
 PATH_SCRIPTS = f"{PATH_HOME}/.local/bin"
-PATH_SCREENSHOTS = f"{PATH_HOME}/Screenshots"
 # -----------------------------------------------------------------------------------------
 
 # INIT SCRIPT
-AUTOSTART = f"{PATH_SCRIPTS}/autostart.sh"
+AUTOSTART = f"{PATH_SCRIPTS}/AUTOSTART"
 # -----------------------------------------------------------------------------------------
 
 # COLORS
@@ -122,44 +117,41 @@ COLOR_INACTIVE = colors[7]
 # -----------------------------------------------------------------------------------------
 
 # MENUS
-MENU_APP = f"{PATH_SCRIPTS}/menus/apps.sh &"
-MENU_CLIPBOARD = f"{PATH_SCRIPTS}/menus/clipboard.sh &"
-MENU_POWER = f"{PATH_SCRIPTS}/menus/power.sh &"
-MENU_UTILS = f"{PATH_SCRIPTS}/menus/utils.sh &"
-MENU_SCREENSHOT = f"flameshot gui"
-MENU_SCREENS = f"{PATH_SCRIPTS}/menus/screens.sh &"
-MENU_AUDIO = "pwvucontrol"
-MENU_NETWORK = "nm-connection-editor"
-MENU_NETWORK_TERMINAL = "kitty --hold tldr nmcli"
-MENU_WINDOWS = "rofi -show window"
-MENU_AUTOMATIONS = f"{PATH_SCRIPTS}/menus/automations.sh &"
-MENU_WALLPAPER = f"{PATH_SCRIPTS}/menus/wallpaper.sh &"
+MENU_APP = f"{PATH_SCRIPTS}/OPEN_APP_MENU &"
+MENU_CLIPBOARD = f"{PATH_SCRIPTS}/OPEN_CLIPBOARD_MENU &"
+MENU_POWER = f"{PATH_SCRIPTS}/OPEN_POWER_MENU &"
+MENU_WALLPAPER = f"{PATH_SCRIPTS}/OPEN_WALLPAPER_MENU &"
+MENU_SCREENS = f"{PATH_SCRIPTS}/OPEN_SCREENS_MENU &"
+MENU_AUTOMATIONS = f"{PATH_SCRIPTS}/OPEN_AUTOMATIONS_MENU &"
+MENU_WINDOWS = f"{PATH_SCRIPTS}/OPEN_WINDOW_MENU &"
+MENU_NETWORK = f"{PATH_SCRIPTS}/OPEN_NETWORK_MENU &"
 # -----------------------------------------------------------------------------------------
 
 # WIDGETS
-WIDGET_DOTFILES = f"{PATH_SCRIPTS}/widgets/dotfiles-status.sh"
-WIDGET_NETWORK = f"{PATH_SCRIPTS}/widgets/network.sh"
-WIDGET_CALENDAR = f"{PATH_SCRIPTS}/widgets/calendar.sh"  # -----------------------------------------------------------------------------------------
+WIDGET_DOTFILES = f"{PATH_SCRIPTS}/WIDGET_DOTFILES"
+WIDGET_NETWORK = f"{PATH_SCRIPTS}/WIDGET_NETWORK"
+# -----------------------------------------------------------------------------------------
 
-# DO ACTIONS
-SHOW_UPGRADABLE_PACKAGES = f"{PATH_SCRIPTS}/utils/show-upgradable-packages.sh &"
-TAKE_SCREENSHOT_FULLSCREEN = f"flameshot full --path {PATH_SCREENSHOTS}"
-OPEN_NOTIFICATION = "dunstctl context && dunstctl close"
-CLOSE_NOTIFICATION = "dunstctl close"
-POP_NOTIFICATION = "dunstctl history-pop"
-MUSIC_NEXT = "playerctl --player=spotify next"
-MUSIC_PREVIOUS = "playerctl --player=spotify previous"
-MUSIC_PLAY_PAUSE = "playerctl --player=spotify play-pause"
-MUSIC_VOLUME_UP = "playerctl -p spotify volume 0.1+"
-MUSIC_VOLUME_DOWN = "playerctl -p spotify volume 0.1-"
-SHOW_MUSIC_VOLUME = f"{PATH_SCRIPTS}/utils/notify-music-volume.sh"
-SHOW_VOLUME = f"{PATH_SCRIPTS}/utils/notify-volume.sh"
-SYSTEM_METRICS = "kitty --name btop --hold btop -p 1"
-INCREASE_BRIGHTNESS = "brightnessctl set +10%"
-DECREASE_BRIGHTNESS = "brightnessctl set 10%-"
-INCREASE_VOLUME = "pamixer --increase 5"
-DECREASE_VOLUME = "pamixer --decrease 5"
-TOGGLE_AUDIO_MUTE = "pamixer -t"
+# ACTIONS
+CALENDAR_SHOW = f"{PATH_SCRIPTS}/CALENDAR_SHOW &"  
+SCREENSHOT = f"{PATH_SCRIPTS}/SCREENSHOT &"
+SCREENSHOT_FULLSCREEN = f"{PATH_SCRIPTS}/SCREENSHOT_FULLSCREEN"
+NOTIFICATION_OPEN = f"{PATH_SCRIPTS}/NOTIFICATION_OPEN"
+NOTIFICATION_CLOSE = f"{PATH_SCRIPTS}/NOTIFICATION_CLOSE"
+NOTIFICATION_POP = f"{PATH_SCRIPTS}/NOTIFICATION_HISTORY"
+MEDIA_NEXT = f"{PATH_SCRIPTS}/MEIDA_NEXT"
+MEDIA_PREVIOUS = f"{PATH_SCRIPTS}/MEDIA_PREVIOUS" 
+MEDIA_PLAY = f"{PATH_SCRIPTS}/MEDIA_PLAY"  
+MEDIA_VOL_UP = f"{PATH_SCRIPTS}/MEDIA_VOL_UP"
+MEDIA_VOL_DOWN = f"{PATH_SCRIPTS}/MEDIA_VOL_DOWN"
+MEDIA_VOL_SHOW = f"{PATH_SCRIPTS}/MEDIA_VOL_SHOW"
+VOL_UP = f"{PATH_SCRIPTS}/VOLUME_UP"
+VOL_DOWN = f"{PATH_SCRIPTS}/VOLUME_DOWN"
+VOL_MUTE = f"{PATH_SCRIPTS}/VOLUME_MUTE"
+VOL_SHOW = f"{PATH_SCRIPTS}/VOLUME_SHOW"
+BRIGHTNESS_UP = f"{PATH_SCRIPTS}/BRIGHTNESS_UP" 
+BRIGHTNESS_DOWN = f"{PATH_SCRIPTS}/BRIGHTNESS_DOWN" 
+
 # -----------------------------------------------------------------------------------------
 
 # HOOKS
@@ -192,12 +184,12 @@ ALT = "mod1"
 
 keys = [
     # 
-    Key([], "XF86MonBrightnessUp", lazy.spawn(INCREASE_BRIGHTNESS), desc="Increase Brightness"),
-    Key([], "XF86MonBrightnessDown", lazy.spawn(DECREASE_BRIGHTNESS), desc="Decrease Brightness"),
-    Key([], "XF86AudioRaiseVolume", lazy.spawn(INCREASE_VOLUME), lazy.spawn(SHOW_VOLUME), desc="Raise Volume"),
-    Key([], "XF86AudioLowerVolume", lazy.spawn(DECREASE_VOLUME), lazy.spawn(SHOW_VOLUME), desc="Lower Volume"),
-    Key([], "XF86AudioMute", lazy.spawn(TOGGLE_AUDIO_MUTE), lazy.spawn(SHOW_VOLUME), desc="Toggle Audio Mute"),
-    Key([], "XF86AudioPlay", lazy.spawn(MUSIC_PLAY_PAUSE), lazy.spawn(SHOW_VOLUME), desc="Toggle Play/Pause music"),
+    Key([], "XF86MonBrightnessUp", lazy.spawn(BRIGHTNESS_UP), desc="Increase Brightness"),
+    Key([], "XF86MonBrightnessDown", lazy.spawn(BRIGHTNESS_DOWN), desc="Decrease Brightness"),
+    Key([], "XF86AudioRaiseVolume", lazy.spawn(VOL_UP), lazy.spawn(VOL_SHOW), desc="Raise Volume"),
+    Key([], "XF86AudioLowerVolume", lazy.spawn(VOL_DOWN), lazy.spawn(VOL_SHOW), desc="Lower Volume"),
+    Key([], "XF86AudioMute", lazy.spawn(VOL_MUTE), lazy.spawn(VOL_SHOW), desc="Toggle Audio Mute"),
+    Key([], "XF86AudioPlay", lazy.spawn(MEDIA_PLAY), lazy.spawn(VOL_SHOW), desc="Toggle Play/Pause music"),
 
 
     # A list of available commands that can be bound to keys can be found
@@ -212,7 +204,6 @@ keys = [
     Key([SUPER, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
     Key([SUPER, "control"], "t", lazy.hide_show_bar("top"), desc="Toggle bar"),
     Key([SUPER, "control"], "b", lazy.hide_show_bar("bottom"), desc="Toggle bar"),
-    Key([SUPER, "control"], "c", lazy.spawn(SYSTEM_METRICS)),
     # Change Focus
     Key([SUPER], "h", lazy.layout.left(), desc="Move focus to left"),
     Key([SUPER], "l", lazy.layout.right(), desc="Move focus to right"),
@@ -255,11 +246,11 @@ keys = [
     Key([SUPER], "p", lazy.spawn(MENU_POWER), desc="Spawn power menu"),
     Key([SUPER], "equal", lazy.spawn(MENU_WALLPAPER), desc="Spawn wallpaper menu"),
     # Screenshots
-    Key([], "Print", lazy.spawn(MENU_SCREENSHOT), desc="Launch screenshot menu"),
+    Key([], "Print", lazy.spawn(SCREENSHOT), desc="Launch screenshot menu"),
     Key(
         ["shift"],
         "Print",
-        lazy.spawn(TAKE_SCREENSHOT_FULLSCREEN),
+        lazy.spawn(SCREENSHOT_FULLSCREEN),
         desc="Launch screenshot fullscreen",
     ),
     # Floating Windows
@@ -324,27 +315,27 @@ keys = [
         desc="move floating right",
     ),
     # Music Control
-    Key([SUPER], "period", lazy.spawn(MUSIC_NEXT), desc="Next music track"),
-    Key([SUPER], "comma", lazy.spawn(MUSIC_PREVIOUS), desc="Previous music track"),
+    Key([SUPER], "period", lazy.spawn(MEDIA_NEXT), desc="Next music track"),
+    Key([SUPER], "comma", lazy.spawn(MEDIA_PREVIOUS), desc="Previous music track"),
     Key(
         [SUPER],
         "semicolon",
-        lazy.spawn(MUSIC_PLAY_PAUSE),
+        lazy.spawn(MEDIA_PLAY),
         desc="Toggle play/pause music track",
     ),
     # Music Volume Control
     Key(
         [SUPER, "shift"],
         "period",
-        lazy.spawn(MUSIC_VOLUME_UP),
-        lazy.spawn(SHOW_MUSIC_VOLUME),
+        lazy.spawn(MEDIA_VOL_UP),
+        lazy.spawn(MEDIA_VOL_SHOW),
         desc="Music Volume Up",
     ),
     Key(
         [SUPER, "shift"],
         "comma",
-        lazy.spawn(MUSIC_VOLUME_DOWN),
-        lazy.spawn(SHOW_MUSIC_VOLUME),
+        lazy.spawn(MEDIA_VOL_DOWN),
+        lazy.spawn(MEDIA_VOL_SHOW),
         desc="Music Volume Down",
     ),
     # Volume Control
@@ -356,10 +347,10 @@ keys = [
                 [],
                 "k",
                 lazy.spawn("pamixer --increase 5"),
-                lazy.spawn(SHOW_VOLUME),
+                lazy.spawn(VOL_SHOW),
             ),
             Key(
-                [], "j", lazy.spawn("pamixer --decrease 5"), lazy.spawn(SHOW_VOLUME)
+                [], "j", lazy.spawn("pamixer --decrease 5"), lazy.spawn(VOL_SHOW)
             ),
             Key([], "m", lazy.spawn("pamixer -t")),
         ],
@@ -374,11 +365,11 @@ keys = [
             Key(
                 [],
                 "Return",
-                lazy.spawn(OPEN_NOTIFICATION),
-                lazy.spawn(CLOSE_NOTIFICATION),
+                lazy.spawn(NOTIFICATION_OPEN),
+                lazy.spawn(NOTIFICATION_CLOSE),
             ),
-            Key([], "Backspace", lazy.spawn(CLOSE_NOTIFICATION)),
-            Key([], "j", lazy.spawn(POP_NOTIFICATION)),
+            Key([], "Backspace", lazy.spawn(NOTIFICATION_CLOSE)),
+            Key([], "j", lazy.spawn(NOTIFICATION_POP)),
         ],
         name="Notifications",
         mode=False,
@@ -394,14 +385,13 @@ groups = [
     Group(name="4", label="4", layout="monadtall"),
     Group(name="5", label="5", layout="monadtall"),
     Group(name="6", label="6", layout="monadtall"),
-    # Qgis Group
     Group(name="7", label="7", matches=[Match(wm_class="qgis")], layout="monadtall"),
     # Spotify Group
     Group(name="8", label="8", matches=[Match(wm_class="spotify")], layout="monadtall"),
     # Discord Group
     Group(
         name="9",
-        label=" ",
+        label="",
         matches=[Match(wm_class="discord")],
         layout="monadtall",
         exclusive=True,
@@ -471,7 +461,7 @@ layouts = [
 # -----------------------------------------------------------------------------------------
 
 widget_defaults = dict(
-    font=FONT,
+    font=DEFAULT_FONT,
     fontsize=16,
     padding=3,
 )
@@ -501,7 +491,7 @@ widget_groupbox_main = widget.GroupBox(
     padding_y=0,
     margin_y=3,
     fontsize=20,
-    font="Iosevka Nerd Font",
+    font=DEFAULT_FONT,
 )
 
 # Groupbox for the secondary screens
@@ -528,7 +518,7 @@ widget_groupbox_secondary = widget.GroupBox(
     padding_y=0,
     margin_y=3,
     fontsize=20,
-    font="Iosevka Nerd Font",
+    font=DEFAULT_FONT,
 )
 
 # -----------------------------------------------------------------------------------------
@@ -539,9 +529,7 @@ widgets = [
         background=None,
         foreground=COLOR_FG_1,
         mouse_callbacks={
-            "Button1": lazy.spawn(WIDGET_CALENDAR + " curr"),
-            "Button4": lazy.spawn(WIDGET_CALENDAR + " prev"),
-            "Button5": lazy.spawn(WIDGET_CALENDAR + " next"),
+            "Button1": lazy.spawn(CALENDAR_SHOW),
         },
         fontsize=18,
         font="Liberation Mono",
@@ -570,10 +558,10 @@ widgets = [
     ),
     widget.Spacer(10),
     widget.Mpris2(
-        name="spotify",
+        name="Media",
         display_metadata=["xesam:title", "xesam:artist"],
         scroll_chars=None,
-        objname="org.mpris.MediaPlayer2.spotify",
+        objname=None,
         scroll_interval=0,
         background=COLOR_PRIMARY,
         foreground=COLOR_FG_2,
@@ -586,7 +574,6 @@ widgets = [
         fmt="󱄠",
         foreground=COLOR_FG_2,
         background=None,
-        mouse_callbacks={"Button3": lazy.spawn(MENU_AUDIO)},
         padding=5,
         fontsize=18,
     ),
@@ -595,7 +582,6 @@ widgets = [
         fmt="{}",
         foreground=COLOR_FG_2,
         background=None,
-        mouse_callbacks={"Button3": lazy.spawn(MENU_AUDIO)},
         padding=5,
         font="Liberation Mono",
     ),
@@ -674,7 +660,6 @@ bar_top = bar.Bar(
             colour_have_updates=COLOR_YELLOW,
             colour_no_updates=COLOR_PRIMARY,
             no_update_string=" ",
-            mouse_callbacks={"Button1": lazy.spawn(SHOW_UPGRADABLE_PACKAGES)},
         ),
         widget.Spacer(),
         widget.DF(
@@ -706,7 +691,7 @@ bar_top = bar.Bar(
             max_chars=50,
             padding=5,
             mouse_callbacks={
-                "Button1": lazy.spawn(MENU_NETWORK_TERMINAL),
+                "Button1": lazy.spawn(MENU_NETWORK),
                 "Button3": lazy.spawn(MENU_NETWORK),
             },
         ),

@@ -1,8 +1,7 @@
 # Essential
 
-## Undisposable
+## Basic
 vim
-neovim
 git
 
 ## Shell
@@ -74,7 +73,6 @@ nm-connection-editor
 
 ## Screenshots / Gif Generators
 flameshot
-peek
 
 ## Screen/Display Utils
 arandr
@@ -118,8 +116,6 @@ python-pyudev
 ## Media Player
 vlc
 
-
-
 # Optionals
 ## Musics
 spotify-launcher
@@ -139,10 +135,11 @@ qgis
 python-psycopg2
 python-gdal
 
-
-
-
 # Developer Tools
+
+## Code Editor
+neovim
+
 ## Docker
 docker
 docker-buildx

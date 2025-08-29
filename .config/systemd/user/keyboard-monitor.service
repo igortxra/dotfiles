@@ -3,7 +3,7 @@ Description=Keyboard Monitor (Python)
 After=graphical-session.target
 
 [Service]
-ExecStart=%h/.local/bin/utils/RemapCAPS.py
+ExecStart=%h/.local/bin/CAPS_TO_SUPER
 Restart=always
 Environment=DISPLAY=:0
 Environment=XAUTHORITY=%h/.Xauthority

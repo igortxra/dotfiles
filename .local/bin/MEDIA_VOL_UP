@@ -1,0 +1,3 @@
+#!/bin/sh
+
+playerctl volume 0.1+

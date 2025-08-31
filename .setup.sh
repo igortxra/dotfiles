@@ -134,7 +134,7 @@ sudo systemctl enable betterlockscreen@$USER
 #####################################
 ## Configure Wallpaper and colors ###
 #####################################
-wal -i $HOME/Wallpapers/default.jpg --cols16 -t --saturate 0.7 -o $HOME/.local/bin/APPLY_COLORS
+$HOME/.local/bin/WALLPAPER_SET
 
 ##########################################
 ## Enable keyboard auto remap CAPS LOCK ##

@@ -1,5 +1,5 @@
 /* Dark theme. */
-@import "~/.cache/wal/colors-rofi-dark"
+@import "~/.cache/wal/rofi/colors.rasi"
 
 configuration {
     show-icons: true;
@@ -20,13 +20,12 @@ configuration {
 
 }
 
-
 * {
     font: "Jetbrains Mono 12";
 }
 
 #window {
-    border:           0;
+    border:           2px;
     padding: 20 20 20 20px;
     width: 20%;
     margin: 0;

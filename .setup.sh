@@ -16,23 +16,6 @@ echo_color() {
     echo -e "${COLOR}$1${RESET}"
 }
 
-#######################
-### INITIALIZE SUDO ###
-#######################
-
-echo_color "Confirming permission..."
-
-sudo -v
-
-( while true; do sudo -n true; sleep 60; done; ) &
-SUDO_KEEP_ALIVE_PID=$!
-
-cleanup() {
-    kill "$SUDO_KEEP_ALIVE_PID"
-    exit
-}
-trap cleanup EXIT
-
 ##########################
 ### START INSTALLATION ###
 ##########################
@@ -152,3 +135,13 @@ sudo systemctl enable betterlockscreen@$USER
 ## Configure Wallpaper and colors ###
 #####################################
 wal -i $HOME/Wallpapers/default.jpg --cols16 -t --saturate 0.7 -o $HOME/.local/bin/APPLY_COLORS
+
+##########################################
+## Enable keyboard auto remap CAPS LOCK ##
+##########################################
+sudo systemctl --user enable keyboard-monitor.service
+
+###########################
+## Set lock screen image ##
+###########################
+betterlockscreen -u $HOME/Wallpapers/default.jpg

@@ -46,6 +46,7 @@ from libqtile.hook import subscribe
 def go_to_group(group_name: str):
     def _inner(qtile: Qtile):
         qtile.groups_map[group_name].toscreen()
+
     return _inner
 
 
@@ -133,15 +134,15 @@ WIDGET_NETWORK = f"{PATH_SCRIPTS}/WIDGET_NETWORK"
 # -----------------------------------------------------------------------------------------
 
 # ACTIONS
-CALENDAR_SHOW = f"{PATH_SCRIPTS}/CALENDAR_SHOW &"  
+CALENDAR_SHOW = f"{PATH_SCRIPTS}/CALENDAR_SHOW &"
 SCREENSHOT = f"{PATH_SCRIPTS}/SCREENSHOT &"
 SCREENSHOT_FULLSCREEN = f"{PATH_SCRIPTS}/SCREENSHOT_FULLSCREEN"
 NOTIFICATION_OPEN = f"{PATH_SCRIPTS}/NOTIFICATION_OPEN"
 NOTIFICATION_CLOSE = f"{PATH_SCRIPTS}/NOTIFICATION_CLOSE"
 NOTIFICATION_POP = f"{PATH_SCRIPTS}/NOTIFICATION_HISTORY"
-MEDIA_NEXT = f"{PATH_SCRIPTS}/MEIDA_NEXT"
-MEDIA_PREVIOUS = f"{PATH_SCRIPTS}/MEDIA_PREVIOUS" 
-MEDIA_PLAY = f"{PATH_SCRIPTS}/MEDIA_PLAY"  
+MEDIA_NEXT = f"{PATH_SCRIPTS}/MEDIA_NEXT"
+MEDIA_PREVIOUS = f"{PATH_SCRIPTS}/MEDIA_PREVIOUS"
+MEDIA_PLAY = f"{PATH_SCRIPTS}/MEDIA_PLAY"
 MEDIA_VOL_UP = f"{PATH_SCRIPTS}/MEDIA_VOL_UP"
 MEDIA_VOL_DOWN = f"{PATH_SCRIPTS}/MEDIA_VOL_DOWN"
 MEDIA_VOL_SHOW = f"{PATH_SCRIPTS}/MEDIA_VOL_SHOW"
@@ -149,24 +150,17 @@ VOL_UP = f"{PATH_SCRIPTS}/VOLUME_UP"
 VOL_DOWN = f"{PATH_SCRIPTS}/VOLUME_DOWN"
 VOL_MUTE = f"{PATH_SCRIPTS}/VOLUME_MUTE"
 VOL_SHOW = f"{PATH_SCRIPTS}/VOLUME_SHOW"
-BRIGHTNESS_UP = f"{PATH_SCRIPTS}/BRIGHTNESS_UP" 
-BRIGHTNESS_DOWN = f"{PATH_SCRIPTS}/BRIGHTNESS_DOWN" 
+BRIGHTNESS_UP = f"{PATH_SCRIPTS}/BRIGHTNESS_UP"
+BRIGHTNESS_DOWN = f"{PATH_SCRIPTS}/BRIGHTNESS_DOWN"
 
 # -----------------------------------------------------------------------------------------
 
-# HOOKS
+# Hooks and custom functions
 
 
 @subscribe.startup_once
 def setup():
     subprocess.Popen([AUTOSTART])
-
-
-@subscribe.client_new
-def new_clinet(client):
-    if "thunar" in client.get_wm_class():
-        client.set_position_floating(500, 500)
-        client.set_size_floating(800, 400)
 
 
 @lazy.function
@@ -183,23 +177,52 @@ SUPER = "mod4"
 ALT = "mod1"
 
 keys = [
-    # 
-    Key([], "XF86MonBrightnessUp", lazy.spawn(BRIGHTNESS_UP), desc="Increase Brightness"),
-    Key([], "XF86MonBrightnessDown", lazy.spawn(BRIGHTNESS_DOWN), desc="Decrease Brightness"),
-    Key([], "XF86AudioRaiseVolume", lazy.spawn(VOL_UP), lazy.spawn(VOL_SHOW), desc="Raise Volume"),
-    Key([], "XF86AudioLowerVolume", lazy.spawn(VOL_DOWN), lazy.spawn(VOL_SHOW), desc="Lower Volume"),
-    Key([], "XF86AudioMute", lazy.spawn(VOL_MUTE), lazy.spawn(VOL_SHOW), desc="Toggle Audio Mute"),
-    Key([], "XF86AudioPlay", lazy.spawn(MEDIA_PLAY), lazy.spawn(VOL_SHOW), desc="Toggle Play/Pause music"),
-
-
+    #
+    Key(
+        [], "XF86MonBrightnessUp", lazy.spawn(BRIGHTNESS_UP), desc="Increase Brightness"
+    ),
+    Key(
+        [],
+        "XF86MonBrightnessDown",
+        lazy.spawn(BRIGHTNESS_DOWN),
+        desc="Decrease Brightness",
+    ),
+    Key(
+        [],
+        "XF86AudioRaiseVolume",
+        lazy.spawn(VOL_UP),
+        lazy.spawn(VOL_SHOW),
+        desc="Raise Volume",
+    ),
+    Key(
+        [],
+        "XF86AudioLowerVolume",
+        lazy.spawn(VOL_DOWN),
+        lazy.spawn(VOL_SHOW),
+        desc="Lower Volume",
+    ),
+    Key(
+        [],
+        "XF86AudioMute",
+        lazy.spawn(VOL_MUTE),
+        lazy.spawn(VOL_SHOW),
+        desc="Toggle Audio Mute",
+    ),
+    Key(
+        [],
+        "XF86AudioPlay",
+        lazy.spawn(MEDIA_PLAY),
+        lazy.spawn(VOL_SHOW),
+        desc="Toggle Play/Pause music",
+    ),
     # A list of available commands that can be bound to keys can be found
     # at https://docs.qtile.org/en/latest/manual/config/lazy.html
-    # BASIC
+    # Basic
     Key([SUPER], "Return", lazy.spawn(TERMINAL), desc="Launch terminal"),
     Key([SUPER], "Backspace", lazy.window.kill(), desc="Kill focused window"),
     Key([SUPER], "Tab", lazy.next_layout(), desc="Toggle between layouts"),
     Key([SUPER], "o", lazy.spawncmd(), desc="Spawn a command using a prompt widget"),
-    # CONTROLS
+    # Controls
     Key([SUPER, "control"], "r", lazy.reload_config(), desc="Reload the config"),
     Key([SUPER, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
     Key([SUPER, "control"], "t", lazy.hide_show_bar("top"), desc="Toggle bar"),
@@ -349,9 +372,7 @@ keys = [
                 lazy.spawn("pamixer --increase 5"),
                 lazy.spawn(VOL_SHOW),
             ),
-            Key(
-                [], "j", lazy.spawn("pamixer --decrease 5"), lazy.spawn(VOL_SHOW)
-            ),
+            Key([], "j", lazy.spawn("pamixer --decrease 5"), lazy.spawn(VOL_SHOW)),
             Key([], "m", lazy.spawn("pamixer -t")),
         ],
         name="Volume",
@@ -386,12 +407,10 @@ groups = [
     Group(name="5", label="5", layout="monadtall"),
     Group(name="6", label="6", layout="monadtall"),
     Group(name="7", label="7", matches=[Match(wm_class="qgis")], layout="monadtall"),
-    # Spotify Group
     Group(name="8", label="8", matches=[Match(wm_class="spotify")], layout="monadtall"),
-    # Discord Group
     Group(
         name="9",
-        label="",
+        label="9",
         matches=[Match(wm_class="discord")],
         layout="monadtall",
         exclusive=True,
@@ -435,14 +454,14 @@ layouts = [
     ),
     layout.MonadTall(
         border_focus=COLOR_PRIMARY,
-        margin=20,
+        margin=10,
         single_border_width=1,
         border_width=2,
         border_on_single=True,
     ),
     layout.MonadWide(
         border_focus=COLOR_PRIMARY,
-        margin=20,
+        margin=10,
         single_border_width=1,
         border_width=2,
         ratio=0.70,
@@ -648,12 +667,6 @@ bar_top = bar.Bar(
             max_chars=20,
             padding=5,
         ),
-        # widget.Spacer(20),
-        # widget.Wallpaper(
-        #     label="󰸉 ",
-        #     directory=f"{PATH_HOME}/Wallpapers",
-        #     foreground=COLOR_BASE,
-        # ),
         widget.Spacer(20),
         widget.CheckUpdates(
             display_format="  {updates}",
@@ -747,21 +760,10 @@ floating_layout = layout.Floating(
     float_rules=[
         # Run the utility of `xprop` to see the wm class and name of an X client.
         *layout.Floating.default_float_rules,
-        Match(wm_class="confirmreset"),  # gitk
-        Match(wm_class="makebranch"),  # gitk
-        Match(wm_class="maketag"),  # gitk
-        Match(wm_class="ssh-askpass"),  # ssh-askpass
         Match(wm_class="thunar"),  # File explorer
-        Match(title="branchdialog"),  # gitk
-        Match(title="pinentry"),  # GPG key password entry
         Match(wm_class="galculator"),  # Galculator
-        Match(wm_class="com.vixalien.sticky"),  # Sticky Notes
         Match(wm_class="nm-connection-editor"),  # Network Manager Connection Editor
-        Match(wm_class="pwvucontrol"),  # Audio Settings
-        Match(wm_class="VirtualBox"),  # VirtualBox
         Match(wm_class="feh"),  # Image Viewer
-        Match(wm_class="Chromium-browser"),  # For automations i created
-        Match(wm_class="btop"),  # For automations i created
     ],
     border_width=1,
     border_focus="#ffffff",

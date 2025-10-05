@@ -161,3 +161,6 @@ brightnessctl
 # 
 # ## IaC
 # terraform
+#
+# ## Note Taking
+# obsidian

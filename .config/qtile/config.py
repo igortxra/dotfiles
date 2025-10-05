@@ -36,6 +36,8 @@ from libqtile.config import (
     KeyChord,
     Match,
     Screen,
+    ScratchPad,
+    DropDown,
 )
 from libqtile.core.manager import Qtile
 from libqtile.lazy import lazy
@@ -152,6 +154,7 @@ VOL_MUTE = f"{PATH_SCRIPTS}/VOLUME_MUTE"
 VOL_SHOW = f"{PATH_SCRIPTS}/VOLUME_SHOW"
 BRIGHTNESS_UP = f"{PATH_SCRIPTS}/BRIGHTNESS_UP"
 BRIGHTNESS_DOWN = f"{PATH_SCRIPTS}/BRIGHTNESS_DOWN"
+NOTES = "obsidian"
 
 # -----------------------------------------------------------------------------------------
 
@@ -416,7 +419,6 @@ groups = [
         exclusive=True,
         spawn="discord",
     ),
-    Group(name="0", label=" "),
 ]
 
 for group in groups:
@@ -439,7 +441,28 @@ for group in groups:
             desc=f"Move focused window to group {group.name}",
         ),
     )
+
+groups.append(
+    ScratchPad(
+        name="notes",
+        dropdowns=[
+            DropDown(
+                "notes",
+                NOTES,
+                x=0.10,
+                y=0.10,
+                width=0.8,
+                height=0.8,
+                opacity=1.0,
+            )
+        ],
+    )
+)
+
+keys.append(Key([SUPER], "0", lazy.group["notes"].dropdown_toggle("notes")))
+
 # -----------------------------------------------------------------------------------------
+
 
 # LAYOUTS
 layouts = [
@@ -449,33 +472,50 @@ layouts = [
     layout.Max(
         border_focus=COLOR_PRIMARY,
         margin=[100, 200, 100, 200],
-        border_width=0,
+        border_width=1,
         border_on_single=True,
     ),
     layout.MonadTall(
         border_focus=COLOR_PRIMARY,
         margin=10,
         single_border_width=1,
-        border_width=2,
+        border_width=3,
         border_on_single=True,
     ),
     layout.MonadWide(
         border_focus=COLOR_PRIMARY,
         margin=10,
         single_border_width=1,
-        border_width=2,
+        border_width=3,
         ratio=0.70,
         border_on_single=True,
     ),
     ## Not Used Layouts.
-    # layout.Matrix(border_focus=COLOR_BASE, margin=10, single_border_width=1, border_width=2, border_on_single=True),
-    # layout.Stack(num_stacks=2),
-    # layout.Bsp(),
-    # layout.RatioTile(),
-    # layout.Tile(),
-    # layout.TreeTab(),
-    # layout.VerticalTile(),
-    # layout.Zoomy(),
+    # layout.Matrix(
+    #     border_focus=COLOR_PRIMARY,
+    #     margin=10,
+    #     single_border_width=1,
+    #     border_width=2,
+    #     border_on_single=True,
+    # ),
+    # layout.Stack(margin=10, num_stacks=2),
+    # layout.Bsp(margin=10),
+    # layout.RatioTile(margin=10),
+    # layout.Tile(margin=10),
+    # layout.TreeTab(
+    #     panel_width=300,
+    #     font="Isoveka Nerd",
+    #     vspace=4,
+    #     active_bg=COLOR_PRIMARY,
+    #     sections=[""],
+    #     bg_color=COLOR_BG_1,
+    #     inactive_bg=COLOR_BG_1,
+    #     border_width=0,
+    #     margin_left=40,
+    #     place_right=True,
+    # ),
+    # layout.VerticalTile(margin=10),
+    # layout.Zoomy(margin=10),
 ]
 # -----------------------------------------------------------------------------------------
 
@@ -587,6 +627,7 @@ widgets = [
         fmt="{}   ",
         paused_text="   {track}",
         padding=10,
+        max_chars=50,
     ),
     widget.Spacer(20),
     widget.Volume(

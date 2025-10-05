@@ -13,19 +13,19 @@
 # Change the argument to True to still load settings configured via autoconfig.yml
 config.load_autoconfig(False)
 
-
-# Keymaps
-config.bind('[b', 'tab-prev')
-config.bind(']b', 'tab-next')
-config.bind('<Space>c', 'tab-close')
-
-
-# Enter automatically in insert mode
-c.input.insert_mode.auto_load = True
-
-# Enable Darkmode
-c.colors.webpage.darkmode.enabled = True
-
+# How to open links in an existing instance if a new one is launched.
+# This happens when e.g. opening a link from a terminal. See
+# `new_instance_open_target_window` to customize in which window the
+# link is opened in.
+# Type: String
+# Valid values:
+#   - tab: Open a new tab in the existing window and activate the window.
+#   - tab-bg: Open a new background tab in the existing window and activate the window.
+#   - tab-silent: Open a new tab in the existing window without activating the window.
+#   - tab-bg-silent: Open a new background tab in the existing window without activating the window.
+#   - window: Open in a new window.
+#   - private-window: Open in a new private window.
+c.new_instance_open_target = 'window'
 
 # Which cookies to accept. With QtWebEngine, this setting also controls
 # other features with tracking capabilities similar to those of cookies;
@@ -87,12 +87,13 @@ config.set('content.headers.accept_language', '', 'https://matchmaker.krunker.io
 # QtWebEngine. * `{qt_version}`: The underlying Qt version. *
 # `{upstream_browser_key}`: "Version" for QtWebKit, "Chrome" for
 # QtWebEngine. * `{upstream_browser_version}`: The corresponding
-# Safari/Chrome version. * `{qutebrowser_version}`: The currently
-# running qutebrowser version.  The default value is equal to the
-# unchanged user agent of QtWebKit/QtWebEngine.  Note that the value
-# read from JavaScript is always the global value. With QtWebEngine
-# between 5.12 and 5.14 (inclusive), changing the value exposed to
-# JavaScript requires a restart.
+# Safari/Chrome version. * `{upstream_browser_version_short}`: The
+# corresponding Safari/Chrome   version, but only with its major
+# version. * `{qutebrowser_version}`: The currently running qutebrowser
+# version.  The default value is equal to the default user agent of
+# QtWebKit/QtWebEngine, but with the `QtWebEngine/...` part removed for
+# increased compatibility.  Note that the value read from JavaScript is
+# always the global value.
 # Type: FormatString
 config.set('content.headers.user_agent', 'Mozilla/5.0 ({os_info}) AppleWebKit/{webkit_version} (KHTML, like Gecko) {upstream_browser_key}/{upstream_browser_version} Safari/{webkit_version}', 'https://web.whatsapp.com/')
 
@@ -103,14 +104,15 @@ config.set('content.headers.user_agent', 'Mozilla/5.0 ({os_info}) AppleWebKit/{w
 # QtWebEngine. * `{qt_version}`: The underlying Qt version. *
 # `{upstream_browser_key}`: "Version" for QtWebKit, "Chrome" for
 # QtWebEngine. * `{upstream_browser_version}`: The corresponding
-# Safari/Chrome version. * `{qutebrowser_version}`: The currently
-# running qutebrowser version.  The default value is equal to the
-# unchanged user agent of QtWebKit/QtWebEngine.  Note that the value
-# read from JavaScript is always the global value. With QtWebEngine
-# between 5.12 and 5.14 (inclusive), changing the value exposed to
-# JavaScript requires a restart.
+# Safari/Chrome version. * `{upstream_browser_version_short}`: The
+# corresponding Safari/Chrome   version, but only with its major
+# version. * `{qutebrowser_version}`: The currently running qutebrowser
+# version.  The default value is equal to the default user agent of
+# QtWebKit/QtWebEngine, but with the `QtWebEngine/...` part removed for
+# increased compatibility.  Note that the value read from JavaScript is
+# always the global value.
 # Type: FormatString
-config.set('content.headers.user_agent', 'Mozilla/5.0 ({os_info}; rv:90.0) Gecko/20100101 Firefox/90.0', 'https://accounts.google.com/*')
+config.set('content.headers.user_agent', 'Mozilla/5.0 ({os_info}; rv:136.0) Gecko/20100101 Firefox/139.0', 'https://accounts.google.com/*')
 
 # Load images automatically in web pages.
 # Type: Bool
@@ -122,12 +124,14 @@ config.set('content.images', True, 'devtools://*')
 
 # Allow JavaScript to read from or write to the clipboard. With
 # QtWebEngine, writing the clipboard as response to a user interaction
-# is always allowed.
-# Type: String
+# is always allowed. On Qt < 6.8, the `ask` setting is equivalent to
+# `none` and permission needs to be granted manually via this setting.
+# Type: JSClipboardPermission
 # Valid values:
 #   - none: Disable access to clipboard.
 #   - access: Allow reading from and writing to the clipboard.
 #   - access-paste: Allow accessing the clipboard and pasting clipboard content.
+#   - ask: Prompt when requested (grants 'access-paste' permission).
 c.content.javascript.clipboard = 'access-paste'
 
 # Enable JavaScript.
@@ -154,6 +158,19 @@ config.set('content.local_content_can_access_remote_urls', True, 'file:///home/i
 # Type: Bool
 config.set('content.local_content_can_access_file_urls', False, 'file:///home/igortxra/.local/share/qutebrowser/userscripts/*')
 
+# Editor (and arguments) to use for the `edit-*` commands. The following
+# placeholders are defined:  * `{file}`: Filename of the file to be
+# edited. * `{line}`: Line in which the caret is found in the text. *
+# `{column}`: Column in which the caret is found in the text. *
+# `{line0}`: Same as `{line}`, but starting from index 0. * `{column0}`:
+# Same as `{column}`, but starting from index 0.
+# Type: ShellCommand
+c.editor.command = ['kitty', '-e', 'nvim', '{file}']
+
+# Automatically enter insert mode if an editable element is focused
+# after loading the page.
+# Type: Bool
+c.input.insert_mode.auto_load = True
 
 # How to behave when the last tab is closed. If the
 # `tabs.tabs_are_windows` setting is set, this is ignored and the
@@ -167,28 +184,412 @@ config.set('content.local_content_can_access_file_urls', False, 'file:///home/ig
 #   - close: Close the window.
 c.tabs.last_close = 'ignore'
 
+# Search engines which can be used via the address bar.  Maps a search
+# engine name (such as `DEFAULT`, or `ddg`) to a URL with a `{}`
+# placeholder. The placeholder will be replaced by the search term, use
+# `{{` and `}}` for literal `{`/`}` braces.  The following further
+# placeholds are defined to configure how special characters in the
+# search terms are replaced by safe characters (called 'quoting'):  *
+# `{}` and `{semiquoted}` quote everything except slashes; this is the
+# most   sensible choice for almost all search engines (for the search
+# term   `slash/and&amp` this placeholder expands to `slash/and%26amp`).
+# * `{quoted}` quotes all characters (for `slash/and&amp` this
+# placeholder   expands to `slash%2Fand%26amp`). * `{unquoted}` quotes
+# nothing (for `slash/and&amp` this placeholder   expands to
+# `slash/and&amp`). * `{0}` means the same as `{}`, but can be used
+# multiple times.  The search engine named `DEFAULT` is used when
+# `url.auto_search` is turned on and something else than a URL was
+# entered to be opened. Other search engines can be used by prepending
+# the search engine name to the search term, e.g. `:open google
+# qutebrowser`.
+# Type: Dict
+c.url.searchengines = {'DEFAULT': 'https://start.duckduckgo.com/?q={}', 'aw': 'https://wiki.archlinux.org/?search={}', 'goog': 'https://www.google.com/search?q={}', 're': 'https://www.reddit.com/search?q={}', 'gh': 'https://github.com/search?q={}', 'ghr': 'https://github.com/{unquoted}', 'wiki': 'https://en.wikipedia.org/wiki/{}', 'yt': 'https://www.youtube.com/results?search_query={}', 'qtile': 'http://docs.qtile.org/en/stable/search.html?q={}', 'firestore': 'https://console.cloud.google.com/firestore/databases/-default-/data/panel/demand-collection-v2/{}?project=scan-275215', 'secret': 'https://console.cloud.google.com/security/secret-manager/secret/{}/versions?project=scan-275215', 'athenas': 'https://athenas.cromai.com/demands/{}', 'translate': 'https://translate.google.com.br/?sl=en&tl=pt&{}=%0A&op=translate', 'ud': 'https://www.urbandictionary.com/define.php?term={}'}
+
 # Page(s) to open at the start.
 # Type: List of FuzzyUrl, or FuzzyUrl
 c.url.start_pages = 'https://github.com/dashboard'
 
-c.url.searchengines = {
-    'DEFAULT': 'https://start.duckduckgo.com/?q={}',
-    'aw': 'https://wiki.archlinux.org/?search={}', 
-    'goog': 'https://www.google.com/search?q={}',
-    're': 'https://www.reddit.com/search?q={}', 
-    'gh': 'https://github.com/search?q={}', 
-    'ghr': 'https://github.com/{unquoted}',
-    'wiki': 'https://en.wikipedia.org/wiki/{}',
-    'yt': 'https://www.youtube.com/results?search_query={}',
-    'qtile': 'http://docs.qtile.org/en/stable/search.html?q={}',
-    'firestore': "https://console.cloud.google.com/firestore/databases/-default-/data/panel/demand-collection-v2/{}?project=scan-275215",
-    'secret': 'https://console.cloud.google.com/security/secret-manager/secret/{}/versions?project=scan-275215',
-    'athenas': 'https://athenas.cromai.com/demands/{}',
-    'translate': 'https://translate.google.com.br/?sl=en&tl=pt&{}=%0A&op=translate',
-    'ud': 'https://www.urbandictionary.com/define.php?term={}'
-}
+# Text color of the completion widget. May be a single color to use for
+# all columns or a list of three colors, one for each column.
+# Type: List of QtColor, or QtColor
+c.colors.completion.fg = '#c4c1c3'
 
-c.editor.command = ["kitty", "-e", "nvim", "{file}"]
+# Background color of the completion widget for odd rows.
+# Type: QssColor
+c.colors.completion.odd.bg = '#1a0410'
 
-from colors import colorize
-c = colorize(c)
+# Background color of the completion widget for even rows.
+# Type: QssColor
+c.colors.completion.even.bg = '#1a0410'
+
+# Foreground color of completion widget category headers.
+# Type: QtColor
+c.colors.completion.category.fg = '#e5c07b'
+
+# Background color of the completion widget category headers.
+# Type: QssColor
+c.colors.completion.category.bg = '#1a0410'
+
+# Top border color of the completion widget category headers.
+# Type: QssColor
+c.colors.completion.category.border.top = '#1a0410'
+
+# Bottom border color of the completion widget category headers.
+# Type: QssColor
+c.colors.completion.category.border.bottom = '#1a0410'
+
+# Foreground color of the selected completion item.
+# Type: QtColor
+c.colors.completion.item.selected.fg = '#c4c1c3'
+
+# Background color of the selected completion item.
+# Type: QssColor
+c.colors.completion.item.selected.bg = '#60103e'
+
+# Top border color of the selected completion item.
+# Type: QssColor
+c.colors.completion.item.selected.border.top = '#60103e'
+
+# Bottom border color of the selected completion item.
+# Type: QssColor
+c.colors.completion.item.selected.border.bottom = '#60103e'
+
+# Foreground color of the matched text in the selected completion item.
+# Type: QtColor
+c.colors.completion.item.selected.match.fg = '#98c379'
+
+# Foreground color of the matched text in the completion.
+# Type: QtColor
+c.colors.completion.match.fg = '#98c379'
+
+# Color of the scrollbar handle in the completion view.
+# Type: QssColor
+c.colors.completion.scrollbar.fg = '#c4c1c3'
+
+# Color of the scrollbar in the completion view.
+# Type: QssColor
+c.colors.completion.scrollbar.bg = '#1a0410'
+
+# Background color of the context menu. If set to null, the Qt default
+# is used.
+# Type: QssColor
+c.colors.contextmenu.menu.bg = '#1a0410'
+
+# Foreground color of the context menu. If set to null, the Qt default
+# is used.
+# Type: QssColor
+c.colors.contextmenu.menu.fg = '#c4c1c3'
+
+# Background color of the context menu's selected item. If set to null,
+# the Qt default is used.
+# Type: QssColor
+c.colors.contextmenu.selected.bg = '#60103e'
+
+# Foreground color of the context menu's selected item. If set to null,
+# the Qt default is used.
+# Type: QssColor
+c.colors.contextmenu.selected.fg = '#c4c1c3'
+
+# Background color of disabled items in the context menu. If set to
+# null, the Qt default is used.
+# Type: QssColor
+c.colors.contextmenu.disabled.bg = '#1a0410'
+
+# Foreground color of disabled items in the context menu. If set to
+# null, the Qt default is used.
+# Type: QssColor
+c.colors.contextmenu.disabled.fg = '#545862'
+
+# Background color for the download bar.
+# Type: QssColor
+c.colors.downloads.bar.bg = '#1a0410'
+
+# Color gradient start for download text.
+# Type: QtColor
+c.colors.downloads.start.fg = '#1a0410'
+
+# Color gradient start for download backgrounds.
+# Type: QtColor
+c.colors.downloads.start.bg = '#0e3d54'
+
+# Color gradient end for download text.
+# Type: QtColor
+c.colors.downloads.stop.fg = '#1a0410'
+
+# Color gradient stop for download backgrounds.
+# Type: QtColor
+c.colors.downloads.stop.bg = '#56b6c2'
+
+# Foreground color for downloads with errors.
+# Type: QtColor
+c.colors.downloads.error.fg = '#e06c75'
+
+# Font color for hints.
+# Type: QssColor
+c.colors.hints.fg = '#1a0410'
+
+# Background color for hints. Note that you can use a `rgba(...)` value
+# for transparency.
+# Type: QssColor
+c.colors.hints.bg = '#e5c07b'
+
+# Font color for the matched part of hints.
+# Type: QtColor
+c.colors.hints.match.fg = '#c4c1c3'
+
+# Text color for the keyhint widget.
+# Type: QssColor
+c.colors.keyhint.fg = '#c4c1c3'
+
+# Highlight color for keys to complete the current keychain.
+# Type: QssColor
+c.colors.keyhint.suffix.fg = '#c4c1c3'
+
+# Background color of the keyhint widget.
+# Type: QssColor
+c.colors.keyhint.bg = '#1a0410'
+
+# Foreground color of an error message.
+# Type: QssColor
+c.colors.messages.error.fg = '#1a0410'
+
+# Background color of an error message.
+# Type: QssColor
+c.colors.messages.error.bg = '#e06c75'
+
+# Border color of an error message.
+# Type: QssColor
+c.colors.messages.error.border = '#e06c75'
+
+# Foreground color of a warning message.
+# Type: QssColor
+c.colors.messages.warning.fg = '#1a0410'
+
+# Background color of a warning message.
+# Type: QssColor
+c.colors.messages.warning.bg = '#c678dd'
+
+# Border color of a warning message.
+# Type: QssColor
+c.colors.messages.warning.border = '#c678dd'
+
+# Foreground color of an info message.
+# Type: QssColor
+c.colors.messages.info.fg = '#c4c1c3'
+
+# Background color of an info message.
+# Type: QssColor
+c.colors.messages.info.bg = '#1a0410'
+
+# Border color of an info message.
+# Type: QssColor
+c.colors.messages.info.border = '#1a0410'
+
+# Foreground color for prompts.
+# Type: QssColor
+c.colors.prompts.fg = '#c4c1c3'
+
+# Border used around UI elements in prompts.
+# Type: String
+c.colors.prompts.border = '#1a0410'
+
+# Background color for prompts.
+# Type: QssColor
+c.colors.prompts.bg = '#1a0410'
+
+# Foreground color for the selected item in filename prompts.
+# Type: QssColor
+c.colors.prompts.selected.fg = '#c4c1c3'
+
+# Background color for the selected item in filename prompts.
+# Type: QssColor
+c.colors.prompts.selected.bg = '#60103e'
+
+# Foreground color of the statusbar.
+# Type: QssColor
+c.colors.statusbar.normal.fg = '#98c379'
+
+# Background color of the statusbar.
+# Type: QssColor
+c.colors.statusbar.normal.bg = '#1a0410'
+
+# Foreground color of the statusbar in insert mode.
+# Type: QssColor
+c.colors.statusbar.insert.fg = '#c4c1c3'
+
+# Background color of the statusbar in insert mode.
+# Type: QssColor
+c.colors.statusbar.insert.bg = '#0e3d54'
+
+# Foreground color of the statusbar in passthrough mode.
+# Type: QssColor
+c.colors.statusbar.passthrough.fg = '#c4c1c3'
+
+# Background color of the statusbar in passthrough mode.
+# Type: QssColor
+c.colors.statusbar.passthrough.bg = '#56b6c2'
+
+# Foreground color of the statusbar in private browsing mode.
+# Type: QssColor
+c.colors.statusbar.private.fg = '#1a0410'
+
+# Background color of the statusbar in private browsing mode.
+# Type: QssColor
+c.colors.statusbar.private.bg = '#1a0410'
+
+# Foreground color of the statusbar in command mode.
+# Type: QssColor
+c.colors.statusbar.command.fg = '#c4c1c3'
+
+# Background color of the statusbar in command mode.
+# Type: QssColor
+c.colors.statusbar.command.bg = '#1a0410'
+
+# Foreground color of the statusbar in private browsing + command mode.
+# Type: QssColor
+c.colors.statusbar.command.private.fg = '#c4c1c3'
+
+# Background color of the statusbar in private browsing + command mode.
+# Type: QssColor
+c.colors.statusbar.command.private.bg = '#1a0410'
+
+# Foreground color of the statusbar in caret mode.
+# Type: QssColor
+c.colors.statusbar.caret.fg = '#1a0410'
+
+# Background color of the statusbar in caret mode.
+# Type: QssColor
+c.colors.statusbar.caret.bg = '#c678dd'
+
+# Foreground color of the statusbar in caret mode with a selection.
+# Type: QssColor
+c.colors.statusbar.caret.selection.fg = '#1a0410'
+
+# Background color of the statusbar in caret mode with a selection.
+# Type: QssColor
+c.colors.statusbar.caret.selection.bg = '#0e3d54'
+
+# Background color of the progress bar.
+# Type: QssColor
+c.colors.statusbar.progress.bg = '#0e3d54'
+
+# Default foreground color of the URL in the statusbar.
+# Type: QssColor
+c.colors.statusbar.url.fg = '#c4c1c3'
+
+# Foreground color of the URL in the statusbar on error.
+# Type: QssColor
+c.colors.statusbar.url.error.fg = '#e06c75'
+
+# Foreground color of the URL in the statusbar for hovered links.
+# Type: QssColor
+c.colors.statusbar.url.hover.fg = '#c4c1c3'
+
+# Foreground color of the URL in the statusbar on successful load
+# (http).
+# Type: QssColor
+c.colors.statusbar.url.success.http.fg = '#56b6c2'
+
+# Foreground color of the URL in the statusbar on successful load
+# (https).
+# Type: QssColor
+c.colors.statusbar.url.success.https.fg = '#98c379'
+
+# Foreground color of the URL in the statusbar when there's a warning.
+# Type: QssColor
+c.colors.statusbar.url.warn.fg = '#c678dd'
+
+# Background color of the tab bar.
+# Type: QssColor
+c.colors.tabs.bar.bg = '#1a0410'
+
+# Color gradient start for the tab indicator.
+# Type: QtColor
+c.colors.tabs.indicator.start = '#0e3d54'
+
+# Color gradient end for the tab indicator.
+# Type: QtColor
+c.colors.tabs.indicator.stop = '#eeeeee'
+
+# Color for the tab indicator on errors.
+# Type: QtColor
+c.colors.tabs.indicator.error = '#e06c75'
+
+# Foreground color of unselected odd tabs.
+# Type: QtColor
+c.colors.tabs.odd.fg = '#1a0410'
+
+# Background color of unselected odd tabs.
+# Type: QtColor
+c.colors.tabs.odd.bg = '#545862'
+
+# Foreground color of unselected even tabs.
+# Type: QtColor
+c.colors.tabs.even.fg = '#1a0410'
+
+# Background color of unselected even tabs.
+# Type: QtColor
+c.colors.tabs.even.bg = '#545862'
+
+# Foreground color of selected odd tabs.
+# Type: QtColor
+c.colors.tabs.selected.odd.fg = '#c4c1c3'
+
+# Background color of selected odd tabs.
+# Type: QtColor
+c.colors.tabs.selected.odd.bg = '#1a0410'
+
+# Foreground color of selected even tabs.
+# Type: QtColor
+c.colors.tabs.selected.even.fg = '#c4c1c3'
+
+# Background color of selected even tabs.
+# Type: QtColor
+c.colors.tabs.selected.even.bg = '#1a0410'
+
+# Foreground color of pinned unselected odd tabs.
+# Type: QtColor
+c.colors.tabs.pinned.odd.fg = '#c8ccd4'
+
+# Background color of pinned unselected odd tabs.
+# Type: QtColor
+c.colors.tabs.pinned.odd.bg = '#98c379'
+
+# Foreground color of pinned unselected even tabs.
+# Type: QtColor
+c.colors.tabs.pinned.even.fg = '#545862'
+
+# Background color of pinned unselected even tabs.
+# Type: QtColor
+c.colors.tabs.pinned.even.bg = '#56b6c2'
+
+# Foreground color of pinned selected odd tabs.
+# Type: QtColor
+c.colors.tabs.pinned.selected.odd.fg = '#eeeeee'
+
+# Background color of pinned selected odd tabs.
+# Type: QtColor
+c.colors.tabs.pinned.selected.odd.bg = '#60103e'
+
+# Foreground color of pinned selected even tabs.
+# Type: QtColor
+c.colors.tabs.pinned.selected.even.fg = '#eeeeee'
+
+# Background color of pinned selected even tabs.
+# Type: QtColor
+c.colors.tabs.pinned.selected.even.bg = '#60103e'
+
+# Render all web contents using a dark theme. On QtWebEngine < 6.7, this
+# setting requires a restart and does not support URL patterns, only the
+# global setting is applied. Example configurations from Chromium's
+# `chrome://flags`: - "With simple HSL/CIELAB/RGB-based inversion": Set
+# `colors.webpage.darkmode.algorithm` accordingly, and   set
+# `colors.webpage.darkmode.policy.images` to `never`.  - "With selective
+# image inversion": qutebrowser default settings.
+# Type: Bool
+c.colors.webpage.darkmode.enabled = True
+
+# Bindings for normal mode
+config.bind('<Space>c', 'tab-close')
+config.bind('[b', 'tab-prev')
+config.bind(']b', 'tab-next')

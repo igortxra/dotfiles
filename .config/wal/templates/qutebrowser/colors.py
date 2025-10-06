@@ -2,28 +2,25 @@
 # COLORS #
 ##########
 
-bg_default = "{background}"          # main shade darkest
+fg_default = "{foreground}"
+fg_error = "#e06c75"
+fg_disabled = "#545862"
+fg_matched_text = "#98c379"
+
+bg_default = "{background}"
 bg_lighter = "{background}"
 bg_selection = "{color2}"
-
-#
+bg_insert_mode = "{color3}"
+bg_lightest = "#c8ccd4"
+bg_hint = "#e5c07b"
+bg_warning = "#be5046"
+bg_passthrough_mode = "#56b6c2"
 white = "#eeeeee"
-fg_disabled = "#545862"
-fg_default = "{foreground}"
-# "#b6bdca"
-bg_lightest = "#c8ccd4"         # main shade lightest
-fg_error = "#e06c75"            # red
-# "#d19a66"                     # orange
-bg_hint = "#e5c07b"             # yellow
-fg_matched_text = "#98c379"     # green
-bg_passthrough_mode = "#56b6c2" # teal
-bg_insert_mode = "{color3}"      # blue
-bg_warning = "#c678dd"          # purple
-# "#be5046"                     # dark red
 
 ############
 # SETTINGS #
 ############
+
 
 def colorize(c):
     # Text color of the completion widget. May be a single color to use for
@@ -82,12 +79,12 @@ def colorize(c):
     c.colors.contextmenu.menu.bg = bg_default
 
     # Foreground color of the context menu. If set to null, the Qt default is used.
-    c.colors.contextmenu.menu.fg =  fg_default
+    c.colors.contextmenu.menu.fg = fg_default
 
     # Background color of the context menu’s selected item. If set to null, the Qt default is used.
     c.colors.contextmenu.selected.bg = bg_selection
 
-    #Foreground color of the context menu’s selected item. If set to null, the Qt default is used.
+    # Foreground color of the context menu’s selected item. If set to null, the Qt default is used.
     c.colors.contextmenu.selected.fg = fg_default
 
     # Background color for the download bar.
@@ -295,7 +292,7 @@ def colorize(c):
     c.colors.tabs.selected.odd.bg = bg_default
 
     # Foreground color of selected even tabs.
-    c.colors.tabs.selected.even.fg =fg_default
+    c.colors.tabs.selected.even.fg = fg_default
 
     # Background color of selected even tabs.
     c.colors.tabs.selected.even.bg = bg_default
@@ -304,5 +301,3 @@ def colorize(c):
     # color).
     # c.colors.webpage.bg = bg_default
     return c
-
-

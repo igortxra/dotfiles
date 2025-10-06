@@ -51,11 +51,12 @@ bluez-utils
 
 ## Themes and Appearance
 picom-git
-python-pywal16
-lxappearance
-tela-circle-icon-theme-black
-material-black-colors-theme
+lxappearance-gtk3
+tela-circle-icon-theme-dracula
 dracula-cursors-git
+dracula-gtk-theme-git
+python-pywal16
+
 
 ## Fonts
 ttf-iosevka-nerd
@@ -117,12 +118,16 @@ python-pyudev
 brightnessctl
 
 ## Code Editor
-# neovim
+neovim
+
+## Note Taking
+obsidian
 
 # Optionals
 # 
 # ## Media Player
 # vlc
+#
 # ## Musics
 # spotify-launcher
 # 
@@ -161,6 +166,3 @@ brightnessctl
 # 
 # ## IaC
 # terraform
-#
-# ## Note Taking
-# obsidian

@@ -647,7 +647,7 @@ widgets = [
     ),
     widget.Spacer(10),
     widget.BatteryIcon(
-        theme_path="/usr/share/icons/Tela-circle-black/22/panel/",
+        theme_path="/usr/share/icons/Tela-circle-dracula/22/panel/",
         update_interval=2,
     ),
     widget.Battery(

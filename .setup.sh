@@ -112,7 +112,7 @@ fi
 
 # Clone the repository, even if the directory doesn't exist
 echo_color "Cloning neovim config..."
-git clone https://github.com/igortxra/nvim "$HOME/.config/nvim"
+git clone https://github.com/igortxra/kickstart.nvim "$HOME/.config/nvim"
 
 echo_color "Neovim configured!"
 

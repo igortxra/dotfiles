@@ -354,14 +354,12 @@ keys = [
         [SUPER, "shift"],
         "period",
         lazy.spawn(MEDIA_VOL_UP),
-        lazy.spawn(MEDIA_VOL_SHOW),
         desc="Music Volume Up",
     ),
     Key(
         [SUPER, "shift"],
         "comma",
         lazy.spawn(MEDIA_VOL_DOWN),
-        lazy.spawn(MEDIA_VOL_SHOW),
         desc="Music Volume Down",
     ),
     # Volume Control
@@ -369,14 +367,9 @@ keys = [
         [SUPER, "control"],
         "v",
         [
-            Key(
-                [],
-                "k",
-                lazy.spawn("pamixer --increase 5"),
-                lazy.spawn(VOL_SHOW),
-            ),
-            Key([], "j", lazy.spawn("pamixer --decrease 5"), lazy.spawn(VOL_SHOW)),
-            Key([], "m", lazy.spawn("pamixer -t")),
+            Key([], "k", lazy.spawn(VOL_UP)),
+            Key([], "j", lazy.spawn(VOL_DOWN)),
+            Key([], "m", lazy.spawn(VOL_MUTE)),
         ],
         name="Volume",
         mode=True,
@@ -583,16 +576,29 @@ widget_groupbox_secondary = widget.GroupBox(
 # -----------------------------------------------------------------------------------------
 
 widgets = [
-    widget.Clock(
-        format="%a %d - %H:%M",
+    widget.Spacer(10),
+    widget.DF(
+        partition="/home/igortxra",
+        format="  {uf}{m}",
+        visible_on_warn=False,
         background=None,
-        foreground=COLOR_FG_1,
-        mouse_callbacks={
-            "Button1": lazy.spawn(CALENDAR_SHOW),
-        },
-        fontsize=18,
-        font="Liberation Mono",
+        foreground=COLOR_FG_2,
     ),
+    widget.Spacer(20),
+    widget.Memory(
+        padding=5,
+        fmt=" {}",
+        format="{MemUsed: .2f}{mm}",
+        measure_mem="G",
+        background=None,
+        foreground=COLOR_FG_2,
+    ),
+    widget.Spacer(20),
+    widget.CPU(
+        format="{load_percent}%", fmt=" {}", background=None, foreground=COLOR_FG_2
+    ),
+    widget.Spacer(10),
+    # widget.Systray(padding=20, icon_size=18),
     widget.Spacer(10),
     widget.Prompt(),
     widget.Spacer(),
@@ -600,6 +606,13 @@ widgets = [
     widget.Spacer(14),
     widget_groupbox_main,
     widget.Spacer(20),
+    widget.Clipboard(
+        fmt=" 󰅎  Copied ",
+        max_width=2,
+        foreground=COLOR_BAR,
+        background=COLOR_FG_1,
+        timeout=2,
+    ),
     widget.Spacer(10),
     widget.Chord(
         fmt=" {} ",
@@ -608,46 +621,63 @@ widgets = [
         background=COLOR_PRIMARY,
     ),
     widget.Spacer(),
-    widget.Clipboard(
-        fmt=" 󰅎  Copied ",
-        max_width=2,
-        foreground=COLOR_FG_1,
-        background=None,
-        timeout=2,
-    ),
-    widget.Spacer(10),
     widget.Mpris2(
         name="Media",
-        display_metadata=["xesam:title", "xesam:artist"],
-        scroll_chars=None,
-        objname=None,
-        scroll_interval=0,
+        width=300,
+        scroll=True,
+        scroll_fixed_width=False,
+        scroll_step=2,
+        format="{xesam:title} - {xesam:artist}",
+        objname="org.mpris.MediaPlayer2.spotify",
         background=COLOR_PRIMARY,
         foreground=COLOR_FG_2,
         fmt="{}   ",
         paused_text="   {track}",
         padding=10,
+    ),
+
+    widget.Spacer(20),
+    widget.CheckUpdates(
+        display_format="󰏔 {updates}",
+        colour_have_updates=COLOR_YELLOW,
+        colour_no_updates=COLOR_PRIMARY,
+        no_update_string=" ",
+    ),
+    widget.Spacer(10),
+    widget.GenPollText(
+        func=lambda: subprocess.check_output(WIDGET_DOTFILES, shell=True).decode(),
+        update_interval=1,
+        foreground=COLOR_FG_2,
+        background=None,
+        max_chars=20,
+        padding=10,
+        fontsize=20
+    ),
+    widget.Spacer(10),
+    widget.GenPollText(
+        func=lambda: subprocess.check_output(WIDGET_NETWORK).decode(),
+        update_interval=1,
+        foreground=COLOR_FG_2,
+        background=None,
         max_chars=50,
+        padding=10,
+        mouse_callbacks={
+            "Button1": lazy.spawn(MENU_NETWORK),
+            "Button3": lazy.spawn(MENU_NETWORK),
+        },
     ),
     widget.Spacer(20),
     widget.Volume(
-        fmt="󱄠",
+        fmt="",
+        theme_path="/usr/share/icons/Tela-circle-dracula/24/panel",
         foreground=COLOR_FG_2,
         background=None,
         padding=5,
         fontsize=18,
     ),
     widget.Spacer(2),
-    widget.Volume(
-        fmt="{}",
-        foreground=COLOR_FG_2,
-        background=None,
-        padding=5,
-        font="Liberation Mono",
-    ),
-    widget.Spacer(10),
     widget.BatteryIcon(
-        theme_path="/usr/share/icons/Tela-circle-dracula/22/panel/",
+        theme_path="/usr/share/icons/Tela-circle-dracula/24/panel",
         update_interval=2,
     ),
     widget.Battery(
@@ -662,9 +692,22 @@ widgets = [
         discharge_char="",
         unknown_char="",
         show_short_text=False,
-        format="{percent:2.0%}",
+        format="",
         update_interval=2,
         padding=1,
+        font="Liberation Mono",
+    ),
+    widget.Spacer(10),
+    widget.Sep(),
+    widget.Spacer(15),
+    widget.Clock(
+        format="%H:%M",
+        background=None,
+        foreground=COLOR_FG_1,
+        mouse_callbacks={
+            "Button1": lazy.spawn(CALENDAR_SHOW),
+        },
+        fontsize=16,
         font="Liberation Mono",
     ),
 ]
@@ -697,76 +740,12 @@ bar_secondary = bar.Bar(
     border_color=COLOR_BAR,
 )
 
-bar_top = bar.Bar(
-    widgets=[
-        widget.Spacer(20),
-        widget.GenPollText(
-            func=lambda: subprocess.check_output(WIDGET_DOTFILES, shell=True).decode(),
-            update_interval=1,
-            foreground=COLOR_FG_2,
-            background=None,
-            max_chars=20,
-            padding=5,
-        ),
-        widget.Spacer(20),
-        widget.CheckUpdates(
-            display_format="  {updates}",
-            colour_have_updates=COLOR_YELLOW,
-            colour_no_updates=COLOR_PRIMARY,
-            no_update_string=" ",
-        ),
-        widget.Spacer(),
-        widget.DF(
-            partition="/home/igortxra",
-            format="  {uf}{m}",
-            visible_on_warn=False,
-            background=None,
-            foreground=COLOR_FG_2,
-        ),
-        widget.Spacer(20),
-        widget.Memory(
-            padding=5,
-            fmt=" {}",
-            format="{MemUsed: .2f}{mm}",
-            measure_mem="G",
-            background=None,
-            foreground=COLOR_FG_2,
-        ),
-        widget.Spacer(20),
-        widget.CPU(
-            format="{load_percent}%", fmt=" {}", background=None, foreground=COLOR_FG_2
-        ),
-        widget.Spacer(20),
-        widget.GenPollText(
-            func=lambda: subprocess.check_output(WIDGET_NETWORK).decode(),
-            update_interval=1,
-            foreground=COLOR_FG_2,
-            background=None,
-            max_chars=50,
-            padding=5,
-            mouse_callbacks={
-                "Button1": lazy.spawn(MENU_NETWORK),
-                "Button3": lazy.spawn(MENU_NETWORK),
-            },
-        ),
-        widget.Spacer(),
-        widget.Spacer(40),
-        widget.Systray(padding=20, icon_size=18),
-        widget.Spacer(20),
-    ],
-    size=23,
-    margin=[0, 0, 0, 0],
-    background=COLOR_BAR,
-    border_width=[4, 20, 4, 20],
-    border_color=COLOR_BAR,
-)
-
 bars = [bar_primary, bar_secondary]
 # -----------------------------------------------------------------------------------------
 
 # SCREENS
 screens = []
-main_screen = Screen(bottom=bar_primary, top=bar_top)
+main_screen = Screen(bottom=bar_primary)
 screens.append(main_screen)
 for _ in range(SCREEN_COUNT):
     screens.append(Screen(bottom=bar_secondary))

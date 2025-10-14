@@ -126,10 +126,11 @@ obsidian
 # Optionals
 # 
 # ## Media Player
-# vlc
+# mpv
 #
 # ## Musics
 # spotify-launcher
+# spotblock-git
 # 
 # ## Required to run AppImages
 # fuse2

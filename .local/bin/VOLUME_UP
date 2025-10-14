@@ -1,4 +1,5 @@
 #!/bin/bash
 
 pamixer --increase 5
+source $HOME/.local/bin/VOLUME_SHOW
 

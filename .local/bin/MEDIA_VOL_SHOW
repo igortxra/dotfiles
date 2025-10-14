@@ -1,4 +1,6 @@
-#!/bin/sh
-VOLUME=$(playerctl volume)
+#!/bin/zsh
+VOLUME=$(playerctl -p spotify volume)
+
 VOLUME_PERCENTAGE=$(echo "$VOLUME * 100" | bc | awk '{ printf "%.2f", $1 }')
-dunstify -r 1 -h int:value:$VOLUME_PERCENTAGE -h string:hlcolor:"#fff" "Media Volume" -t 1000
+
+dunstify -r 1 -h int:value:$VOLUME_PERCENTAGE -h string:hlcolor:"#fff" "  Media Volume" -t 1000

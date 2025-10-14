@@ -240,8 +240,9 @@ c.url.searchengines = {
 # Type: List of FuzzyUrl, or FuzzyUrl
 c.url.start_pages = "https://github.com/dashboard"
 
-c.colors.webpage.darkmode.enabled = True
+c.colors.webpage.darkmode.enabled = False
 c.colors.webpage.darkmode.policy.images = "never"
+c.colors.webpage.preferred_color_scheme = "dark"
 
 # Bindings for normal mode
 config.bind("<Space>c", "tab-close")

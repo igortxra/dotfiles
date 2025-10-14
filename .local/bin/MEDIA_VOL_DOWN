@@ -1,3 +1,4 @@
 #!/bin/sh
 
-playerctl volume 0.1-
+playerctl volume -p spotify 0.1-
+source $HOME/.local/bin/MEDIA_VOL_SHOW	

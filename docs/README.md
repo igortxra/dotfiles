@@ -1,9 +1,7 @@
 # My Arch Linux Dotfiles
 Sharing my dotfiles that can be useful to someone :)
 
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/51b006fd-c5f2-4581-999a-d918958d79ba" />
-<img width="1593" height="894" alt="image" src="https://github.com/user-attachments/assets/d3109dfb-3384-4bd2-9219-f8167756be1d" /> <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/eed9d4eb-02ba-4dca-bbf2-cad0551ab551" />
-Note: Colors are set based on the wallpaper!
+<img width="1919" height="1079" alt="2025-10-13_21-10-20" src="https://github.com/user-attachments/assets/06774997-e387-485d-a4e5-5c6f5c8a57f8" />
 
 ## Main Applications
 - Qtile (Window Manager)

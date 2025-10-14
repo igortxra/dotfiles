@@ -236,6 +236,17 @@ keys = [
     Key([SUPER], "j", lazy.layout.down(), desc="Move focus down"),
     Key([SUPER], "k", lazy.layout.up(), desc="Move focus up"),
     Key([SUPER], "m", lazy.next_screen(), desc="Change focused screen"),
+
+    # Column Layout
+    Key([SUPER, "control"], "j", lazy.layout.grow_down()),
+    Key([SUPER, "control"], "k", lazy.layout.grow_up()),
+    Key([SUPER, "control"], "h", lazy.layout.grow_left()),
+    Key([SUPER, "control"], "l", lazy.layout.grow_right()),
+    Key([SUPER], "s", lazy.layout.toggle_split()),
+    Key([SUPER, "shift", "control"], "h", lazy.layout.swap_column_left()),
+    Key([SUPER, "shift", "control"], "l", lazy.layout.swap_column_right()),
+    Key([SUPER], "n", lazy.layout.normalize()),
+
     # Move windows
     Key(
         [SUPER, "shift"],
@@ -267,7 +278,7 @@ keys = [
     Key([SUPER], "space", lazy.spawn(MENU_APP), desc="Spawn a app launcher"),
     Key([SUPER], "a", lazy.spawn(MENU_AUTOMATIONS), desc="Spawn automations menu"),
     Key([SUPER], "w", lazy.spawn(MENU_WINDOWS), desc="Spawn windows menu"),
-    Key([SUPER], "s", lazy.spawn(MENU_SCREENS), desc="Spawn screens menu"),
+    Key([SUPER, "control"], "s", lazy.spawn(MENU_SCREENS), desc="Spawn screens menu"),
     Key([SUPER], "v", lazy.spawn(MENU_CLIPBOARD), desc="Spawn clipboard menu"),
     Key([SUPER], "p", lazy.spawn(MENU_POWER), desc="Spawn power menu"),
     Key([SUPER], "equal", lazy.spawn(MENU_WALLPAPER), desc="Spawn wallpaper menu"),
@@ -462,12 +473,12 @@ layouts = [
     layout.Max(
         border_focus=COLOR_PRIMARY, margin=20, border_width=0, border_on_single=True
     ),
-    layout.Max(
-        border_focus=COLOR_PRIMARY,
-        margin=[100, 200, 100, 200],
-        border_width=1,
-        border_on_single=True,
-    ),
+    # layout.Max(
+    #     border_focus=COLOR_PRIMARY,
+    #     margin=[100, 200, 100, 200],
+    #     border_width=1,
+    #     border_on_single=True,
+    # ),
     layout.MonadTall(
         border_focus=COLOR_PRIMARY,
         margin=10,
@@ -481,6 +492,16 @@ layouts = [
         single_border_width=1,
         border_width=3,
         ratio=0.70,
+        border_on_single=True,
+    ),
+    layout.Columns(
+        border_focus=COLOR_PRIMARY,
+        border_focus_stack=COLOR_4,
+        border_normal=COLOR_BG_1,
+        border_normal_stack=COLOR_BG_1,
+        margin=[3,3,10,3],
+        single_border_width=1,
+        border_width=3,
         border_on_single=True,
     ),
     ## Not Used Layouts.

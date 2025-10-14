@@ -470,30 +470,30 @@ keys.append(Key([SUPER], "0", lazy.group["notes"].dropdown_toggle("notes")))
 
 # LAYOUTS
 layouts = [
-    layout.Max(
-        border_focus=COLOR_PRIMARY, margin=20, border_width=0, border_on_single=True
-    ),
+    # layout.Max(
+    #     border_focus=COLOR_PRIMARY, margin=20, border_width=0, border_on_single=True
+    # ),
     # layout.Max(
     #     border_focus=COLOR_PRIMARY,
     #     margin=[100, 200, 100, 200],
     #     border_width=1,
     #     border_on_single=True,
     # ),
-    layout.MonadTall(
-        border_focus=COLOR_PRIMARY,
-        margin=10,
-        single_border_width=1,
-        border_width=3,
-        border_on_single=True,
-    ),
-    layout.MonadWide(
-        border_focus=COLOR_PRIMARY,
-        margin=10,
-        single_border_width=1,
-        border_width=3,
-        ratio=0.70,
-        border_on_single=True,
-    ),
+    # layout.MonadTall(
+    #     border_focus=COLOR_PRIMARY,
+    #     margin=10,
+    #     single_border_width=1,
+    #     border_width=3,
+    #     border_on_single=True,
+    # ),
+    # layout.MonadWide(
+    #     border_focus=COLOR_PRIMARY,
+    #     margin=10,
+    #     single_border_width=1,
+    #     border_width=3,
+    #     ratio=0.70,
+    #     border_on_single=True,
+    # ),
     layout.Columns(
         border_focus=COLOR_PRIMARY,
         border_focus_stack=COLOR_4,
@@ -535,7 +535,7 @@ layouts = [
 
 widget_defaults = dict(
     font=DEFAULT_FONT,
-    fontsize=16,
+    fontsize=14,
     padding=3,
 )
 
@@ -563,7 +563,6 @@ widget_groupbox_main = widget.GroupBox(
     padding_x=0,
     padding_y=0,
     margin_y=3,
-    fontsize=20,
     font=DEFAULT_FONT,
 )
 
@@ -590,7 +589,6 @@ widget_groupbox_secondary = widget.GroupBox(
     padding_x=0,
     padding_y=0,
     margin_y=3,
-    fontsize=20,
     font=DEFAULT_FONT,
 )
 
@@ -623,8 +621,8 @@ widgets = [
     widget.Spacer(10),
     widget.Prompt(),
     widget.Spacer(),
-    widget.CurrentLayout(icon_first=True, scale=0.7),
-    widget.Spacer(14),
+    # widget.CurrentLayout(icon_first=True, scale=0.7),
+    # widget.Spacer(14),
     widget_groupbox_main,
     widget.Spacer(20),
     widget.Clipboard(
@@ -672,7 +670,6 @@ widgets = [
         background=None,
         max_chars=20,
         padding=10,
-        fontsize=20
     ),
     widget.Spacer(10),
     widget.GenPollText(
@@ -694,7 +691,6 @@ widgets = [
         foreground=COLOR_FG_2,
         background=None,
         padding=5,
-        fontsize=18,
     ),
     widget.Spacer(2),
     widget.BatteryIcon(
@@ -728,7 +724,6 @@ widgets = [
         mouse_callbacks={
             "Button1": lazy.spawn(CALENDAR_SHOW),
         },
-        fontsize=16,
         font="Liberation Mono",
     ),
 ]
@@ -737,7 +732,7 @@ widgets = [
 # BARS and WIDGETS
 bar_primary = bar.Bar(
     widgets=widgets,
-    size=25,
+    size=20,
     margin=[-5, 0, 0, 0],
     background=COLOR_BAR,
     border_width=[4, 20, 4, 20],

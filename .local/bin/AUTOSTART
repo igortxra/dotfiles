@@ -18,5 +18,9 @@ picom &
 # Auto detect screen profile
 autorandr --change &
 
+# Reload qtile
+qtile cmd-obj -o cmd -f restart
+
 # Set wallpaper and colorscheme
 wal -R
+

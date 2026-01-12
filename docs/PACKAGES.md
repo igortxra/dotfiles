@@ -54,7 +54,7 @@ picom-git
 lxappearance-gtk3
 tela-circle-icon-theme-dracula
 dracula-cursors-git
-dracula-gtk-theme-git
+dracula-gtk-theme-full
 python-pywal16
 
 

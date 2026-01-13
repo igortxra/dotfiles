@@ -15,12 +15,14 @@ dunst &
 # Compositor
 picom &
 
+sleep 1s
 # Auto detect screen profile
 autorandr --change &
 
+sleep 2s
 # Reload qtile
 qtile cmd-obj -o cmd -f restart
 
+sleep 2s
 # Set wallpaper and colorscheme
 wal -R
-

@@ -387,7 +387,7 @@ keys = [
     ),
     # Notifications Control
     KeyChord(
-        [SUPER],
+        [SUPER, "control"],
         "n",
         [
             Key(
@@ -648,8 +648,8 @@ widgets = [
         foreground="#28b259",
         fmt=" ",
         paused_text="{}",
-        stopped_text="{}",
         padding=5,
+        scroll=False
     ),
     widget.Mpris2(
         name="Media",
@@ -659,7 +659,7 @@ widgets = [
         background="#28b259",
         foreground=COLOR_BG_1,
         fmt=" {}  ",
-        paused_text="  {track}",
+        paused_text=" {track}",
         padding=10,
     ),
 

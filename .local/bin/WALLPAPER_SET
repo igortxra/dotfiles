@@ -1,5 +1,7 @@
 #!/bin/sh
 
+WALLPAPER_DIR=$HOME/Wallpapers/
+
 if [ -n "$1" ]; then
   WALLPAPER_PATH=$1
 else

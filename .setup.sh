@@ -75,6 +75,7 @@ DOTFILES_DIR=$HOME/.dotfiles
 log_output git clone --bare "$DOTFILES_URL" "$DOTFILES_DIR"
 log_output /usr/bin/git --git-dir=$DOTFILES_DIR --work-tree=$HOME config --local status.showUntrackedFiles no
 log_output /usr/bin/git --git-dir=$DOTFILES_DIR --work-tree=$HOME checkout -f
+log_output /usr/bin/git --git-dir=$DOTFILES_DIR --work-tree=$HOME config --local alias.list 'ls-tree --full-tree -r --name-only HEAD'
 
 echo_color "Dotfiles configured!"
 

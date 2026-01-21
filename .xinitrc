@@ -8,4 +8,6 @@ if [ -d "$xinitdir"/xinitrc.d ] ; then
 	unset f
 fi
 
+export XDG_SESSION_TYPE=x11
+
 exec dbus-run-session -- qtile start

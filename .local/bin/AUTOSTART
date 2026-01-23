@@ -25,4 +25,4 @@ qtile cmd-obj -o cmd -f restart
 
 sleep 2s
 # Set wallpaper and colorscheme
-wal -R
+wal -R || wal --theme default

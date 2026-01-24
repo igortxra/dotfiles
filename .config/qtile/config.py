@@ -86,10 +86,31 @@ cache = f"{PATH_HOME}/.cache/wal/colors"
 
 
 def load_colors(cache):
-    with open(cache, "r") as file:
-        for i in range(16):
-            colors.append(file.readline().strip())
-    colors.append("#ffffff")
+    default_colors = [
+        "#0f1228",
+        "#414d9c",
+        "#423fa6",
+        "#404fa7",
+        "#8a55dd",
+        "#5966be",
+        "#5f69bf",
+        "#c5c5c7",
+        "#404c94",
+        "#414d9c",
+        "#423fa6",
+        "#404fa7",
+        "#8a55dd",
+        "#5966be",
+        "#5f69bf",
+        "#c5c5c7",
+    ]
+
+    try:
+        with open(cache, "r") as file:
+            colors = [file.readline().strip() for _ in range(16)]
+    except FileNotFoundError:
+        colors = default_colors
+
     lazy.reload()
 
 

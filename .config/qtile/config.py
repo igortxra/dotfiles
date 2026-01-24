@@ -1,4 +1,4 @@
-# Copyright (c) 2010 Aldo Cortesi
+
 # Copyright (c) 2010, 2014 dequis
 # Copyright (c) 2012 Randall Ma
 # Copyright (c) 2012-2014 Tycho Andersen
@@ -81,35 +81,33 @@ AUTOSTART = f"{PATH_SCRIPTS}/AUTOSTART"
 # -----------------------------------------------------------------------------------------
 
 # COLORS
-colors = []
+colors = [
+    "#0f1228",
+    "#414d9c",
+    "#423fa6",
+    "#404fa7",
+    "#8a55dd",
+    "#5966be",
+    "#5f69bf",
+    "#c5c5c7",
+    "#404c94",
+    "#414d9c",
+    "#423fa6",
+    "#404fa7",
+    "#8a55dd",
+    "#5966be",
+    "#5f69bf",
+    "#c5c5c7",
+]
+
 cache = f"{PATH_HOME}/.cache/wal/colors"
 
-
 def load_colors(cache):
-    default_colors = [
-        "#0f1228",
-        "#414d9c",
-        "#423fa6",
-        "#404fa7",
-        "#8a55dd",
-        "#5966be",
-        "#5f69bf",
-        "#c5c5c7",
-        "#404c94",
-        "#414d9c",
-        "#423fa6",
-        "#404fa7",
-        "#8a55dd",
-        "#5966be",
-        "#5f69bf",
-        "#c5c5c7",
-    ]
-
     try:
         with open(cache, "r") as file:
             colors = [file.readline().strip() for _ in range(16)]
     except FileNotFoundError:
-        colors = default_colors
+        pass
 
     lazy.reload()
 
@@ -854,4 +852,4 @@ wl_input_rules = None
 # java that happens to be on java's whitelist.
 wmname = "Qtile"
 
-# -----------------------------------------------------------------------------------------
+# -------------------------------------

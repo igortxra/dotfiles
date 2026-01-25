@@ -103,6 +103,7 @@ colors = [
 cache = f"{PATH_HOME}/.cache/wal/colors"
 
 def load_colors(cache):
+    global colors
     try:
         with open(cache, "r") as file:
             colors = [file.readline().strip() for _ in range(16)]
@@ -718,6 +719,7 @@ widgets = [
         foreground=COLOR_FG_2,
         background=None,
         padding=5,
+
     ),
     widget.Spacer(2),
     widget.BatteryIcon(

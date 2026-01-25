@@ -74,6 +74,9 @@ DEFAULT_FONT = "Iosevka Nerd Font"
 # PATHS
 PATH_HOME = path.expanduser("~")
 PATH_SCRIPTS = f"{PATH_HOME}/.local/bin"
+PATH_ICONS = f"{PATH_HOME}/.icons/qtile/"
+PATH_ICON_BATTERY = f"{PATH_ICONS}/battery/"
+PATH_ICON_AUDIO = f"{PATH_ICONS}/audio/"
 # -----------------------------------------------------------------------------------------
 
 # INIT SCRIPT
@@ -490,15 +493,9 @@ keys.append(Key([SUPER], "0", lazy.group["notes"].dropdown_toggle("notes")))
 
 # LAYOUTS
 layouts = [
-    # layout.Max(
-    #     border_focus=COLOR_PRIMARY, margin=20, border_width=0, border_on_single=True
-    # ),
-    # layout.Max(
-    #     border_focus=COLOR_PRIMARY,
-    #     margin=[100, 200, 100, 200],
-    #     border_width=1,
-    #     border_on_single=True,
-    # ),
+    layout.Max(
+        border_focus=COLOR_PRIMARY, margin=20, border_width=3, border_on_single=True
+    ),
     layout.MonadTall(
         border_focus=COLOR_PRIMARY,
         margin=10,
@@ -506,14 +503,7 @@ layouts = [
         border_width=3,
         border_on_single=True,
 ),
-    # layout.MonadWide(
-    #     border_focus=COLOR_PRIMARY,
-    #     margin=10,
-    #     single_border_width=1,
-    #     border_width=3,
-    #     ratio=0.70,
-    #     border_on_single=True,
-    # ),
+
     layout.Columns(
         border_focus=COLOR_PRIMARY,
         border_focus_stack=COLOR_4,
@@ -525,6 +515,15 @@ layouts = [
         border_on_single=True,
     ),
     ## Not Used Layouts.
+    # layout.MonadWide(
+    #     border_focus=COLOR_PRIMARY,
+    #     margin=10,
+    #     single_border_width=1,
+    #     border_width=3,
+    #     ratio=0.70,
+    #     border_on_single=True,
+    # ),
+    #
     # layout.Matrix(
     #     border_focus=COLOR_PRIMARY,
     #     margin=10,
@@ -555,8 +554,7 @@ layouts = [
 
 widget_defaults = dict(
     font=DEFAULT_FONT,
-    fontsize=12,
-    # padding=3,
+    fontsize=14,
 )
 
 # GROUPBOX WIDGETS
@@ -623,7 +621,7 @@ widgets = [
         background=None,
         foreground=COLOR_FG_2,
     ),
-    widget.Spacer(20),
+    widget.Spacer(10),
     widget.Memory(
         padding=5,
         fmt=" {}",
@@ -632,16 +630,56 @@ widgets = [
         background=None,
         foreground=COLOR_FG_2,
     ),
-    widget.Spacer(20),
+    widget.Spacer(10),
     widget.CPU(
         format="{load_percent}%", fmt=" {}", background=None, foreground=COLOR_FG_2
     ),
     widget.Spacer(10),
-    widget.Systray(padding=20, icon_size=12),
+    widget.Sep(),
     widget.Spacer(10),
+    widget.GenPollText(
+        func=lambda: subprocess.check_output(WIDGET_DOTFILES, shell=True).decode(),
+        update_interval=1,
+        foreground=COLOR_FG_2,
+        background=None,
+        max_chars=20,
+        padding=10,
+    ),
+
+    widget.Spacer(10),
+    widget.GenPollText(
+        func=lambda: subprocess.check_output(WIDGET_NETWORK).decode(),
+        update_interval=1,
+        foreground=COLOR_FG_2,
+        background=None,
+        max_chars=50,
+        padding=10,
+        mouse_callbacks={
+            "Button1": lazy.spawn(MENU_NETWORK),
+            "Button3": lazy.spawn(MENU_NETWORK),
+        },
+    ),
+
+    widget.Spacer(10),
+    widget.CheckUpdates(
+        display_format="󰏔 {updates}",
+        colour_have_updates=COLOR_YELLOW,
+        colour_no_updates=COLOR_FG_2,
+        no_update_string=" ",
+        distro="Arch_yay",
+        padding=10,
+        update_interval=60
+    ),
+
+    widget.Spacer(10),
+    widget.Sep(),
+    widget.Systray(margin=10, padding=10, icon_size=14),
+
     # widget.Prompt(),
+
+    widget.Spacer(10),
     widget.Spacer(),
-    widget.CurrentLayout(icon_first=True, scale=0.7),
+    widget.CurrentLayout(mode="icon", scale=0.7),
     # widget.Spacer(14),
     widget_groupbox_main,
     widget.Spacer(20),
@@ -653,13 +691,7 @@ widgets = [
         background=COLOR_PRIMARY,
     ),
     widget.Spacer(),
-    widget.Clipboard(
-        fmt=" 󰅎  Copied ",
-        #max_width=2,
-        foreground=COLOR_FG_1,
-        background=COLOR_FG_1,
-        timeout=20,
-    ),
+
     widget.Mpris2(
         name="Media Icon",
         format="",
@@ -684,46 +716,19 @@ widgets = [
     ),
 
     widget.Spacer(20),
-    widget.CheckUpdates(
-        display_format="󰏔 {updates}",
-        colour_have_updates=COLOR_YELLOW,
-        colour_no_updates=COLOR_FG_2,
-        no_update_string=" ",
-    ),
+
     widget.Spacer(10),
-    widget.GenPollText(
-        func=lambda: subprocess.check_output(WIDGET_DOTFILES, shell=True).decode(),
-        update_interval=1,
-        foreground=COLOR_FG_2,
-        background=None,
-        max_chars=20,
-        padding=10,
-    ),
-    
-    widget.Spacer(10),
-    widget.GenPollText(
-        func=lambda: subprocess.check_output(WIDGET_NETWORK).decode(),
-        update_interval=1,
-        foreground=COLOR_FG_2,
-        background=None,
-        max_chars=50,
-        padding=10,
-        mouse_callbacks={
-            "Button1": lazy.spawn(MENU_NETWORK),
-            "Button3": lazy.spawn(MENU_NETWORK),
-        },
-    ),
-    widget.Spacer(10),
+
     widget.Volume(
         fmt=" {}",
+        theme_path=PATH_ICON_AUDIO,
         foreground=COLOR_FG_2,
         background=None,
         padding=10,
 
     ),
-    widget.Spacer(10),
     widget.BatteryIcon(
-    theme_path="/usr/share/icons/Papirus-Dark/24x24/panel",
+    theme_path=PATH_ICON_BATTERY,
         update_interval=2,
     ),
     widget.Battery(
@@ -740,7 +745,7 @@ widgets = [
         show_short_text=False,
         format="",
         update_interval=2,
-        padding=1,
+        padding=10,
         font="Liberation Mono",
     ),
     widget.Spacer(10),
@@ -761,7 +766,7 @@ widgets = [
 bar_primary = bar.Bar(
     widgets=widgets,
     size=20,
-    margin=[-5, 0, 0, 0],
+    margin=[0, 0, 0, 0],
     background=COLOR_BAR,
     border_width=[4, 20, 4, 20],
     border_color=COLOR_BAR,

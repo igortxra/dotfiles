@@ -555,8 +555,8 @@ layouts = [
 
 widget_defaults = dict(
     font=DEFAULT_FONT,
-    fontsize=14,
-    padding=3,
+    fontsize=12,
+    # padding=3,
 )
 
 # GROUPBOX WIDGETS
@@ -637,21 +637,14 @@ widgets = [
         format="{load_percent}%", fmt=" {}", background=None, foreground=COLOR_FG_2
     ),
     widget.Spacer(10),
-    # widget.Systray(padding=20, icon_size=18),
+    widget.Systray(padding=20, icon_size=12),
     widget.Spacer(10),
-    widget.Prompt(),
+    # widget.Prompt(),
     widget.Spacer(),
-    # widget.CurrentLayout(icon_first=True, scale=0.7),
+    widget.CurrentLayout(icon_first=True, scale=0.7),
     # widget.Spacer(14),
     widget_groupbox_main,
     widget.Spacer(20),
-    widget.Clipboard(
-        fmt=" 󰅎  Copied ",
-        max_width=2,
-        foreground=COLOR_BAR,
-        background=COLOR_FG_1,
-        timeout=2,
-    ),
     widget.Spacer(10),
     widget.Chord(
         fmt=" {} ",
@@ -660,6 +653,13 @@ widgets = [
         background=COLOR_PRIMARY,
     ),
     widget.Spacer(),
+    widget.Clipboard(
+        fmt=" 󰅎  Copied ",
+        #max_width=2,
+        foreground=COLOR_FG_1,
+        background=COLOR_FG_1,
+        timeout=20,
+    ),
     widget.Mpris2(
         name="Media Icon",
         format="",
@@ -687,7 +687,7 @@ widgets = [
     widget.CheckUpdates(
         display_format="󰏔 {updates}",
         colour_have_updates=COLOR_YELLOW,
-        colour_no_updates=COLOR_PRIMARY,
+        colour_no_updates=COLOR_FG_2,
         no_update_string=" ",
     ),
     widget.Spacer(10),
@@ -699,6 +699,7 @@ widgets = [
         max_chars=20,
         padding=10,
     ),
+    
     widget.Spacer(10),
     widget.GenPollText(
         func=lambda: subprocess.check_output(WIDGET_NETWORK).decode(),
@@ -712,18 +713,17 @@ widgets = [
             "Button3": lazy.spawn(MENU_NETWORK),
         },
     ),
-    widget.Spacer(20),
+    widget.Spacer(10),
     widget.Volume(
-        fmt="",
-        theme_path="/usr/share/icons/Tela-circle-dracula/24/panel",
+        fmt=" {}",
         foreground=COLOR_FG_2,
         background=None,
-        padding=5,
+        padding=10,
 
     ),
-    widget.Spacer(2),
+    widget.Spacer(10),
     widget.BatteryIcon(
-        theme_path="/usr/share/icons/Tela-circle-dracula/24/panel",
+    theme_path="/usr/share/icons/Papirus-Dark/24x24/panel",
         update_interval=2,
     ),
     widget.Battery(
@@ -744,7 +744,6 @@ widgets = [
         font="Liberation Mono",
     ),
     widget.Spacer(10),
-    widget.Sep(),
     widget.Spacer(15),
     widget.Clock(
         format="%H:%M",
@@ -753,7 +752,7 @@ widgets = [
         mouse_callbacks={
             "Button1": lazy.spawn(CALENDAR_SHOW),
         },
-        font="Liberation Mono",
+        # font="Liberation Mono",
     ),
 ]
 

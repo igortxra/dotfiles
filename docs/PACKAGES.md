@@ -55,6 +55,8 @@ lxappearance-gtk3
 tela-circle-icon-theme-dracula
 dracula-cursors-git
 dracula-gtk-theme-full
+rose-pine-gtk-theme
+rose-pine-cursor
 python-pywal16
 
 

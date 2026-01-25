@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+
+
+themes=$(wal --theme -l | sed -n '
+  /^[[:space:]]*-/ {
+    s/^[[:space:]]*-[[:space:]]*//   # remove "- "
+    s/[[:space:]]*(.*)//             # remove " (....)" e tudo depois
+    s/[[:space:]].*$//               # corta no primeiro espaço restante
+    p
+  }
+')
+
+if [ -z $themes ]; then
+  dunstify -a System "Themes" "No theme found."
+  exit
+fi
+
+theme=$(echo $themes | tr ' ' '\n' | rofi -dmenu -p "Themes")
+if [ -z $theme ]; then
+	exit
+fi
+
+# Send notification
+dunstify -a System "Themes" "Applying $theme ..."
+
+# Change Theme
+wal --theme $theme --fg "#ffffff"
+
+# Dunst
+ln -sf ~/.cache/wal/dunst/dunstrc ~/.config/dunst/dunstrc
+dunstctl reload
+
+# Qutebrowser
+ln -sf ~/.cache/wal/qutebrowser/colors.py ~/.config/qutebrowser/colors.py
+pgrep qutebrowser > /dev/null && qutebrowser ':config-source'
+
+# Flameshot
+ln -sf ~/.cache/wal/flameshot/flameshot.ini ~/.config/flameshot/flameshot.ini
+
+# Notify the changes
+ln -sf ~/.cache/wal/dunst/dunstrc ~/.config/dunst/dunstrc
+
+# Reload Qtile
+qtile cmd-obj -o cmd -f restart

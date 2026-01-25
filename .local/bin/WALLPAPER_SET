@@ -8,5 +8,5 @@ else
   WALLPAPER_PATH="$WALLPAPER_DIR/default.jpg"
 fi
 
-wal -i $WALLPAPER_PATH -t --saturate 0.3 -o $HOME/.local/bin/APPLY_COLORS
-qtile cmd-obj -o root -f reload_config
+feh --bg-fill "$WALLPAPER_PATH"
+

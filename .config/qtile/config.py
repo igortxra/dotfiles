@@ -147,6 +147,7 @@ MENU_APP = f"{PATH_SCRIPTS}/OPEN_APP_MENU &"
 MENU_CLIPBOARD = f"{PATH_SCRIPTS}/OPEN_CLIPBOARD_MENU &"
 MENU_POWER = f"{PATH_SCRIPTS}/OPEN_POWER_MENU &"
 MENU_WALLPAPER = f"{PATH_SCRIPTS}/OPEN_WALLPAPER_MENU &"
+MENU_THEME = f"{PATH_SCRIPTS}/OPEN_THEME_MENU &"
 MENU_SCREENS = f"{PATH_SCRIPTS}/OPEN_SCREENS_MENU &"
 MENU_AUTOMATIONS = f"{PATH_SCRIPTS}/OPEN_AUTOMATIONS_MENU &"
 MENU_WINDOWS = f"{PATH_SCRIPTS}/OPEN_WINDOW_MENU &"
@@ -305,6 +306,7 @@ keys = [
     Key([SUPER], "v", lazy.spawn(MENU_CLIPBOARD), desc="Spawn clipboard menu"),
     Key([SUPER], "p", lazy.spawn(MENU_POWER), desc="Spawn power menu"),
     Key([SUPER], "equal", lazy.spawn(MENU_WALLPAPER), desc="Spawn wallpaper menu"),
+    Key([SUPER], "t", lazy.spawn(MENU_THEME), desc="Spawn theme menu"),
     # Screenshots
     Key([], "Print", lazy.spawn(SCREENSHOT), desc="Launch screenshot menu"),
     Key(
@@ -436,15 +438,9 @@ groups = [
     Group(name="4", label="4", layout="monadtall"),
     Group(name="5", label="5", layout="monadtall"),
     Group(name="6", label="6", layout="monadtall"),
-    Group(name="7", label="7", matches=[Match(wm_class="qgis")], layout="monadtall"),
+    Group(name="7", label="7", layout="monadtall"),
     Group(name="8", label="8", matches=[Match(wm_class="spotify")], layout="monadtall"),
-    Group(
-        name="9",
-        label="9",
-        matches=[Match(wm_class="discord")],
-        layout="monadtall",
-        exclusive=True,
-        spawn="discord",
+    Group(name="9", label="9", matches=[Match(wm_class="discord")], layout="monadtall",
     ),
 ]
 
@@ -560,7 +556,7 @@ widget_defaults = dict(
 # GROUPBOX WIDGETS
 # Groupbox for the primary screen
 widget_groupbox_main = widget.GroupBox(
-    active="#999",
+    active="#FFF",
     background=COLOR_BAR,
     borderwidth=2,
     center_aligned=True,
@@ -575,9 +571,9 @@ widget_groupbox_main = widget.GroupBox(
     urgent_text=COLOR_PRIMARY,
     this_screen_border="#333",  # Border or line colour for group on this screen when unfocused.
     other_screen_border=COLOR_BAR,  # Border or line colour for group on other screen when unfocused.
-    this_current_screen_border=COLOR_PRIMARY,  # Border or line colour for group on this screen when focused.
+    this_current_screen_border="#555",  # Border or line colour for group on this screen when focused.
     other_current_screen_border=COLOR_BAR,  # Border or line colour for group on other screen when focused.
-    block_highlight_text_color=COLOR_FG_2,
+    block_highlight_text_color="#fff",
     padding_x=0,
     padding_y=0,
     margin_y=3,
@@ -586,7 +582,7 @@ widget_groupbox_main = widget.GroupBox(
 
 # Groupbox for the secondary screens
 widget_groupbox_secondary = widget.GroupBox(
-    active="#999",
+    active="#fff",
     background=COLOR_BAR,
     borderwidth=2,
     center_aligned=True,
@@ -601,9 +597,9 @@ widget_groupbox_secondary = widget.GroupBox(
     urgent_text=COLOR_PRIMARY,
     this_screen_border="#333",  # Border or line colour for group on this screen when unfocused.
     other_screen_border=COLOR_BAR,  # Border or line colour for group on other screen when unfocused.
-    this_current_screen_border=COLOR_PRIMARY,  # Border or line colour for group on this screen when focused.
+    this_current_screen_border="#555",  # Border or line colour for group on this screen when focused.
     other_current_screen_border=COLOR_BAR,  # Border or line colour for group on other screen when focused.
-    block_highlight_text_color=COLOR_FG_2,
+    block_highlight_text_color="#fff",
     padding_x=0,
     padding_y=0,
     margin_y=3,

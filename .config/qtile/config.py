@@ -24,8 +24,10 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+import json
 import subprocess
 from os import path
+from typing import TypedDict
 
 from libqtile import bar, layout, widget
 from libqtile.config import (
@@ -45,6 +47,8 @@ from libqtile.hook import subscribe
 
 
 # AUXILIARY FUNCTIONS
+
+
 def go_to_group(group_name: str):
     def _inner(qtile: Qtile):
         qtile.groups_map[group_name].toscreen()
@@ -83,62 +87,58 @@ PATH_ICON_AUDIO = f"{PATH_ICONS}/audio/"
 AUTOSTART = f"{PATH_SCRIPTS}/AUTOSTART"
 # -----------------------------------------------------------------------------------------
 
-# COLORS
-colors = [
-    "#0f1228",
-    "#414d9c",
-    "#423fa6",
-    "#404fa7",
-    "#8a55dd",
-    "#5966be",
-    "#5f69bf",
-    "#c5c5c7",
-    "#404c94",
-    "#414d9c",
-    "#423fa6",
-    "#404fa7",
-    "#8a55dd",
-    "#5966be",
-    "#5f69bf",
-    "#c5c5c7",
-]
+# COLORSCHEME LOGIC
+CURRENT_COLORS = f"{PATH_HOME}/.cache/wal/colors.json"
+DEFAULT_COLORS = f"{PATH_HOME}/.config/wal/themes/dark/default.json"
 
-cache = f"{PATH_HOME}/.cache/wal/colors"
+class QtileColors(TypedDict):
+    bg: str
+    fg: str
+    cursor: str
+    colors: list[str]
 
-def load_colors(cache):
-    global colors
+colors = []
+def load_colors_from_json(json_path):
+    color_dict = {}
     try:
-        with open(cache, "r") as file:
-            colors = [file.readline().strip() for _ in range(16)]
+        with open(json_path, "r") as fp:
+            color_dict = json.load(fp)
     except FileNotFoundError:
         pass
+    return color_dict
 
-    lazy.reload()
+colors_dict = load_colors_from_json(CURRENT_COLORS)
+if not colors_dict:
+    colors_dict = load_colors_from_json(DEFAULT_COLORS)
 
+colors = QtileColors( {
+        "fg": colors_dict["special"]["foreground"],
+        "bg": colors_dict["special"]["background"],
+        "cursor": colors_dict["special"]["cursor"],
+        "colors": [c for c in colors_dict["colors"].values()]})
 
-load_colors(cache)
 
 # FIXED COLORS
-COLOR_BAR = "#11111199"
 COLOR_RED = "#FF0000"
 COLOR_YELLOW = "#FFFF00"
 
 # MAIN COLORS
-COLOR_PRIMARY = colors[2]
-COLOR_SECONDARY = colors[1]
-COLOR_4 = colors[4]
+COLOR_BAR = f"{colors["bg"]}99"
+COLOR_PRIMARY = colors["colors"][2]
+COLOR_SECONDARY = colors["colors"][4]
 
 # FOREGROUNDS
-COLOR_FG_1 = colors[-1]
-COLOR_FG_2 = colors[-2]
+COLOR_FG = colors["fg"]
+COLOR_FG_2 = colors["colors"][-2]
 
 # BACKGROUNDS
-COLOR_BG_1 = colors[0]
-COLOR_BG_2 = colors[1]
-COLOR_BG_3 = colors[2]
+COLOR_BG = colors["bg"]
+
+# CURSOR
+COLOR_CURSOR = colors["cursor"]
 
 # STATUS
-COLOR_INACTIVE = colors[7]
+COLOR_INACTIVE = colors["colors"][7]
 
 # -----------------------------------------------------------------------------------------
 
@@ -502,9 +502,9 @@ layouts = [
 
     layout.Columns(
         border_focus=COLOR_PRIMARY,
-        border_focus_stack=COLOR_4,
-        border_normal=COLOR_BG_1,
-        border_normal_stack=COLOR_BG_1,
+        border_focus_stack=COLOR_SECONDARY,
+        border_normal=COLOR_BG,
+        border_normal_stack=COLOR_BG,
         margin=[3,3,10,3],
         single_border_width=1,
         border_width=3,
@@ -556,7 +556,7 @@ widget_defaults = dict(
 # GROUPBOX WIDGETS
 # Groupbox for the primary screen
 widget_groupbox_main = widget.GroupBox(
-    active="#FFF",
+    active=COLOR_FG,
     background=COLOR_BAR,
     borderwidth=2,
     center_aligned=True,
@@ -568,8 +568,8 @@ widget_groupbox_main = widget.GroupBox(
     highlight_method="block",
     urgent_alert_method="border",
     urgent_border=COLOR_RED,
-    urgent_text=COLOR_PRIMARY,
-    this_screen_border="#333",  # Border or line colour for group on this screen when unfocused.
+    urgent_text=COLOR_FG,
+    this_screen_border="#444",  # Border or line colour for group on this screen when unfocused.
     other_screen_border=COLOR_BAR,  # Border or line colour for group on other screen when unfocused.
     this_current_screen_border="#555",  # Border or line colour for group on this screen when focused.
     other_current_screen_border=COLOR_BAR,  # Border or line colour for group on other screen when focused.
@@ -683,7 +683,7 @@ widgets = [
     widget.Chord(
         fmt=" {} ",
         name_transform=lambda n: n.upper(),
-        foreground=COLOR_FG_1,
+        foreground=COLOR_FG,
         background=COLOR_PRIMARY,
     ),
     widget.Spacer(),
@@ -692,7 +692,7 @@ widgets = [
         name="Media Icon",
         format="",
         objname="org.mpris.MediaPlayer2.spotify",
-        background=COLOR_BG_1,
+        background=COLOR_BG,
         foreground="#28b259",
         fmt=" ",
         paused_text="{}",
@@ -705,7 +705,7 @@ widgets = [
         format="{xesam:title} - {xesam:artist}",
         objname="org.mpris.MediaPlayer2.spotify",
         background="#28b259",
-        foreground=COLOR_BG_1,
+        foreground=COLOR_BG,
         fmt=" {}  ",
         paused_text=" {track}",
         padding=10,
@@ -749,7 +749,7 @@ widgets = [
     widget.Clock(
         format="%H:%M",
         background=None,
-        foreground=COLOR_FG_1,
+        foreground=COLOR_FG,
         mouse_callbacks={
             "Button1": lazy.spawn(CALENDAR_SHOW),
         },
@@ -772,7 +772,7 @@ bar_secondary = bar.Bar(
     widgets=[
         widget.Sep(foreground=COLOR_BAR),
         widget.Spacer(),
-        widget.CurrentLayout(icon_first=True, scale=0.7),
+        widget.CurrentLayout(mode="icon", scale=0.7),
         widget.Spacer(14),
         widget_groupbox_secondary,
         widget.Spacer(),

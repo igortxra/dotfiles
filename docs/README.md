@@ -1,7 +1,8 @@
 # My Arch Linux Dotfiles
 Sharing my dotfiles that can be useful to someone :)
 
-<img width="1919" height="1079" alt="2025-10-13_21-10-20" src="https://github.com/user-attachments/assets/06774997-e387-485d-a4e5-5c6f5c8a57f8" />
+<img width="1919" height="1079" alt="image" src="https://github.com/user-attachments/assets/1315204a-9547-43fe-8de0-a6ec908cb8c9" />
+
 
 ## Main Applications
 - Qtile (Window Manager)
